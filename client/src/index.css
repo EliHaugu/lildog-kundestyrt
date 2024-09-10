@@ -8,6 +8,7 @@ body {
   color: #001e1e;
 }
 
+/* top rounding when navigation item is hovered */
 .nav_item__rounded:hover:before {
   content: '';
   position: absolute;
@@ -20,6 +21,7 @@ body {
   box-shadow: #fefefe 1rem 1rem 0 1rem;
 }
 
+/* bottom rounding when navigation item is hovered */
 .nav_item__rounded:hover:after {
   content: '';
   position: absolute;
@@ -32,6 +34,7 @@ body {
   box-shadow: #fefefe 1rem -1rem 0 1rem;
 }
 
+/* rounding between header and navigation sidebar */
 #header__rounded_corner:before {
   content: '';
   position: absolute;

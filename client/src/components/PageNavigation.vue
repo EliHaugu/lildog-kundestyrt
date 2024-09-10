@@ -1,86 +1,5 @@
 <script setup lang="ts">
-const mockNavItems = [
-  {
-    id: 1,
-    name: 'Test button activates backend and light',
-    link: ''
-  },
-  {
-    id: 2,
-    name: 'Test light switches',
-    link: ''
-  },
-  {
-    id: 3,
-    name: 'Test GPS location tracker turns on',
-    link: ''
-  }
-  /* {
-    id: 4,
-    name: 'Test interface updates on request',
-    link: '',
-  },
-  {
-    id: 1,
-    name: 'Test button activates backend and light',
-    link: '',
-  },
-  {
-    id: 2,
-    name: 'Test light switches',
-    link: '',
-  },
-  {
-    id: 3,
-    name: 'Test GPS location tracker turns on',
-    link: '',
-  },
-  {
-    id: 4,
-    name: 'Test interface updates on request',
-    link: '',
-  },
-  {
-    id: 1,
-    name: 'Test button activates backend and light',
-    link: '',
-  },
-  {
-    id: 2,
-    name: 'Test light switches',
-    link: '',
-  },
-  {
-    id: 3,
-    name: 'Test GPS location tracker turns on',
-    link: '',
-  },
-  {
-    id: 4,
-    name: 'Test interface updates on request',
-    link: '',
-  },
-  {
-    id: 1,
-    name: 'Test button activates backend and light',
-    link: '',
-  },
-  {
-    id: 2,
-    name: 'Test light switches',
-    link: '',
-  },
-  {
-    id: 3,
-    name: 'Test GPS location tracker turns on',
-    link: '',
-  },
-  {
-    id: 4,
-    name: 'Test interface updates on request',
-    link: '',
-  } */
-]
+import { listItems } from '@/assets/mock_data'
 </script>
 
 <template>
@@ -89,8 +8,8 @@ const mockNavItems = [
 
     <ul class="relative flex max-h-[calc(100vh-9.5rem)] flex-col gap-2 overflow-y-scroll py-4">
       <li
-        key="item.id"
-        v-for="item in mockNavItems"
+        v-bind:key="item.id"
+        v-for="item in listItems"
         class="text-md nav_item__rounded relative rounded-l-xl py-3 pl-4 pr-2 text-white-100 hover:cursor-pointer hover:bg-white-200 hover:text-accent-900"
       >
         <a tabindex="2" class="line-clamp-1 max-w-56 text-ellipsis">{{ item.name }}</a>
