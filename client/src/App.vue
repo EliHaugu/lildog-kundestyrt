@@ -1,13 +1,9 @@
 <script setup lang="ts">
-
-import Layout from './components/Layout.vue';
-
+import Layout from './components/Layout.vue'
 </script>
 
 <template>
   <Layout />
-  
 
-  <main class="flex w-screen">
-  </main>
+  <main class="flex w-screen"></main>
 </template>
