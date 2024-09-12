@@ -4,6 +4,5 @@ import Layout from '@/components/PageLayout.vue'
 
 <template>
   <Layout />
-
-  <main class="flex w-screen"></main>
+  <RouterView class="ml-[17rem] mt-16 w-[calc(100vw-17rem)]" />
 </template>
