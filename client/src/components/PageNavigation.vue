@@ -6,13 +6,19 @@ import { listItems } from '@/assets/mock_data'
   <nav id="header__rounded_corner" class="fixed left-0 top-12 h-screen w-64 bg-accent-800 pl-4">
     <h2 class="pl-4 text-lg text-white-100">Stored Flows</h2>
 
-    <ul class="relative flex max-h-[calc(100vh-9.5rem)] flex-col gap-2 overflow-y-scroll py-4">
+    <ul class="relative flex max-h-[calc(100vh-9.5rem)] flex-col overflow-y-scroll py-4">
       <li
         v-bind:key="item.id"
         v-for="item in listItems"
-        class="text-md nav_item__rounded relative rounded-l-xl py-3 pl-4 pr-2 text-white-100 hover:cursor-pointer hover:bg-white-200 hover:text-accent-900"
+        :aria-expanded="item.id === $route.params.id"
+        class="text-md nav_item__rounded relative rounded-l-xl text-white-100 hover:cursor-pointer hover:bg-white-200 hover:text-accent-900 aria-expanded:bg-white-200 aria-expanded:text-accent-900"
       >
-        <a tabindex="2" class="line-clamp-1 max-w-56 text-ellipsis">{{ item.name }}</a>
+        <router-link
+          :to="{ name: 'flow', params: { id: item.id } }"
+          tabindex="2"
+          class="line-clamp-1 max-w-56 text-ellipsis py-1.5 pl-4 pr-2 leading-10"
+          >{{ item.name }}</router-link
+        >
       </li>
     </ul>
     <button
