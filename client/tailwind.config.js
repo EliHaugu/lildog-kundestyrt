@@ -4,7 +4,6 @@ export default {
   content: [],
   theme: {
     colors: {
-      white: '#ffffff',
       accent: {
         400: '#BDEEED',
         500: '#469796',
@@ -13,14 +12,13 @@ export default {
         800: '#00312F',
         900: '#001E1E'
       },
-      disabled: {
-        500: '#B7B7B7',
-        600: '#E0E0E0'
+      white: {
+        100: 'ffffff',
+        200: 'fefefe'
       },
-      error: {
-        500: '#E76C6C',
-        600: '#C53030'
-      }
+      error: {},
+      warning: {},
+      success: {}
     },
     extend: {}
   },
