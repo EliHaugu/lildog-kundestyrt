@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Layout from '@/components/PageLayout.vue'
+</script>
 
 <template>
-  <main class="flex w-screen">
-    <h1 class="mx-auto text-2xl font-semibold text-accent-900">Hello World!</h1>
-  </main>
+  <Layout />
+
+  <main class="flex w-screen"></main>
 </template>

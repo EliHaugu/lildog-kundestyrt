@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  content: [],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     colors: {
       accent: {
@@ -13,8 +12,8 @@ export default {
         900: '#001E1E'
       },
       white: {
-        100: 'ffffff',
-        200: 'fefefe'
+        100: '#ffffff',
+        200: '#fefefe'
       },
       error: {},
       warning: {},
