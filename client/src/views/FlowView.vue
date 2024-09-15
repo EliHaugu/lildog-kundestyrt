@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
-import { useRoute } from 'vue-router'
 
 import { listItems } from '@/assets/mock_data'
+import LogView from '../components/FlowLog.vue';
+import { ref } from 'vue';
 
-const route = useRoute()
-const item = listItems.find((item) => item.id === route.params.id)
-const state = reactive({ id: route.params.id, name: item!.name })
+const displayLog = ref(false);
 
-watch(
-  () => route.params.id,
-  (newId) => {
-    state.id = newId
-    state.name = listItems.find((item) => item.id === newId)!.name
-  }
-)
 </script>
 
 <template>
-  <main class="flex w-screen">
-    <h1>{{ state.name }}</h1>
+  <main class="flex flex-col">
+     <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }} </h1>
+
+
+    <LogView :show=displayLog />
+    <button @click="displayLog = !displayLog" class="absolute bottom-4">Test</button>
+
   </main>
 </template>
