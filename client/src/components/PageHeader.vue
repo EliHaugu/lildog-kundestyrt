@@ -5,7 +5,7 @@ import { headerItems } from '@/assets/mock_data'
   <header class="fixed top-0 flex h-12 w-screen gap-40 bg-accent-800">
     <h1 class="ml-8 w-min text-2xl text-accent-400">liltest</h1>
     <ul class="ml-2 mr-auto flex flex-row gap-4">
-      <li v-for="item in headerItems" :key=item.id class="flex justify-center">
+      <li v-for="item in headerItems" :key="item.id" class="flex justify-center">
         <router-link
           :to="{ name: item.link }"
           tabindex="1"
