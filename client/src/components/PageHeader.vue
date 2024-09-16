@@ -9,7 +9,8 @@ import { headerItems } from '@/assets/mock_data'
         <router-link
           :to="{ name: item.link }"
           tabindex="1"
-          class="my-auto rounded-lg px-4 py-1.5 text-white-100 transition-colors duration-200 hover:bg-white-100 hover:text-accent-900 hover:shadow-lg"
+          :aria-expanded="item.link === $route.path.split('/')[1]"
+          class="my-auto rounded-lg px-4 py-1.5 text-white-100 transition-colors duration-200 hover:bg-white-100 hover:text-accent-900 hover:shadow-lg aria-expanded:bg-white-100 aria-expanded:text-accent-900"
           >{{ item.name }}</router-link
         >
       </li>

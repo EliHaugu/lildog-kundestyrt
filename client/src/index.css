@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #fefefe;
+  background-color: #fbfbfb;
   color: #001e1e;
 }
 
@@ -19,7 +19,7 @@ body {
   right: 0;
   top: -1rem;
   border-bottom-right-radius: 1rem;
-  box-shadow: #fefefe 1rem 1rem 0 1rem;
+  box-shadow: #fbfbfb 1rem 1rem 0 1rem;
 }
 
 /* both these selectors removes the radius to prevent overlap */
@@ -46,7 +46,7 @@ body {
   right: 0;
   bottom: -1rem;
   border-top-right-radius: 1rem;
-  box-shadow: #fefefe 1rem -1rem 0 1rem;
+  box-shadow: #fbfbfb 1rem -1rem 0 1rem;
 }
 
 /* rounding between header and navigation sidebar */
