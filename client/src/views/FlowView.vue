@@ -11,7 +11,7 @@ const displayLog = ref(false)
     <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
 
     <flow-log :show="displayLog" />
-    <button @click="displayLog = !displayLog" class="fixed bottom-6 right-4">
+    <button @click="displayLog = !displayLog" class="fixed bottom-6 right-4" tabindex="1">
       Display log: {{ displayLog }}
     </button>
   </main>

@@ -17,6 +17,7 @@ const currentDevice = ref(0)
         <li
           @click="currentDevice = 0"
           :aria-expanded="currentDevice === 0"
+          tabindex="1"
           class="h-fit w-fit flex-shrink-0 rounded-md bg-white-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400"
         >
           All Devices
@@ -26,6 +27,7 @@ const currentDevice = ref(0)
           v-for="item in logItems"
           @click="currentDevice = item.id"
           :aria-expanded="currentDevice === item.id"
+          tabindex="1"
           class="h-fit w-fit flex-shrink-0 rounded-md bg-white-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400"
         >
           {{ item.name }}
@@ -33,6 +35,7 @@ const currentDevice = ref(0)
       </ul>
       <a
         href=""
+        tabindex="1"
         class="ml-auto mr-4 flex h-fit flex-shrink-0 gap-2 rounded-md bg-accent-400 px-4 py-1.5 shadow-md transition-colors duration-200 hover:bg-accent-500"
         >Export log
         <svg
