@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LandingView from '@//views/LandingView.vue'
 import FlowView from '@/views/FlowView.vue'
-import LogView from '@/views/LogView.vue'
+import LogView from '@/components/FlowLog.vue'
 import DevicesView from '@/views/DevicesView.vue'
 import ApiView from '@/views/ApiView.vue'
 import NewDeviceView from '@/views/NewDeviceView.vue'
@@ -16,11 +16,11 @@ const routes = [
   {
     path: '/flow/:id',
     name: 'flow',
-    component: FlowView,
-    props: true
+    component: FlowView
   },
   {
     path: '/flow/:id/log',
+    name: 'log',
     component: LogView,
     props: true
   },

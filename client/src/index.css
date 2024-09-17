@@ -8,8 +8,7 @@ body {
   color: #001e1e;
 }
 
-/* top rounding when navigation item is hovered */
-.nav_item__rounded:hover:before,
+/* top rounding when navigation item is selected */
 .nav_item__rounded[aria-expanded='true']::before {
   content: '';
   position: absolute;
@@ -22,21 +21,7 @@ body {
   box-shadow: #fefefe 1rem 1rem 0 1rem;
 }
 
-/* both these selectors removes the radius to prevent overlap */
-.nav_item__rounded:hover + .nav_item__rounded[aria-expanded='true'] {
-  &::before {
-    display: none;
-  }
-}
-
-.nav_item__rounded[aria-expanded='true'] + .nav_item__rounded {
-  &::before {
-    display: none;
-  }
-}
-
-/* bottom rounding when navigation item is hovered */
-.nav_item__rounded:hover:after,
+/* bottom rounding when navigation item is selected */
 .nav_item__rounded[aria-expanded='true']::after {
   content: '';
   position: absolute;
