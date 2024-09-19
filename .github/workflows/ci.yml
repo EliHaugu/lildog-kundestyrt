@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: "18.x"
       - name: Install dependencies for CI environment
+        working-directory: ./client
         run: npm ci
       - name: Check if code is pretty
+        working-directory: ./client
         run: npm run prettier-check
       - name: Check if code is linted
+        working-directory: ./client
         run: npm run lint
