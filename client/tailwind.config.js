@@ -13,7 +13,7 @@ export default {
       },
       white: {
         100: '#ffffff',
-        200: '#fefefe'
+        200: '#fbfbfb'
       },
       error: {},
       warning: {},
