@@ -4,7 +4,6 @@ defineProps<{
 }>()
 
 import { logItems } from '@/assets/mock_data'
-import { listItems } from '@/assets/mock_data'
 </script>
 <template>
   <section class="mb-8 h-full max-h-[calc(100vh-14rem)] overflow-y-scroll">
