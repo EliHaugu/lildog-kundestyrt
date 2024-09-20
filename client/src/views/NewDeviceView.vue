@@ -6,7 +6,8 @@ const response = ref([
   {
     id: 1,
     number: 300,
-    status: 'OK'
+    status: 'OK',
+    name: 'Device 1'
   }
 ])
 
