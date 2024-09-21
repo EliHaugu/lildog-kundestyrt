@@ -1,7 +1,7 @@
 type Log = {
-    id: number;
-    name: string;
-    log: string[];
-};
+  id: number
+  name: string
+  log: string[]
+}
 
-export type { Log };
+export type { Log }
