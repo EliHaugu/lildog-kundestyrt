@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CustomData } from '@/types'
-import { Handle, Position, NodeProps } from '@vue-flow/core'
+import { Handle, Position } from '@vue-flow/core'
+import type { NodeProps } from '@vue-flow/core'
 
 defineProps<NodeProps<CustomData>>()
 </script>
