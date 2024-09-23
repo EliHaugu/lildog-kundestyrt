@@ -3,4 +3,3 @@ cd ..
 isort .
 black .
 echo "Done formatting code :)"
-
