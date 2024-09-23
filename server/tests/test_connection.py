@@ -1,7 +1,9 @@
+import json
+
 import pytest
 import websockets
-import json
 from conftest import WEBSOCKET_URL
+
 
 @pytest.mark.asyncio
 async def test_load_logs(start_server):
