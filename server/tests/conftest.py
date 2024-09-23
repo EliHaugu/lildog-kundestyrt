@@ -4,13 +4,13 @@ import time
 
 import pytest
 
-WEBSOCKET_HOST = "localhost"
-WEBSOCKET_PORT = 8765
+HOST = "localhost"
+PORT = 8765
 SERVER_TIMEOUT = 5
-WEBSOCKET_URL = f"ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}"
+WEBSOCKET_URL = f"ws://{HOST}:{PORT}"
 
 
-def poll_server(host=WEBSOCKET_HOST, port=WEBSOCKET_PORT, timeout=SERVER_TIMEOUT):
+def poll_server(host=HOST, port=PORT, timeout=SERVER_TIMEOUT):
     """Poll server until connection is established"""
     start_time = time.time()
     while time.time() - start_time < timeout:
