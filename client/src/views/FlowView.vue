@@ -5,19 +5,13 @@ import { Background } from '@vue-flow/background'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import useDragAndDrop from '@/utils/useDragAndDrop'
 import type { Connection, Edge, GraphEdge } from '@vue-flow/core'
-import type { CustomNode } from '@/types'
+import type { CustomNode } from '@/types/nodeType'
 import FlowLog from '@/components/FlowLog.vue'
 import FlowNode from '@/components/FlowNode.vue'
+import FlowEdge from '@/components/FlowEdge.vue'
 import FlowDevices from '@/components/FlowDevices.vue'
 import { ref } from 'vue'
-import FlowEdge from '@/components/FlowEdge.vue'
-
-const stripNodeStyles = {
-  backgroundColor: 'transparent',
-  border: 'none',
-  padding: '0',
-  width: 'fit-content'
-}
+import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
 const { onConnect, addEdges, updateEdge } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
@@ -72,10 +66,21 @@ const displayLog = ref(false)
 
 <template>
   <main class="flex flex-col">
-    <header class="relative mr-4 flex gap-2">
+    <header class="relative mr-4 flex h-10 gap-2">
       <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <button class="ml-auto h-9 rounded-xl bg-accent-600 px-4 text-white-100">Run</button>
-      <flow-devices :nodes="nodes" />
+      <button
+        v-if="displayLog"
+        class="ml-auto h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
+      >
+        Run
+      </button>
+      <button
+        v-else
+        class="ml-auto mr-48 h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
+      >
+        Run
+      </button>
+      <flow-devices v-if="!displayLog" :nodes="nodes" />
     </header>
     <flow-log :show="displayLog" />
     <section class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
@@ -90,10 +95,10 @@ const displayLog = ref(false)
         <!--  MiniMap element only available if auto sized elements are not used -->
         <!--  <MiniMap class="rounded-lg" pannable zoomable /> -->
         <template #node-default="customNodeProps">
-          <FlowNode v-bind="customNodeProps" />
+          <flow-node v-bind="customNodeProps" />
         </template>
         <template #edge-default="edgeProps">
-          <FlowEdge v-bind="edgeProps" />
+          <flow-edge v-bind="edgeProps" />
         </template>
         <Background />
       </VueFlow>

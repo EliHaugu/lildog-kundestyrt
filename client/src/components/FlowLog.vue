@@ -12,7 +12,7 @@ const currentDevice = ref(0)
 
 <template>
   <div v-if="show">
-    <nav class="mt-4 flex gap-2">
+    <nav class="mt-2 flex gap-2">
       <ul class="flex h-14 flex-grow gap-2 overflow-x-scroll">
         <li
           @click="currentDevice = 0"

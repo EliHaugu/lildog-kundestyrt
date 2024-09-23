@@ -1,6 +1,7 @@
-<script setup>
-import { BaseEdge, getSmoothStepPath } from '@vue-flow/core'
+<script setup lang="ts">
+import { BaseEdge, getSmoothStepPath, Position } from '@vue-flow/core'
 import { computed } from 'vue'
+import type { PropType } from 'vue'
 
 const props = defineProps({
   id: {
@@ -24,11 +25,11 @@ const props = defineProps({
     required: true
   },
   sourcePosition: {
-    type: String,
+    type: String as PropType<Position>,
     required: true
   },
   targetPosition: {
-    type: String,
+    type: String as PropType<Position>,
     required: true
   },
   markerEnd: {
@@ -40,12 +41,12 @@ const props = defineProps({
 const path = computed(() => getSmoothStepPath(props))
 </script>
 
-<script>
+<script lang="ts">
 export default {
   inheritAttrs: false
 }
 </script>
 
 <template>
-  <BaseEdge :id="id" :style="style" :path="path[0]" :marker-end="markerEnd" />
+  <BaseEdge :id="id" :path="path[0]" :marker-end="markerEnd" />
 </template>

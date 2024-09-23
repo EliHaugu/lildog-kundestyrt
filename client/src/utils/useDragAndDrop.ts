@@ -1,11 +1,13 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
+import type { CustomNode } from '@/types/nodeType'
 
-let nodeId = 0
-let draggedNode: any = null
+let draggedNode: CustomNode
+let uniqueId = 0
 
-function setNode(node: any) {
+function setNode(node: CustomNode) {
   draggedNode = node
+  draggedNode.data!.flowId = uniqueId.toString()
 }
 
 function getNode() {
@@ -13,7 +15,7 @@ function getNode() {
 }
 
 function getId() {
-  return `nodeCounter-${nodeId++}`
+  return `nodeCounter-${uniqueId++}`
 }
 
 const state = {
@@ -30,8 +32,7 @@ export default function useDragAndDrop() {
     document.body.style.userSelect = dragging ? 'none' : ''
   })
 
-  // Update any to node types
-  function onDragStart(event: DragEvent, device: any) {
+  function onDragStart(event: DragEvent, device: CustomNode) {
     if (event.dataTransfer) {
       setNode(device)
       event.dataTransfer.setData('application/vueflow', 'node')
@@ -44,7 +45,6 @@ export default function useDragAndDrop() {
 
   function onDragOver(event: DragEvent) {
     event.preventDefault()
-
     if (draggedType.value) isDragOver.value = true
   }
 
@@ -65,24 +65,16 @@ export default function useDragAndDrop() {
       y: event.clientY
     })
 
-    const nodeId = getId()
     const node = getNode()
-
-    // update to reflect our node type
-    const newNode = {
-      id: nodeId,
-      position,
-      data: { label: node },
-      style: {
-        backgroundColor: 'transparent',
-        border: 'none',
-        padding: '0',
-        width: 'fit-content'
-      }
+    const id = getId()
+    const newNode: CustomNode = {
+      ...node,
+      id,
+      position
     }
 
     const { off } = onNodesInitialized(() => {
-      updateNode(nodeId, (node) => ({
+      updateNode(id, (node) => ({
         position: {
           x: node.position.x - node.dimensions.width / 2,
           y: node.position.y - node.dimensions.height / 2
