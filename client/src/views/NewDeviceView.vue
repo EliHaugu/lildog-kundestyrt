@@ -15,9 +15,9 @@ const testConnection = ref(false)
 </script>
 
 <template>
-  <main class="flex h-[calc(100vh-4rem)] items-center justify-center bg-white-100">
-    <div class="w-1/2 rounded-xl p-6 shadow-xl">
-      <h2 class="text-lg text-accent-700">Add new device</h2>
+  <main class="flex h-[calc(100vh-4rem)] items-center justify-center bg-primary-200">
+    <div class="w-1/2 rounded-xl bg-primary-100 p-6 shadow-xl">
+      <h2 class="text-lg">Add new device</h2>
       <form action="" class="relative flex flex-col gap-2 pb-6 pt-4">
         <label for="newDeviceName">Name Device:</label>
         <input

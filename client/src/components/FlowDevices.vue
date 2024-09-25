@@ -20,7 +20,7 @@ import { devices } from '@/assets/mock_data'
     aria-expanded="false"
     id="devices_menu"
     @click="openDevices"
-    class="absolute right-0 z-50 h-9 rounded-xl border border-accent-500 bg-white-100 px-4 leading-8 shadow-md aria-expanded:pb-4"
+    class="absolute right-0 z-50 h-9 rounded-xl border border-accent-500 bg-primary-100 px-4 leading-8 shadow-md aria-expanded:pb-4"
   >
     <div class="flex hover:cursor-pointer">
       <h3>Stored Devices</h3>
@@ -47,7 +47,7 @@ import { devices } from '@/assets/mock_data'
     </div>
     <div
       v-if="displayDevices"
-      class="absolute right-0 top-12 z-50 max-h-[calc(100vh-8rem)] w-[16rem] overflow-scroll rounded-xl border border-accent-500 bg-white-100 p-2"
+      class="absolute right-0 top-12 z-50 max-h-[calc(100vh-8rem)] w-[16rem] overflow-scroll rounded-xl border border-accent-500 bg-primary-200 p-2"
     >
       <ul class="flex flex-col gap-2">
         <li
@@ -55,7 +55,7 @@ import { devices } from '@/assets/mock_data'
           :draggable="true"
           @dragstart="onDragStart($event, device)"
           v-for="device in devices"
-          class="rounded-lg bg-white-100 px-4 py-1.5 shadow-md hover:cursor-grab"
+          class="rounded-lg bg-primary-100 px-4 py-1.5 shadow-md hover:cursor-grab"
         >
           <h4>{{ device.data?.label }}</h4>
         </li>

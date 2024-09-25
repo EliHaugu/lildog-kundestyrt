@@ -3,9 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  --primary-100: #ffffff;
+  --primary-200: #fbfbfb;
+  --primary-300: rgba(255, 255, 255, 0.8);
+  --text: #001e1e;
+}
+
+.dark {
+  --primary-200: #001e1e;
+  --primary-100: #00312f;
+  --primary-300: rgba(0, 49, 47, 0.8);
+  --text: #ffffff;
+}
+
 body {
-  background-color: #fbfbfb;
-  color: #001e1e;
+  background-color: var(--primary-200);
+  color: var(--text);
 }
 
 /* top rounding when navigation item is selected */
@@ -18,7 +32,7 @@ body {
   right: 0;
   top: -1rem;
   border-bottom-right-radius: 1rem;
-  box-shadow: #fbfbfb 1rem 1rem 0 1rem;
+  box-shadow: var(--primary-200) 1rem 1rem 0 1rem;
 }
 
 /* bottom rounding when navigation item is selected */
@@ -31,7 +45,7 @@ body {
   right: 0;
   bottom: -1rem;
   border-top-right-radius: 1rem;
-  box-shadow: #fbfbfb 1rem -1rem 0 1rem;
+  box-shadow: var(--primary-200) 1rem -1rem 0 1rem;
 }
 
 /* rounding between header and navigation sidebar */
@@ -40,7 +54,7 @@ body {
   position: absolute;
   height: 1rem;
   width: 1rem;
-  background-color: #fefefe;
+  background-color: var(--primary-200);
   right: -1rem;
   border-top-left-radius: 1rem;
   box-shadow: #00312f -1rem -1rem 0 1rem;
