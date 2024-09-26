@@ -42,7 +42,7 @@ const devices = [
         <input
           type="text"
           placeholder="Search..."
-          class="mb-4 w-auto flex-grow rounded-xl border border-accent-500 bg-white-100 px-4 py-2"
+          class="mb-4 w-auto flex-grow rounded-xl border border-accent-500 bg-primary-100 px-4 py-2"
         />
         <button
           type="submit"
