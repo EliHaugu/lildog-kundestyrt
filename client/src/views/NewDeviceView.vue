@@ -23,7 +23,7 @@ const testConnection = ref(false)
         <input
           type="text"
           placeholder="Device name"
-          class="rounded-lg border border-accent-600 px-4 py-2"
+          class="rounded-lg border border-accent-600 px-4 py-2 bg-primary-200"
         />
         <div>
           <label for="newConnectionType">Connection Type:</label>
@@ -61,13 +61,13 @@ const testConnection = ref(false)
           </select>
           <button
             type="submit"
-            class="text-bg-900 rounded-xl bg-accent-400 px-4 py-2 shadow-md hover:bg-accent-500"
+            class="text-bg-900 rounded-xl dark:bg-accent-600 bg-accent-400 px-4 py-2 shadow-md hover:bg-accent-500"
           >
             Add to devices
           </button>
           <button
             type="button"
-            class="text-bg-700 rounded-xl bg-white-100 px-4 py-2 shadow-md hover:bg-accent-500"
+            class="text-bg-700 rounded-xl bg-primary-200 px-4 py-2 shadow-md hover:bg-accent-600"
           >
             Cancel
           </button>
