@@ -12,6 +12,7 @@ import FlowEdge from '@/components/FlowEdge.vue'
 import FlowDevices from '@/components/FlowDevices.vue'
 import { ref } from 'vue'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
+import BaseButton from '../components/BaseButton.vue'
 
 const { onConnect, addEdges, updateEdge } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
@@ -68,7 +69,9 @@ const displayLog = ref(false)
   <main class="flex flex-col">
     <header class="relative mr-4 flex h-10 gap-2">
       <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <button
+      <BaseButton v-if="displayLog" >
+      </BaseButton>
+      <!--<button
         v-if="displayLog"
         class="ml-auto h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
       >
@@ -79,7 +82,7 @@ const displayLog = ref(false)
         class="ml-auto mr-48 h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
       >
         Run
-      </button>
+      </button>-->
       <flow-devices v-if="!displayLog" :nodes="nodes" />
     </header>
     <flow-log :show="displayLog" />

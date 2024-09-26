@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DevicesCard from '@/components/DevicesCard.vue'
+import BaseButton from '../components/BaseButton.vue';
 
 const devices = [
   {
@@ -44,12 +45,10 @@ const devices = [
           placeholder="Search..."
           class="mb-4 w-auto flex-grow rounded-xl border border-accent-500 bg-primary-100 px-4 py-2"
         />
-        <button
-          type="submit"
-          class="mb-4 ml-auto mr-4 rounded-xl bg-accent-600 px-4 text-white-100"
+        <BaseButton type="submit" variant="primary" 
         >
           Search Devices
-        </button>
+        </BaseButton>
       </form>
     </section>
     <ul class="mr-4 grid gap-4 xl:grid-cols-2">
