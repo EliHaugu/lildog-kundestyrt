@@ -3,7 +3,7 @@ defineProps<{
   deviceId: number
 }>()
 
-import { defineProps, reactive, onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 import { webSocketService } from '@/services/WebSocketService'
 
 const state = reactive({

@@ -27,7 +27,7 @@ const handleTheme = (event: Event) => {
         >
       </li>
       <li class="ml-auto mr-4 mt-2 flex text-white-100">
-        <input type="checkbox" name="" id="" class="ml-auto" @change="handleTheme" />
+        <input type="checkbox" name="" id="darkMode" class="ml-auto" @change="handleTheme" />
       </li>
     </ul>
   </header>
