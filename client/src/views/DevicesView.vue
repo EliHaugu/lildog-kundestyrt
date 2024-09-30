@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DevicesCard from '@/components/DevicesCard.vue'
-import BaseButton from '../components/BaseButton.vue';
+import BaseButton from '../components/BaseButton.vue'
+import BaseInputField from '@/components/BaseInputField.vue'
 
 const devices = [
   {
@@ -40,15 +41,8 @@ const devices = [
   <main>
     <section>
       <form action="" class="flex gap-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          class="mb-4 w-auto flex-grow rounded-xl border border-accent-500 bg-primary-100 px-4 py-2"
-        />
-        <BaseButton type="submit" variant="primary" 
-        >
-          Search Devices
-        </BaseButton>
+        <BaseInputField />
+        <BaseButton type="submit" variant="default"> Search Devices </BaseButton>
       </form>
     </section>
     <ul class="mr-4 grid gap-4 xl:grid-cols-2">

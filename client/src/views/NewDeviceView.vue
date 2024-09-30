@@ -4,17 +4,13 @@
       <h2 class="text-lg">Add new device</h2>
       <form action="" class="relative flex flex-col gap-2 pb-6 pt-4">
         <label for="newDeviceName">Name Device:</label>
-        <input
-          type="text"
-          placeholder="Device name"
-          class="rounded-lg border border-accent-600 bg-primary-200 px-4 py-2"
-        />
+        <BaseInputField placeholder="Device name" />
         <div>
-          <label for="newConnectionType" >Connection Type:</label>
+          <label for="newConnectionType">Connection Type:</label>
           <select
             name="newConnectionType"
             id="newConnectionType"
-            class="ml-4 mt-2 rounded bg-accent-600 text-white-100 "
+            class="ml-4 mt-2 rounded bg-accent-600 text-white-100"
           >
             <option value="ble">BLE</option>
             <option value="lte">LTE</option>
@@ -23,12 +19,7 @@
           </select>
         </div>
         <div class="mt-4 flex items-center gap-2">
-          <BaseButton
-            size="md"
-            @click="toggleTestConnection"
-          >
-            Test Connection
-          </BaseButton>
+          <BaseButton @click="toggleTestConnection"> Test Connection </BaseButton>
 
           <label>Response:</label>
           <label class="font-bold" v-if="testConnection" for="response">
@@ -43,12 +34,8 @@
               {{ item.name }}
             </option>
           </select>
-          <BaseButton variant="accent-400-button" type="submit">
-            Add to devices
-          </BaseButton>
-          <BaseButton variant="white-button" @click="cancelAction">
-            Cancel
-          </BaseButton>
+          <BaseButton variant="accent-400-button" type="submit"> Add to devices </BaseButton>
+          <BaseButton variant="white-button" @click="cancelAction"> Cancel </BaseButton>
         </div>
       </form>
     </div>
@@ -56,9 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import BaseButton from '@/components/BaseButton.vue';
-import { listItems } from '@/assets/mock_data';
+import { ref } from 'vue'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseInputField from '@/components/BaseInputField.vue'
+import { listItems } from '@/assets/mock_data'
 
 const response = ref([
   {
@@ -67,15 +55,15 @@ const response = ref([
     status: 'OK',
     name: 'Device 1'
   }
-]);
+])
 
-const testConnection = ref(false);
+const testConnection = ref(false)
 
 const toggleTestConnection = () => {
-  testConnection.value = !testConnection.value;
-};
+  testConnection.value = !testConnection.value
+}
 
 const cancelAction = () => {
   // Handle cancel action here
-};
+}
 </script>

@@ -69,20 +69,8 @@ const displayLog = ref(false)
   <main class="flex flex-col">
     <header class="relative mr-4 flex h-10 gap-2">
       <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <BaseButton v-if="displayLog" >
-      </BaseButton>
-      <!--<button
-        v-if="displayLog"
-        class="ml-auto h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
-      >
-        Run
-      </button>
-      <button
-        v-else
-        class="ml-auto mr-48 h-9 rounded-xl bg-accent-600 px-4 text-white-100 shadow-md"
-      >
-        Run
-      </button>-->
+      <BaseButton v-if="displayLog" variant="default" class="ml-auto"> Run </BaseButton>
+      <BaseButton v-else variant="default" class="ml-auto mr-48"> Run </BaseButton>
       <flow-devices v-if="!displayLog" :nodes="nodes" />
     </header>
     <flow-log :show="displayLog" />

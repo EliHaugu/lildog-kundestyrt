@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import BaseInputField from './BaseInputField.vue'
+import BaseButton from './BaseButton.vue'
 
 defineProps({
   device: Object
@@ -20,12 +22,8 @@ const showSaveButton = ref(false)
       class="relative flex flex-col gap-2 pb-14 pt-4"
     >
       <label for="deviceName">Name Device:</label>
-      <input
-        type="text"
-        :placeholder="device!.name"
-        class="rounded-lg border border-accent-600 bg-primary-200 px-4 py-2"
-      />
-      <div>
+      <BaseInputField :placeholder="device!.name" />
+      <div class="flex items-center">
         <label for="connectionType">Connection Type:</label>
         <select
           name="connectionType"
@@ -38,14 +36,8 @@ const showSaveButton = ref(false)
           <option value="wifi">WiFi</option>
           <option value="ade">ADE</option>
         </select>
+        <BaseButton v-if="showSaveButton" class="ml-auto"> Save Changes </BaseButton>
       </div>
-
-      <button
-        v-if="showSaveButton"
-        class="absolute bottom-0 right-0 rounded-xl bg-accent-600 px-4 py-2 text-white-100 shadow-md hover:bg-accent-500"
-      >
-        Save Changes
-      </button>
     </form>
   </li>
 </template>
