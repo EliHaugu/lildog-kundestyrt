@@ -55,9 +55,9 @@ const handleClick = (event: Event) => {
 // Compute the button variant class
 const variantClass = computed(() => {
   switch (props.variant) {
-    case 'white-button':
-      return 'bg-primary-200 text-bg-700 hover:bg-primary-100 border border-accent-600'
-    case 'accent-400-button':
+    case 'outline':
+      return 'bg-primary-200 text-bg-700 transition-colours duration-200 hover:bg-accent-500 border border-accent-600'
+    case 'secondary':
       return 'bg-accent-400 text-bg-700 '
     default:
       return 'bg-accent-600 text-white-100 h-fit'

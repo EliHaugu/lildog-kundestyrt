@@ -34,8 +34,8 @@
               {{ item.name }}
             </option>
           </select>
-          <BaseButton variant="accent-400-button" type="submit"> Add to devices </BaseButton>
-          <BaseButton variant="white-button" @click="cancelAction"> Cancel </BaseButton>
+          <BaseButton variant="secondary" type="submit"> Add to devices </BaseButton>
+          <BaseButton variant="outline" @click="cancelAction"> Cancel </BaseButton>
         </div>
       </form>
     </div>
