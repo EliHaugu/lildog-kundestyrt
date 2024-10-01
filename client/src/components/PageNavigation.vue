@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { listItems } from '@/assets/mock_data'
+import BaseButton from './BaseButton.vue'
 </script>
 
 <template>
@@ -21,16 +22,16 @@ import { listItems } from '@/assets/mock_data'
         >
       </li>
     </ul>
-    <button
+    <BaseButton
+      variant="outline"
       tabindex="3"
-      class="absolute bottom-16 mx-auto flex w-56 rounded-xl bg-primary-200 px-4 py-2.5 pl-14 shadow-lg transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500"
-    >
-      New Flow
+      class="absolute bottom-16 flex px-14 py-2.5 transition-colors"
+      >New Flow
       <svg
         width="24"
         height="24"
         viewBox="0 0 15 15"
-        class="ml-auto mr-8"
+        class="ml-4"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -38,6 +39,6 @@ import { listItems } from '@/assets/mock_data'
           fill="#014848"
         />
       </svg>
-    </button>
+    </BaseButton>
   </nav>
 </template>
