@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { listItems } from '@/assets/mock_data'
+import BaseButton from './BaseButton.vue'
 </script>
 
 <template>
@@ -11,7 +12,7 @@ import { listItems } from '@/assets/mock_data'
         v-bind:key="item.id"
         v-for="item in listItems"
         :aria-expanded="item.id === $route.params.id"
-        class="text-md nav_item__rounded relative z-10 rounded-l-xl text-white-100 hover:z-50 hover:cursor-pointer hover:bg-white-200/80 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-white-200 aria-expanded:text-accent-900 aria-expanded:duration-0"
+        class="text-md nav_item__rounded relative z-10 rounded-l-xl text-white-100 hover:z-50 hover:cursor-pointer hover:bg-primary-300 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-primary-200 aria-expanded:text-accent-900 aria-expanded:duration-0 dark:hover:bg-primary-200 dark:hover:text-white-100 dark:aria-expanded:text-white-100"
       >
         <router-link
           :to="`/flow/${item.id}`"
@@ -21,16 +22,16 @@ import { listItems } from '@/assets/mock_data'
         >
       </li>
     </ul>
-    <button
+    <BaseButton
+      variant="outline"
       tabindex="3"
-      class="absolute bottom-16 mx-auto flex w-56 rounded-xl bg-white-200 px-4 py-2.5 pl-14 shadow-lg transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500"
-    >
-      New Flow
+      class="absolute bottom-16 flex px-14 py-2.5 transition-colors"
+      >New Flow
       <svg
         width="24"
         height="24"
         viewBox="0 0 15 15"
-        class="ml-auto mr-8"
+        class="ml-4"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
@@ -38,6 +39,6 @@ import { listItems } from '@/assets/mock_data'
           fill="#014848"
         />
       </svg>
-    </button>
+    </BaseButton>
   </nav>
 </template>

@@ -5,7 +5,7 @@
 This is recommended to avoid issues with differing versions of packages in project and local environment. In addition, this avoids bloat not necessary for the project being added when freezing requirements.
 
 1. If you don't have python3.10-venv already, install it
-    - On Ubuntu: `sudo apt install python3.10-venv`
+    - On Ubuntu: `sudo apt install python3-venv`
 2. Create a venv
     - On Ubuntu: `python3 -m venv venv` (or whatever else you want to name your venv)
 3. Enter your venv
