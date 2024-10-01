@@ -42,7 +42,7 @@ const devices = [
     <section>
       <form action="" class="flex gap-4">
         <BaseInputField />
-        <BaseButton type="submit" class="mr-4"> Search Devices </BaseButton>
+        <BaseButton type="submit" class="mb-4 mr-4"> Search Devices </BaseButton>
       </form>
     </section>
     <ul class="mr-4 grid gap-4 xl:grid-cols-2">
