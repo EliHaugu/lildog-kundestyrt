@@ -1,6 +1,7 @@
 from django.db import models
 
-VALID_CONNECTION_TYPES = ['wifi', 'bluetooth', 'ethernet']
+VALID_CONNECTION_TYPES = ["wifi", "bluetooth", "ethernet"]
+
 
 class Category(models.Model):
     category_name = models.CharField(max_length=255)
@@ -8,7 +9,9 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if self.connection_type not in VALID_CONNECTION_TYPES:
-            raise ValueError(f"Invalid connection type: {self.connection_type}. Must be one of {VALID_CONNECTION_TYPES}.")
+            raise ValueError(
+                f"Invalid connection type: {self.connection_type}. Must be one of {VALID_CONNECTION_TYPES}."
+            )
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -34,12 +37,18 @@ class Node(models.Model):
     def __str__(self):
         return self.label
 
+
 class Edge(models.Model):
-    source = models.ForeignKey(Node, related_name='source_edges', on_delete=models.CASCADE)
-    target = models.ForeignKey(Node, related_name='target_edges', on_delete=models.CASCADE)
+    source = models.ForeignKey(
+        Node, related_name="source_edges", on_delete=models.CASCADE
+    )
+    target = models.ForeignKey(
+        Node, related_name="target_edges", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"Edge from {self.source} to {self.target}"
+
 
 class Flow(models.Model):
     name = models.CharField(max_length=255)
@@ -48,5 +57,3 @@ class Flow(models.Model):
 
     def __str__(self):
         return self.name
-
-
