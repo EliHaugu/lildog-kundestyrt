@@ -1,12 +1,15 @@
 import asyncio
-import websockets
 import json
+
+import websockets
+
 
 # Load mock logs
 def load_logs():
-    with open('./assets/mock_data.json', 'r') as file:
+    with open("./assets/mock_data.json", "r") as file:
         logs = json.load(file)
     return logs["logItems"]
+
 
 async def log(websocket):
     print("Server connected")
@@ -18,9 +21,11 @@ async def log(websocket):
         await websocket.send(log_message)
         print(f"Server sent log {log_entry['id']}")
 
+
 async def main():
     async with websockets.serve(log, "localhost", 8765):
-        await asyncio.Future() # run forever
+        await asyncio.Future()  # run forever
+
 
 if __name__ == "__main__":
     asyncio.run(main())
