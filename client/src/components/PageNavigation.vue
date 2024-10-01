@@ -25,7 +25,7 @@ import BaseButton from './BaseButton.vue'
     <BaseButton
       variant="outline"
       tabindex="3"
-      class="absolute bottom-16 flex px-14 py-2.5 transition-colors"
+      class="absolute bottom-16 flex w-[14rem] justify-center py-2.5 transition-colors"
       >New Flow
       <svg
         width="24"
