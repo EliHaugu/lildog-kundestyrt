@@ -12,13 +12,13 @@ const currentDevice = ref(0)
 
 <template>
   <div v-if="show">
-    <nav class="mt-4 flex gap-2">
+    <nav class="mt-2 flex gap-2">
       <ul class="flex h-14 flex-grow gap-2 overflow-x-scroll">
         <li
           @click="currentDevice = 0"
           :aria-expanded="currentDevice === 0"
           tabindex="1"
-          class="h-fit w-fit flex-shrink-0 rounded-md bg-white-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400"
+          class="h-fit w-fit flex-shrink-0 rounded-md bg-primary-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400 dark:hover:bg-accent-600 dark:aria-expanded:bg-accent-500"
         >
           All Devices
         </li>
@@ -28,7 +28,7 @@ const currentDevice = ref(0)
           @click="currentDevice = item.id"
           :aria-expanded="currentDevice === item.id"
           tabindex="1"
-          class="h-fit w-fit flex-shrink-0 rounded-md bg-white-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400"
+          class="h-fit w-fit flex-shrink-0 rounded-md bg-primary-100 px-4 py-1.5 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400 dark:hover:bg-accent-600 dark:aria-expanded:bg-accent-500"
         >
           {{ item.name }}
         </li>
@@ -36,7 +36,7 @@ const currentDevice = ref(0)
       <a
         href=""
         tabindex="1"
-        class="ml-auto mr-4 flex h-fit flex-shrink-0 gap-2 rounded-md bg-accent-400 px-4 py-1.5 shadow-md transition-colors duration-200 hover:bg-accent-500"
+        class="ml-auto mr-4 flex h-fit flex-shrink-0 gap-2 rounded-md bg-accent-400 px-4 py-1.5 shadow-md transition-colors duration-200 hover:bg-accent-500 dark:bg-accent-500 dark:hover:bg-accent-600"
         >Export log
         <svg
           xmlns="http://www.w3.org/2000/svg"

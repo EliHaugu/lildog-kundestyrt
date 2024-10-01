@@ -92,3 +92,105 @@ export const logItems = [
     ]
   }
 ]
+
+import type { CustomNode } from '@/types/nodeType'
+import { stripNodeStyles } from '@/utils/stripNodeStyles'
+
+export const devices: CustomNode[] = [
+  {
+    id: '1',
+    data: { label: 'Button Press', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '2',
+    data: { label: 'Backend Updated', connection: 'ADE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '3',
+    data: { label: 'Driver Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '4',
+    data: { label: 'Light Turned On', connection: 'WiFi' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '5',
+    data: { label: 'Button Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '1',
+    data: { label: 'Button Press', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '2',
+    data: { label: 'Backend Updated', connection: 'ADE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '3',
+    data: { label: 'Driver Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '4',
+    data: { label: 'Light Turned On', connection: 'WiFi' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '5',
+    data: { label: 'Button Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '1',
+    data: { label: 'Button Press', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '2',
+    data: { label: 'Backend Updated', connection: 'ADE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '3',
+    data: { label: 'Driver Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '4',
+    data: { label: 'Light Turned On', connection: 'WiFi' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '5',
+    data: { label: 'Button Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  },
+  {
+    id: '5',
+    data: { label: 'Button Signal', connection: 'BLE' },
+    position: { x: 0, y: 0 },
+    style: stripNodeStyles
+  }
+]
