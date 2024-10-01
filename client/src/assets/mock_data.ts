@@ -93,7 +93,7 @@ export const logItems = [
   }
 ]
 
-import type { CustomNode } from '@/types/nodeType'
+import type { CustomNode } from '@/types/NodeType'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
 export const devices: CustomNode[] = [

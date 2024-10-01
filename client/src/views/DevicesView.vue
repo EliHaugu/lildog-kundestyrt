@@ -2,8 +2,11 @@
 import DevicesCard from '@/components/DevicesCard.vue'
 import BaseButton from '../components/BaseButton.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
+import type { Device } from '@/types/DeviceTypes'
 
-const devices = [
+const deviceTypes = ['ble', 'ade', 'wifi']
+
+const devices: Device[] = [
   {
     id: 1,
     name: 'Device 1',
@@ -33,20 +36,36 @@ const devices = [
       key: 'zxvc_234523',
       value: '1234'
     }
+  },
+  {
+    id: 4,
+    name: 'Device 4',
+    type: 'ble',
+    connection: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
   }
 ]
 </script>
 
 <template>
   <main>
-    <section>
-      <form action="" class="flex gap-4">
+    <section class="flex justify-between">
+      <form action="" class="w-2/3 flex gap-4">
         <BaseInputField />
-        <BaseButton type="submit" class="mr-4"> Search Devices </BaseButton>
+        <BaseButton type="submit" class="mr-4">Search Devices</BaseButton>
       </form>
+      <BaseButton class="w-fit mr-4">New device type</BaseButton>
     </section>
-    <ul class="mr-4 grid gap-4 xl:grid-cols-2">
-      <devices-card v-for="device in devices" :key="device.id" :device="device" />
+    <ul class="mr-4 grid grid-cols-1 gap-4">
+      <DevicesCard 
+        v-for="deviceType in deviceTypes" 
+        :key="deviceType" 
+        :deviceType="deviceType" 
+        :devices="devices.filter(device => device.type === deviceType)" 
+      />
     </ul>
   </main>
 </template>

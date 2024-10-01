@@ -1,12 +1,19 @@
 type Device = {
-    id: number,
-    name: string,
-    type: string,
-    connection: string,
+    id: Number,
+    name: String,
+    type: String,
+    connection: String,
     fields: {
-        key: string,
-        value: string
+        key: String,
+        value: String
     }
 }
 
+const deviceTypes: String[] = [
+    "ble",
+    "ade",
+    "wifi"
+]
+
 export type { Device }
+export { deviceTypes }
