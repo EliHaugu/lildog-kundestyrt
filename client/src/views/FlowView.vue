@@ -32,25 +32,61 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 const nodes = ref<CustomNode[]>([
   {
     id: '1',
-    data: { label: 'Button Press', connection: 'BLE' },
+    data: {
+      label: 'Button Press',
+      connection: 'BLE',
+      type: 'Action',
+      testState: 'idle',
+      fields: {
+        uuid: '123456789',
+        action: 'buttonPressed()'
+      }
+    },
     position: { x: 400, y: 50 },
     style: stripNodeStyles
   },
   {
     id: '2',
-    data: { label: 'Backend Updated', connection: 'ADE' },
+    data: {
+      label: 'Backend Updated',
+      connection: 'ADE',
+      type: 'Action',
+      testState: 'success',
+      fields: {
+        uuid: '987654321',
+        action: 'updateBackend()'
+      }
+    },
     position: { x: 150, y: 200 },
     style: stripNodeStyles
   },
   {
     id: '3',
-    data: { label: 'Driver Signal', connection: 'BLE' },
+    data: {
+      label: 'Driver Signal',
+      connection: 'BLE',
+      type: 'Assertion',
+      testState: 'warning',
+      fields: {
+        uuid: '123456789',
+        assertion: 'driverSignalSent()'
+      }
+    },
     position: { x: 650, y: 200 },
     style: stripNodeStyles
   },
   {
     id: '4',
-    data: { label: 'Light Turned On', connection: 'WiFi' },
+    data: {
+      label: 'Light Turned On',
+      connection: 'WiFi',
+      type: 'Assertion',
+      testState: 'error',
+      fields: {
+        uuid: '987654321',
+        assertion: 'lightIsOn()'
+      }
+    },
     position: { x: 400, y: 350 },
     style: stripNodeStyles
   }

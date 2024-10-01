@@ -21,9 +21,10 @@ export default {
         100: '#ffffff',
         200: '#fbfbfb'
       },
-      error: {},
-      warning: {},
-      success: {}
+      error: '#FF0000',
+      warning: '#FAFA00',
+      success: '#00AA00',
+      idle: '#AAAAAA'
     },
     extend: {}
   },

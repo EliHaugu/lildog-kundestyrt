@@ -2,35 +2,97 @@
 import type { CustomData } from '@/types/nodeType'
 import { Handle, Position } from '@vue-flow/core'
 import type { NodeProps } from '@vue-flow/core'
+import { blue, green, pink, purple } from '@/utils/colorRanges'
+import { ref } from 'vue'
+import NodeFieldInput from './node/FieldInput.vue'
 
-defineProps<NodeProps<CustomData>>()
+const props = defineProps<NodeProps<CustomData>>()
+const nodeTestState = ref(props.data.testState)
+const nodeExpanded = ref(false)
+const edited = ref(false)
 
-const expandNode = (event: Event) => {
-  const clickedElement = event.currentTarget as HTMLElement
-
-  if (clickedElement.getAttribute('aria-expanded') === 'true') {
-    clickedElement.setAttribute('aria-expanded', 'false')
-    return
+const pickColour = (connectionType: string) => {
+  switch (connectionType) {
+    case 'BLE':
+      return blue[Math.floor(Math.random() * blue.length)]
+    case 'LTE':
+      return green[Math.floor(Math.random() * green.length)]
+    case 'WiFi':
+      return pink[Math.floor(Math.random() * pink.length)]
+    case 'ADE':
+      return purple[Math.floor(Math.random() * purple.length)]
+    default:
+      break
   }
+}
 
-  document.querySelectorAll('.flow_node').forEach((node) => {
-    node.setAttribute('aria-expanded', 'false')
-  })
-  clickedElement.setAttribute('aria-expanded', 'true')
+const colour = pickColour(props!.data.connection!)
+
+const editedField = () => {
+  edited.value = true
+}
+
+const getKeysByValue = (value: string) => {
+  const fields = props.data.fields as { [key: string]: string } | undefined
+  return Object.keys(fields!).find((key) => fields![key] === value)
 }
 </script>
+
 <template>
   <div
     aria-expanded="false"
-    class="flow_node rounded-xl border border-accent-500 bg-white-200 p-4 aria-expanded:h-64"
-    @click="expandNode($event)"
+    class="flow_node flex flex-col gap-1 rounded-xl border-2 border-idle bg-primary-200 p-1"
+    :class="{
+      'border-success': nodeTestState === 'success',
+      'border-warning': nodeTestState === 'warning',
+      'border-error': nodeTestState === 'error'
+    }"
   >
-    <h1 class="text-lg">
+    <h1
+      @click="nodeExpanded = !nodeExpanded"
+      class="rounded-lg px-3 py-1 text-lg dark:text-white-100"
+      :style="{
+        backgroundColor: colour,
+        borderBottomRightRadius: nodeExpanded ? '2px' : '8px',
+        borderBottomLeftRadius: nodeExpanded ? '2px' : '8px'
+      }"
+    >
       {{ data.label }}
     </h1>
-    <div class="rounded-md bg-accent-400 px-4 py-2">
-      <p>Connected through {{ data.connection }}</p>
+
+    <div v-if="nodeExpanded" class="flex flex-col gap-1">
+      <h2
+        class="rounded-sm px-3 py-1 text-lg dark:text-white-100"
+        :style="{ backgroundColor: colour }"
+      >
+        {{ data.type }}
+      </h2>
+
+      <div class="flex">
+        <h3 class="text-md text-left dark:text-white-100">Connection: {{ data.connection }}</h3>
+        <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
+      </div>
+
+      <ul class="flex flex-col gap-1">
+        <li v-for="field in data.fields" :key="field">
+          <node-field-input
+            :label="getKeysByValue(field!)"
+            :value="field"
+            :colour="colour"
+            @edit="editedField"
+          />
+        </li>
+      </ul>
+
+      <button
+        :style="{ backgroundColor: colour }"
+        class="flex items-center rounded-b-lg rounded-t-sm px-3 py-2 text-left shadow-md"
+      >
+        Test Connection
+        <div class="ml-auto rounded-sm bg-success px-1">200/OK</div>
+      </button>
     </div>
+
     <Handle type="target" :position="Position.Top" />
     <Handle type="source" :position="Position.Bottom" />
   </div>
