@@ -11,12 +11,16 @@ colorama==0.4.6
 coverage==7.6.1
 cryptography==42.0.5
 Django==5.1.1
+django-stubs==5.1.0
+django-stubs-ext==5.1.0
 djangorestframework==3.15.2
+djangorestframework-stubs==3.15.1
 docutils==0.21.2
 exceptiongroup==1.2.2
 flake8==7.1.1
 idna==3.10
 imagesize==1.4.1
+importlib_metadata==8.5.0
 iniconfig==2.0.0
 isort==5.13.2
 jaraco.classes==3.4.0
@@ -50,6 +54,7 @@ PySocks==1.7.1
 pytest==8.3.3
 pytest-asyncio==0.24.0
 python-dotenv==1.0.1
+pywin32-ctypes==0.2.3
 pyxdg==0.28
 requests==2.32.3
 SecretStorage==3.3.3
@@ -66,7 +71,11 @@ sqlparse==0.5.1
 structlog==24.1.0
 toml==0.10.2
 tomli==2.0.1
+types-PyYAML==6.0.12.20240917
+types-requests==2.32.0.20240914
 typing_extensions==4.12.2
+tzdata==2024.1
 urllib3==2.2.3
 wcwidth==0.2.13
 websockets==13.1
+zipp==3.20.2

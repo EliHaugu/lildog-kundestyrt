@@ -15,12 +15,22 @@ from .views import (
 )
 
 urlpatterns = [
-    path("api/categories/", CategoryListCreateView.as_view(), name="category-list"),
     path(
-        "api/categories/<int:pk>/", CategoryDetailView.as_view(), name="category-detail"
+        "api/categories/",
+        CategoryListCreateView.as_view(),
+        name="category-list",
+    ),
+    path(
+        "api/categories/<int:pk>/",
+        CategoryDetailView.as_view(),
+        name="category-detail",
     ),
     path("api/devices/", DeviceListCreateView.as_view(), name="device-list"),
-    path("api/devices/<int:pk>/", DeviceDetailView.as_view(), name="device-detail"),
+    path(
+        "api/devices/<int:pk>/",
+        DeviceDetailView.as_view(),
+        name="device-detail",
+    ),
     path("api/nodes/", NodeListCreateView.as_view(), name="node-list"),
     path("api/nodes/<int:pk>/", NodeDetailView.as_view(), name="node-detail"),
     path("api/edges/", EdgeListCreateView.as_view(), name="edge-list"),

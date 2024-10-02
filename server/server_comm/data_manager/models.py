@@ -1,17 +1,39 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.core.exceptions import ValidationError
 
 VALID_CONNECTION_TYPES = ["wifi", "bluetooth", "ethernet"]
 
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=255)
-    connection_type = models.CharField(max_length=50)
+    category_name: models.CharField = models.CharField(max_length=255)
+    connection_types: ArrayField = ArrayField(
+        models.CharField(
+            max_length=50,
+            choices=[(conn, conn) for conn in VALID_CONNECTION_TYPES],
+        ),
+        size=len(VALID_CONNECTION_TYPES),
+        default=list,
+    )
+
+    def clean(self):
+        if not isinstance(self.connection_types, list):
+            raise ValidationError("connection_types must be a list.")
+
+        invalid_types = [
+            conn
+            for conn in self.connection_types
+            if conn not in VALID_CONNECTION_TYPES
+        ]
+
+        if invalid_types:
+            raise ValidationError(
+                f"Invalid connection types: {', '.join(invalid_types)}. "
+                f"Must be one of {VALID_CONNECTION_TYPES}."
+            )
 
     def save(self, *args, **kwargs):
-        if self.connection_type not in VALID_CONNECTION_TYPES:
-            raise ValueError(
-                f"Invalid connection type: {self.connection_type}. Must be one of {VALID_CONNECTION_TYPES}."
-            )
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -19,30 +41,34 @@ class Category(models.Model):
 
 
 class Device(models.Model):
-    device_id = models.CharField(max_length=255, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    device_id: models.CharField = models.CharField(max_length=255, unique=True)
+    category: models.ForeignKey = models.ForeignKey(
+        Category, on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.device_id
 
 
 class Node(models.Model):
-    label = models.CharField(max_length=255)
-    expected_response = models.CharField(max_length=255)
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    function = models.TextField()
-    x_pos = models.IntegerField()
-    y_pos = models.IntegerField()
+    label: models.CharField = models.CharField(max_length=255)
+    expected_response: models.CharField = models.CharField(max_length=255)
+    device: models.ForeignKey = models.ForeignKey(
+        Device, on_delete=models.CASCADE
+    )
+    function: models.TextField = models.TextField()
+    x_pos: models.IntegerField = models.IntegerField()
+    y_pos: models.IntegerField = models.IntegerField()
 
     def __str__(self):
         return self.label
 
 
 class Edge(models.Model):
-    source = models.ForeignKey(
+    source: models.ForeignKey = models.ForeignKey(
         Node, related_name="source_edges", on_delete=models.CASCADE
     )
-    target = models.ForeignKey(
+    target: models.ForeignKey = models.ForeignKey(
         Node, related_name="target_edges", on_delete=models.CASCADE
     )
 
@@ -51,9 +77,9 @@ class Edge(models.Model):
 
 
 class Flow(models.Model):
-    name = models.CharField(max_length=255)
-    nodes = models.ManyToManyField(Node)
-    edges = models.ManyToManyField(Edge)
+    name: models.CharField = models.CharField(max_length=255)
+    nodes: models.ManyToManyField = models.ManyToManyField(Node)
+    edges: models.ManyToManyField = models.ManyToManyField(Edge)
 
     def __str__(self):
         return self.name
