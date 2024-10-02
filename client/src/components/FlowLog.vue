@@ -6,7 +6,7 @@ defineProps<{
 import LogList from '@/components/LogList.vue'
 import { logItems } from '@/assets/mock_data'
 import { ref } from 'vue'
-import WebSocketProvider from '@/providers/WebSocketProvider.vue';
+import WebSocketProvider from '@/providers/WebSocketProvider.vue'
 
 const currentDevice = ref(0)
 </script>
