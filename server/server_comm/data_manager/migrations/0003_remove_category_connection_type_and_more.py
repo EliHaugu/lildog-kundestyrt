@@ -7,7 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("data_manager", "0002_category_device_edge_flow_node_delete_item_and_more"),
+        (
+            "data_manager",
+            "0002_category_device_edge_flow_node_delete_item_and_more",
+        ),
     ]
 
     operations = [

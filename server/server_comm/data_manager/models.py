@@ -1,6 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 
 VALID_CONNECTION_TYPES = ["wifi", "bluetooth", "ethernet"]
 
