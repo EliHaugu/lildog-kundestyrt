@@ -48,17 +48,57 @@ const getKeysByValue = (value: string) => {
       'border-error': nodeTestState === 'error'
     }"
   >
-    <h1
-      @click="nodeExpanded = !nodeExpanded"
-      class="rounded-lg px-3 py-1 text-lg dark:text-white-100"
+    <div
+      class="flex items-center justify-center "
       :style="{
         backgroundColor: colour,
+        borderTopRightRadius: '8px',
+        borderTopLeftRadius: '8px',
         borderBottomRightRadius: nodeExpanded ? '2px' : '8px',
         borderBottomLeftRadius: nodeExpanded ? '2px' : '8px'
       }"
     >
-      {{ data.label }}
-    </h1>
+      <h1
+        @click="nodeExpanded = !nodeExpanded"
+        class="rounded-lg px-3 py-1 text-lg dark:text-white-100"
+      >
+        {{ data.label }}
+      </h1>
+
+      <div v-if="nodeTestState" class="icon-container p-1" >
+        <svg
+          v-if="nodeTestState === 'success'"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 -960 960 960"
+        >
+          <path d="M382-240 154-468l57-57 171 171 367-367 57 57z" />
+        </svg>
+        <svg
+          v-if="nodeTestState === 'warning'"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 -960 960 960"
+        >
+          <path d="M440-400v-360h80v360zm0 200v-80h80v80z" />
+        </svg>
+        <svg
+          v-if="nodeTestState === 'error'"
+          width="24"
+          height="24"
+          viewBox="0 0 16 16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8.6 1c1.6.1 3.1.9 4.2 2 1.3 1.4 2 3.1 2 5.1 0 1.6-.6 3.1-1.6 4.4-1 1.2-2.4 2.1-4 2.4-1.6.3-3.2.1-4.6-.7-1.4-.8-2.5-2-3.1-3.5C.9 9.2.8 7.5 1.3 6c.5-1.6 1.4-2.9 2.8-3.8C5.4 1.3 7 .9 8.6 1zm.5 12.9c1.3-.3 2.5-1 3.4-2.1.8-1.1 1.3-2.4 1.2-3.8 0-1.6-.6-3.2-1.7-4.3-1-1-2.2-1.6-3.6-1.7-1.3-.1-2.7.2-3.8 1-1.1.8-1.9 1.9-2.3 3.3-.4 1.3-.4 2.7.2 4 .6 1.3 1.5 2.3 2.7 3 1.2.7 2.6.9 3.9.6zM7.9 7.5L10.3 5l.7.7-2.4 2.5 2.4 2.5-.7.7-2.4-2.5-2.4 2.5-.7-.7 2.4-2.5-2.4-2.5.7-.7 2.4 2.5z"
+          />
+        </svg>
+      </div>
+    </div>
 
     <div v-if="nodeExpanded" class="flex flex-col gap-1">
       <h2
