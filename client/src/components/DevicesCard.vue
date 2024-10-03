@@ -2,9 +2,14 @@
 import { ref } from 'vue';
 import BaseButton from '../components/BaseButton.vue';
 
+// Import or define the DeviceType type
+import type { DeviceType } from '../types/DeviceTypes';
+
 defineProps({
-  deviceType: String,
-  devices: Object
+  deviceType: {
+    type: Object as () => DeviceType,
+    required: true,
+  },
 });
 
 const showDevices = ref(true);
@@ -15,11 +20,11 @@ const toggleDevices = () => {
 </script>
 
 <template>
-  <div class="p-2 h-fit min-w-96 rounded-xl border-2 border-[#dcdcdc] shadow-md flex flex-col gap-2">
+  <div class="p-2 h-fit min-w-96 rounded-xl border-2 border-[#dcdcdc] flex flex-col gap-2">
     <div
       :class="['flex justify-between items-center']"
     >
-      <h2 class="px-2 text-xl font-semibold">{{ deviceType }}</h2>
+      <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
       <div class="flex gap-2">
         <BaseButton class="w-fit">Add device</BaseButton>
         <BaseButton class="w-fit" @click="toggleDevices">
@@ -30,7 +35,7 @@ const toggleDevices = () => {
     <div :class="['pt-2 w-full flex flex-row gap-2', showDevices ? 'border-t-2 border-[#d4d4d4]' : '']" v-if="showDevices">
       <ul class="w-full">
         <li 
-          v-for="device in devices" 
+          v-for="device in deviceType.devices" 
           :key="device.id"
           class="p-2 w-full rounded-md hover:bg-[#e3e3e3] hover:cursor-pointer flex flex-row"
         >

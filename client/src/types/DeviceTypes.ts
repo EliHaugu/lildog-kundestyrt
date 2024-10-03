@@ -1,19 +1,19 @@
 type Device = {
-    id: Number,
-    name: String,
-    type: String,
-    connection: String,
+    id: number,
+    name: string,
+    deviceType: string,
+    connectionType: string,
+    connectionId: string,
     fields: {
-        key: String,
-        value: String
+        key: string,
+        value: string
     }
 }
 
-const deviceTypes: String[] = [
-    "ble",
-    "ade",
-    "wifi"
-]
+type DeviceType = {
+    name: string,
+    connectionType: string,
+    devices?: Device[]
+}
 
-export type { Device }
-export { deviceTypes }
+export type { Device, DeviceType }

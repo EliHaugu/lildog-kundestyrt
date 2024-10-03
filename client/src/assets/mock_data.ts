@@ -1,3 +1,7 @@
+import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { CustomNode } from '@/types/NodeType'
+import { stripNodeStyles } from '@/utils/stripNodeStyles'
+
 export const listItems = [
   {
     id: '1',
@@ -92,9 +96,6 @@ export const logItems = [
     ]
   }
 ]
-
-import type { CustomNode } from '@/types/NodeType'
-import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
 export const devices: CustomNode[] = [
   {
@@ -192,5 +193,70 @@ export const devices: CustomNode[] = [
     data: { label: 'Button Signal', connection: 'BLE' },
     position: { x: 0, y: 0 },
     style: stripNodeStyles
+  }
+]
+
+export const mock_devices: Device[] = [
+  {
+    id: 1,
+    name: 'Device 1',
+    deviceType: 'Halsbånd',
+    connectionType: 'ble',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 2,
+    name: 'Device 2',
+    deviceType: 'Halsbånd',
+    connectionType: 'ade',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 3,
+    name: 'Device 3',
+    deviceType: 'HundeChip',
+    connectionType: 'wifi',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 4,
+    name: 'Device 4',
+    deviceType: 'GPS-tracker',
+    connectionType: 'ble',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  }
+]
+
+export const mock_device_types: DeviceType[] = [
+  {
+    name: 'Halsbånd',
+    connectionType: 'BLE',
+    devices: mock_devices.filter((device) => device.deviceType === 'Halsbånd')
+  },
+  {
+    name: 'HundeChip',
+    connectionType: 'ADE',
+    devices: mock_devices.filter((device) => device.deviceType === 'HundeChip')
+  },
+  {
+    name: 'GPS-tracker',
+    connectionType: 'WiFi',
+    devices: mock_devices.filter((device) => device.deviceType === 'GPS-tracker')
   }
 ]

@@ -1,5 +1,18 @@
 <script setup lang="ts">
-import Layout from '@/components/PageLayout.vue'
+import { ref, provide } from 'vue';
+import Layout from '@/components/PageLayout.vue';
+import { mock_device_types } from '@/assets/mock_data';
+import type { DeviceType } from '@/types/DeviceTypes';
+
+const deviceTypes = ref<DeviceType[]>(mock_device_types);
+
+function updateDeviceTypes(newData: DeviceType[]) {
+  deviceTypes.value = newData;
+  console.log('Device types updated');
+}
+
+provide('deviceTypes', deviceTypes);
+provide('updateDeviceTypes', updateDeviceTypes);
 </script>
 
 <template>
