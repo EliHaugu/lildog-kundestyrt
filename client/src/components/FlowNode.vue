@@ -49,7 +49,7 @@ const getKeysByValue = (value: string) => {
     }"
   >
     <div
-      class="flex items-center justify-center "
+      class="flex items-center justify-center"
       :style="{
         backgroundColor: colour,
         borderTopRightRadius: '8px',
@@ -65,7 +65,7 @@ const getKeysByValue = (value: string) => {
         {{ data.label }}
       </h1>
 
-      <div v-if="nodeTestState" class="icon-container p-1" >
+      <div v-if="nodeTestState" class="icon-container p-1">
         <svg
           v-if="nodeTestState === 'success'"
           xmlns="http://www.w3.org/2000/svg"
