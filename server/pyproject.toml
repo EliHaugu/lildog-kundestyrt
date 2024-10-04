@@ -1,6 +1,6 @@
 [tool.isort]
-profile = "black"  # Use black's formatting style
-line_length = 79    # Ensure the line length matches black's
+profile = "black"
+line_length = 79
 
 [tool.black]
 line-length = 79
