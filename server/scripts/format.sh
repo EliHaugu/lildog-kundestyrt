@@ -1,5 +1,5 @@
 echo "Formatting server code"
-cd ..
+cd "$(dirname "$0")/.."
 isort .
 black .
 echo "Done formatting code :)"

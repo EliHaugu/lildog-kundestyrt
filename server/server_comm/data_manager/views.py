@@ -1,4 +1,3 @@
-# data_manager/views.py
 from rest_framework import generics
 
 from .models import Category, Device, Edge, Flow, Node
