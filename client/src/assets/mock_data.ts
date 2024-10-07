@@ -23,18 +23,8 @@ export const listItems = [
 export const headerItems = [
   {
     id: 1,
-    name: 'New Device',
-    link: 'new'
-  },
-  {
-    id: 2,
-    name: 'Configure Devices',
+    name: 'Devices',
     link: 'devices'
-  },
-  {
-    id: 3,
-    name: 'API',
-    link: 'api'
   }
 ]
 
