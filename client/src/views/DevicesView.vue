@@ -65,25 +65,27 @@ const filteredDeviceTypes = computed(() => {
     <form 
     class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] z-10
     w-96 
-    bg-white-100 rounded-xl flex flex-col gap-6 p-4 shadow-md" 
+    bg-white-100 rounded-xl flex flex-col gap-6 p-4 pt-6 shadow-md" 
     v-if="showNewDeviceTypeForm">
-      <div class="flex justify-between items-center">
-        <h2 class="text-lg font-semibold">Create New Device Type</h2>
-        <BaseButton @click="showNewDeviceTypeForm = false">
-        <i class="mdi mdi-close text-xl p-1"></i>
-      </BaseButton>
-      </div>
+      <h2 class="text-lg font-semibold">Create new - Device Type</h2>
       <div className="flex flex-col gap-1">
-        <label for="name" class="text-md">Name</label>
-        <BaseInputField v-model="newDeviceTypeName" label="Name" name="name" />
+        <label for="name" class="text-md">Device type name</label>
+        <BaseInputField v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
+      </div>
+      <div class="flex flex-col gap-1">
         <label for="connection-type" class="text-md">Connection type</label>
         <select name="connection-type" class="border border-accent-600 bg-primary-200 rounded-lg p-2" v-model="newDeviceTypeConnection">
+          <option value="" disabled selected>Select connection type</option>
           <option v-for="deviceType in deviceTypes" :key="deviceType.name" :value="deviceType.connectionType">{{ deviceType.connectionType }}</option>
         </select>
       </div>
-      <div className="w-full flex justify-between">
-        <BaseButton variant="outline" @click="showNewDeviceTypeForm = false">Cancel</BaseButton>
-        <BaseButton type="submit" @click.prevent="addNewDeviceType">Create</BaseButton>
+      <div class="mt-6 flex justify-between gap-6">
+        <BaseButton variant="outline" @click="showNewDeviceTypeForm = false">
+          Cancel
+        </BaseButton>
+        <BaseButton @click="addNewDeviceType">
+          Create
+        </BaseButton>
       </div>
     </form>
     <div v-if="showNewDeviceTypeForm" class="fixed inset-0 bg-[#000000] opacity-30"></div>

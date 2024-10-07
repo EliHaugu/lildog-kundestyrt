@@ -114,10 +114,10 @@ import { listItems } from '@/assets/mock_data'
     w-96 
     bg-white-100 rounded-xl flex flex-col gap-6 p-4 pt-6 shadow-md" 
     v-if="showNewDeviceForm">
-    <h2 class="text-xl font-semibold">Create New Device</h2>
+    <h2 class="text-xl font-semibold">Create new - Device</h2>
     <div class="flex flex-col gap-1">
       <label for="name" class="text-md">Device name</label>
-      <BaseInputField v-model="newDeviceName" label="Name" name="name" placeholder="Device name" />
+      <BaseInputField v-model="newDeviceName" label="Name" name="name" placeholder="" />
     </div>
     <div class="flex flex-col gap-1">
       <label for="connection" class="text-md">Device connection</label>
@@ -127,7 +127,7 @@ import { listItems } from '@/assets/mock_data'
         </select>
         <BaseButton @click="toggleTestConnection">Test</BaseButton>
       </div>
-      <div class="w-1/2 flex justify-between">
+      <div class="w-fit flex justify-between gap-3">
         <label>Response:</label>
         <label class="font-bold" v-if="testConnection" for="response">
           {{ response[0].number }} {{ response[0].status }}
