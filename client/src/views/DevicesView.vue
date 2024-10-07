@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue'
+import { ref, inject, computed } from 'vue'
 import type { Ref } from 'vue'
 import DevicesCard from '@/components/DevicesCard.vue'
 import BaseButton from '../components/BaseButton.vue'
@@ -12,6 +12,7 @@ const deviceTypes = inject<Ref<DeviceType[]>>("deviceTypes", ref([]));
 const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>('updateDeviceTypes', () => {});
 const newDeviceTypeName = ref('');
 const newDeviceTypeConnection = ref('');
+const searchQuery = ref('');
 
 const addNewDeviceType = () => {
   if (!newDeviceTypeName.value || !newDeviceTypeConnection.value) {
@@ -21,6 +22,7 @@ const addNewDeviceType = () => {
     if (!newDeviceTypeConnection.value) {
       console.error('Device type connection is required');
     }
+    return;
   }
 
   const newDeviceType: DeviceType = {
@@ -33,22 +35,26 @@ const addNewDeviceType = () => {
   showNewDeviceTypeForm.value = false;
   newDeviceTypeName.value = '';
   newDeviceTypeConnection.value = '';
-  showNewDeviceTypeForm.value = false;
 };
+
+const filteredDeviceTypes = computed(() => {
+  return deviceTypes.value.filter(deviceType =>
+    deviceType.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
   <main>
     <section class="flex justify-between">
-      <form action="" class="w-2/3 flex gap-4">
-        <BaseInputField />
-        <BaseButton type="submit" class="mr-4">Search Devices</BaseButton>
+      <form action="" class="w-1/3 flex gap-4">
+        <BaseInputField v-model="searchQuery" placeholder="Search Devices" />
       </form>
       <BaseButton class="w-fit mr-4" @click="showNewDeviceTypeForm = true">New device type</BaseButton>
     </section>
     <ul class="mr-4 grid grid-cols-1 gap-4">
       <DevicesCard 
-        v-for="deviceType in deviceTypes" 
+        v-for="deviceType in filteredDeviceTypes" 
         :key="deviceType.name" 
         :deviceType="deviceType"
       />
