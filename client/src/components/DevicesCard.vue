@@ -1,22 +1,63 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
 import BaseButton from '../components/BaseButton.vue';
+import BaseInputField from '@/components/BaseInputField.vue'
 import '@mdi/font/css/materialdesignicons.css';
 
 // Import or define the DeviceType type
-import type { DeviceType } from '../types/DeviceTypes';
+import type { Device, DeviceType } from '../types/DeviceTypes';
 
-defineProps({
-  deviceType: {
-    type: Object as () => DeviceType,
-    required: true,
-  },
-});
+const props = defineProps<{
+  deviceType: DeviceType;
+}>();
 
 const showDevices = ref(false);
 
 const toggleDevices = () => {
   showDevices.value = !showDevices.value;
+};
+
+const deviceTypes = inject<Ref<DeviceType[]>>("deviceTypes", ref([]));
+const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>('updateDeviceTypes', () => {});
+
+const showNewDeviceForm = ref(false);
+const newDeviceName = ref('');
+const newDeviceConnection = ref(props.deviceType.connectionType || '');
+
+const addNewDevice = () => {
+  if (!newDeviceName.value || !newDeviceConnection.value) {
+    if (!newDeviceName.value) {
+      console.error('Device name is required');
+    }
+    if (!newDeviceConnection.value) {
+      console.error('Device connection is required');
+    }
+    return;
+  } else if (deviceTypes.value.some(deviceType => deviceType.devices?.some(device => device.name === newDeviceName.value))) {
+    console.error('Device name already exists');
+    return;
+  }
+
+  const newDevice: Device = {
+    id: Date.now(),
+    name: newDeviceName.value,
+    deviceType: props.deviceType.name,
+    connectionType: 'default', // Replace with actual connection type if available
+    connectionId: newDeviceConnection.value,
+    fields: { key: '', value: '' },
+  };
+
+  updateDeviceTypes(deviceTypes.value.map(deviceType => {
+    if (deviceType.name === props.deviceType.name) {
+      return {
+        ...deviceType,
+        devices: [...deviceType.devices!, newDevice],
+      };
+    }
+    return deviceType;
+  }));
+
+  showNewDeviceForm.value = false;
 };
 </script>
 
@@ -27,7 +68,7 @@ const toggleDevices = () => {
     >
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
       <div class="flex gap-2">
-        <BaseButton class="w-fit">
+        <BaseButton  variant="outline" class="w-fit" @click="showNewDeviceForm = !showNewDeviceForm">
             Add Device
             <i class="mdi mdi-plus text-xl p-1"></i>
         </BaseButton>
@@ -51,4 +92,25 @@ const toggleDevices = () => {
       </ul>
     </div>
   </div>
+  <form 
+    class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] z-10
+    w-96 
+    bg-white-100 rounded-xl flex flex-col gap-6 p-4 shadow-md" 
+    v-if="showNewDeviceForm">
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold">Create New Device</h2>
+      <BaseButton @click="showNewDeviceForm = false">
+        <i class="mdi mdi-close text-xl p-1"></i>
+      </BaseButton>
+    </div>
+    <label for="name" class="text-md">Device name</label>
+    <BaseInputField v-model="newDeviceName" label="Name" name="name" placeholder="Device name" />
+    <label for="connection" class="text-md">Device connection</label>
+    <select name="connection" class="border border-accent-600 bg-primary-200 rounded-lg p-2" v-model="newDeviceConnection">
+      <option v-for="deviceType in deviceTypes" :key="deviceType.name" :value="deviceType.connectionType">{{ deviceType.connectionType }}</option>
+    </select>
+    <BaseButton @click="addNewDevice">
+      Add Device
+    </BaseButton>
+  </form>
 </template>

@@ -76,7 +76,6 @@ const filteredDeviceTypes = computed(() => {
       <div className="flex flex-col gap-1">
         <label for="name" class="text-md">Name</label>
         <BaseInputField v-model="newDeviceTypeName" label="Name" name="name" />
-        <p>Typed text: {{ newDeviceTypeName }}</p>
         <label for="connection-type" class="text-md">Connection type</label>
         <select name="connection-type" class="border border-accent-600 bg-primary-200 rounded-lg p-2" v-model="newDeviceTypeConnection">
           <option v-for="deviceType in deviceTypes" :key="deviceType.name" :value="deviceType.connectionType">{{ deviceType.connectionType }}</option>
