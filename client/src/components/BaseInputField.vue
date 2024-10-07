@@ -36,7 +36,7 @@ const attrs = useAttrs()
 const listeners = attrs.on || {}
 
 const computedClass = computed(() => {
-  return `mb-4 w-auto flex-grow rounded-lg border border-accent-600 bg-primary-200 px-4 py-2 ${props.customClass}`
+  return `w-auto flex-grow rounded-lg border border-accent-600 bg-primary-200 px-4 py-2 ${props.customClass}`
 })
 
 // Emit the updated input value

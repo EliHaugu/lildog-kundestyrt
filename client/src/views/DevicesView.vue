@@ -45,7 +45,7 @@ const filteredDeviceTypes = computed(() => {
 </script>
 
 <template>
-  <main>
+  <main class="flex flex-col gap-6">
     <section class="flex justify-between">
       <form action="" class="w-1/3 flex gap-4">
         <BaseInputField v-model="searchQuery" placeholder="Search device types" />
@@ -70,8 +70,8 @@ const filteredDeviceTypes = computed(() => {
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-semibold">Create New Device Type</h2>
         <BaseButton @click="showNewDeviceTypeForm = false">
-          X
-        </BaseButton>
+        <i class="mdi mdi-close text-xl p-1"></i>
+      </BaseButton>
       </div>
       <div className="flex flex-col gap-1">
         <label for="name" class="text-md">Name</label>

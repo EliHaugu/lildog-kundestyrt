@@ -59,6 +59,23 @@ const addNewDevice = () => {
 
   showNewDeviceForm.value = false;
 };
+
+const response = ref([
+  {
+    id: 1,
+    number: 300,
+    status: 'OK',
+    name: 'Device 1'
+  }
+])
+
+const testConnection = ref(false)
+
+const toggleTestConnection = () => {
+  testConnection.value = !testConnection.value
+}
+
+import { listItems } from '@/assets/mock_data'
 </script>
 
 <template>
@@ -95,22 +112,42 @@ const addNewDevice = () => {
   <form 
     class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] z-10
     w-96 
-    bg-white-100 rounded-xl flex flex-col gap-6 p-4 shadow-md" 
+    bg-white-100 rounded-xl flex flex-col gap-6 p-4 pt-6 shadow-md" 
     v-if="showNewDeviceForm">
-    <div class="flex justify-between items-center">
-      <h2 class="text-lg font-semibold">Create New Device</h2>
-      <BaseButton @click="showNewDeviceForm = false">
-        <i class="mdi mdi-close text-xl p-1"></i>
+    <h2 class="text-xl font-semibold">Create New Device</h2>
+    <div class="flex flex-col gap-1">
+      <label for="name" class="text-md">Device name</label>
+      <BaseInputField v-model="newDeviceName" label="Name" name="name" placeholder="Device name" />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="connection" class="text-md">Device connection</label>
+      <div class="w-full flex justify-between gap-3">
+        <select name="connection" class="w-full h-fit border border-accent-600 bg-primary-200 rounded-lg p-2" v-model="newDeviceConnection">
+          <option v-for="deviceType in deviceTypes" :key="deviceType.name" :value="deviceType.connectionType">{{ deviceType.connectionType }}</option>
+        </select>
+        <BaseButton @click="toggleTestConnection">Test</BaseButton>
+      </div>
+      <div class="w-1/2 flex justify-between">
+        <label>Response:</label>
+        <label class="font-bold" v-if="testConnection" for="response">
+          {{ response[0].number }} {{ response[0].status }}
+        </label>
+      </div>
+    </div>
+    <select name="Add to board" class="px-2 h-12 rounded-xl border border-accent-700">
+      <option value="" disabled selected>Select Board</option>
+      <option v-for="item in listItems" :key="item.id">
+        {{ item.name }}
+      </option>
+    </select>
+    <div class="mt-6 flex justify-between gap-6">
+      <BaseButton variant="outline" @click="showNewDeviceForm = false">
+        Cancel
+      </BaseButton>
+      <BaseButton @click="addNewDevice">
+        Add Device
       </BaseButton>
     </div>
-    <label for="name" class="text-md">Device name</label>
-    <BaseInputField v-model="newDeviceName" label="Name" name="name" placeholder="Device name" />
-    <label for="connection" class="text-md">Device connection</label>
-    <select name="connection" class="border border-accent-600 bg-primary-200 rounded-lg p-2" v-model="newDeviceConnection">
-      <option v-for="deviceType in deviceTypes" :key="deviceType.name" :value="deviceType.connectionType">{{ deviceType.connectionType }}</option>
-    </select>
-    <BaseButton @click="addNewDevice">
-      Add Device
-    </BaseButton>
   </form>
+  <div v-if="showNewDeviceForm" class="fixed inset-0 bg-[#000000] opacity-30"></div>
 </template>
