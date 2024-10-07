@@ -13,7 +13,7 @@ defineProps({
   },
 });
 
-const showDevices = ref(true);
+const showDevices = ref(false);
 
 const toggleDevices = () => {
   showDevices.value = !showDevices.value;
