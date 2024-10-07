@@ -50,7 +50,10 @@ const filteredDeviceTypes = computed(() => {
       <form action="" class="w-1/3 flex gap-4">
         <BaseInputField v-model="searchQuery" placeholder="Search Devices" />
       </form>
-      <BaseButton class="w-fit mr-4" @click="showNewDeviceTypeForm = true">New device type</BaseButton>
+      <BaseButton class="w-fit mr-4" @click="showNewDeviceTypeForm = true">
+        New device type
+        <i class="mdi mdi-plus text-xl p-1"></i>
+      </BaseButton>
     </section>
     <ul class="mr-4 grid grid-cols-1 gap-4">
       <DevicesCard 
