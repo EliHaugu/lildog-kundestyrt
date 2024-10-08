@@ -47,11 +47,13 @@ const addNewDevice = () => {
     fields: { key: '', value: '' },
   };
 
+  const devices = props.deviceType.devices || [];
+
   updateDeviceTypes(deviceTypes.value.map(deviceType => {
     if (deviceType.name === props.deviceType.name) {
       return {
         ...deviceType,
-        devices: [...deviceType.devices!, newDevice],
+        devices: [...devices, newDevice],
       };
     }
     return deviceType;
