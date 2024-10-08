@@ -8,7 +8,6 @@ const deviceTypes = ref<DeviceType[]>(mock_device_types);
 
 function updateDeviceTypes(newData: DeviceType[]) {
   deviceTypes.value = newData;
-  console.log('Device types updated');
 }
 
 provide('deviceTypes', deviceTypes);
