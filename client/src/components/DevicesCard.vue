@@ -62,6 +62,18 @@ const addNewDevice = () => {
   showNewDeviceForm.value = false;
 };
 
+const deleteDevice = (device: Device) => {
+  updateDeviceTypes(deviceTypes.value.map(deviceType => {
+    if (deviceType.name === props.deviceType.name) {
+      return {
+        ...deviceType,
+        devices: deviceType.devices?.filter(d => d.id !== device.id),
+      };
+    }
+    return deviceType;
+  }));
+};
+
 const response = ref([
   {
     id: 1,
@@ -87,7 +99,7 @@ import { listItems } from '@/assets/mock_data'
     >
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
       <div class="flex gap-2">
-        <BaseButton  variant="outline" class="w-fit" @click="showNewDeviceForm = !showNewDeviceForm">
+        <BaseButton variant="outline" class="w-fit shadow-none active:bg-accent-700 active:text-white-100" @click="showNewDeviceForm = !showNewDeviceForm">
             Add Device
             <i class="mdi mdi-plus text-xl p-1"></i>
         </BaseButton>
@@ -102,11 +114,14 @@ import { listItems } from '@/assets/mock_data'
         <li 
           v-for="device in deviceType.devices" 
           :key="device.id"
-          class="p-2 w-full rounded-md hover:bg-[#e3e3e3] hover:cursor-pointer flex flex-row"
+          class="p-2 w-full rounded-md hover:bg-[#e3e3e3] hover:cursor-pointer flex justify-between items-center gap-2"
         >
           <div class="w-full">
             {{ device.name }}
           </div>
+          <BaseButton variant="secondary" class="w-12 h-12 rounded-full shadow-none p-0 bg-opacity-0 hover:bg-error active:bg-[#9c1c1c] group text-error border-[#000000] flex justify-center items-center">
+            <i class="mdi mdi-delete text-lg group-hover:text-white-100 group-active:text-white-100" @click="deleteDevice(device)"></i>
+          </BaseButton>
         </li>
       </ul>
     </div>
