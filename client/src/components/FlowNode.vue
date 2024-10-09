@@ -41,21 +41,19 @@ const getKeysByValue = (value: string) => {
 <template>
   <div
     aria-expanded="false"
-    class="flow_node flex flex-col gap-1 rounded-xl border-2 border-idle bg-primary-200 p-1"
+    class="flow_node flex flex-col gap-1 rounded-xl border-2 bg-primary-200 p-1"
     :class="{
+      'border-idle': nodeTestState === 'idle',
       'border-success': nodeTestState === 'success',
       'border-warning': nodeTestState === 'warning',
       'border-error': nodeTestState === 'error'
     }"
   >
     <div
-      class="flex items-center justify-center"
+      class="flex items-center justify-center rounded-lg"
+      :class="{ 'rounded-b-sm': nodeExpanded }"
       :style="{
-        backgroundColor: colour,
-        borderTopRightRadius: '8px',
-        borderTopLeftRadius: '8px',
-        borderBottomRightRadius: nodeExpanded ? '2px' : '8px',
-        borderBottomLeftRadius: nodeExpanded ? '2px' : '8px'
+        backgroundColor: colour
       }"
     >
       <h1
@@ -94,7 +92,7 @@ const getKeysByValue = (value: string) => {
           height="28"
           viewBox="0 0 15 15"
           xmlns="http://www.w3.org/2000/svg"
-          class="rounded-md border bg-[#FF5B49]"
+          class="rounded-md border bg-error"
           fill="#00312F"
         >
           <path
