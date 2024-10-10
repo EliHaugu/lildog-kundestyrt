@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LandingView from '@//views/LandingView.vue'
 import FlowView from '@/views/FlowView.vue'
-import LogView from '@/components/FlowLog.vue'
+import LogView from '@/components/log/WrapperView.vue'
 import DevicesView from '@/views/DevicesView.vue'
 import ApiView from '@/views/ApiView.vue'
 import NewDeviceView from '@/views/NewDeviceView.vue'
