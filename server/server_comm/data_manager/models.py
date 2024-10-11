@@ -2,34 +2,76 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
 
-VALID_CONNECTION_TYPES = ["wifi", "bluetooth", "ethernet"]
-
 
 class Category(models.Model):
+    WIFI = "wifi"
+    BLUETOOTH = "bluetooth"
+    LTE = "lte"
+
+    COMMUNICATION_PROTOCOLS_CHOICES = [
+        (WIFI, "WiFi"),
+        (BLUETOOTH, "Bluetooth"),
+        (LTE, "LTE"),
+    ]
+
+    ADB = "adb"
+    UART = "uart"
+
+    CONNECTION_TYPES_CHOICES = [
+        (ADB, "ADB"),
+        (UART, "UART"),
+    ]
+
     category_name: models.CharField = models.CharField(max_length=255)
-    connection_types: ArrayField = ArrayField(
+    communication_protocols: ArrayField = ArrayField(
         models.CharField(
             max_length=50,
-            choices=[(conn, conn) for conn in VALID_CONNECTION_TYPES],
+            choices=COMMUNICATION_PROTOCOLS_CHOICES,
         ),
-        size=len(VALID_CONNECTION_TYPES),
+        size=len(COMMUNICATION_PROTOCOLS_CHOICES),
         default=list,
     )
 
+    connection_types: ArrayField = ArrayField(
+        models.CharField(
+            max_length=50,
+            choices=CONNECTION_TYPES_CHOICES,
+        ),
+        default=list,
+        blank=True,
+    )
+
     def clean(self):
+
+        if not isinstance(self.communication_protocols, list):
+            raise ValidationError("communication_protocols must be a list.")
+
+        invalid_communication_protocols = [
+            protocol
+            for protocol in self.communication_protocols
+            if protocol
+            not in dict(self.COMMUNICATION_PROTOCOLS_CHOICES).keys()
+        ]
+        if invalid_communication_protocols:
+            raise ValidationError(
+                f"""Invalid communication protocols:
+                 {', '.join(invalid_communication_protocols)}.
+                 Must be one of {self.COMMUNICATION_PROTOCOLS_CHOICES}."""
+            )
+
         if not isinstance(self.connection_types, list):
             raise ValidationError("connection_types must be a list.")
 
-        invalid_types = [
+        invalid_connection_types = [
             conn
             for conn in self.connection_types
-            if conn not in VALID_CONNECTION_TYPES
+            if conn not in dict(self.CONNECTION_TYPES_CHOICES).keys()
         ]
-
-        if invalid_types:
+        if invalid_connection_types:
             raise ValidationError(
-                f"Invalid connection types: {', '.join(invalid_types)}. "
-                f"Must be one of {VALID_CONNECTION_TYPES}."
+                f"""Invalid connection types:
+                 {', '.join(invalid_communication_protocols)}.
+                 Must be one of {self.CONNECTION_TYPES_CHOICES}."""
             )
 
     def save(self, *args, **kwargs):
@@ -51,8 +93,18 @@ class Device(models.Model):
 
 
 class Node(models.Model):
+    ACTION = "Action"
+    ASSERT = "Assert"
+
+    NODE_TYPE_CHOICES = [
+        (ACTION, "Action"),
+        (ASSERT, "Assert"),
+    ]
+
     label: models.CharField = models.CharField(max_length=255)
-    expected_response: models.CharField = models.CharField(max_length=255)
+    node_type: models.CharField = models.CharField(
+        max_length=50, choices=NODE_TYPE_CHOICES, default=ACTION
+    )
     device: models.ForeignKey = models.ForeignKey(
         Device, on_delete=models.CASCADE
     )
@@ -60,8 +112,19 @@ class Node(models.Model):
     x_pos: models.IntegerField = models.IntegerField()
     y_pos: models.IntegerField = models.IntegerField()
 
+    def clean(self):
+        if self.node_type not in dict(self.NODE_TYPE_CHOICES).keys():
+            raise ValidationError(
+                f"""Invalid node type: {self.node_type}.
+                 Must be one of {self.NODE_TYPE_CHOICES}."""
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.label
+        return f"{self.label} ({self.node_type})"
 
 
 class Edge(models.Model):
