@@ -120,7 +120,7 @@ class Node(models.Model):
             )
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Call full_clean to ensure validation before saving
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def __str__(self):
