@@ -6,7 +6,7 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import useDragAndDrop from '@/utils/useDragAndDrop'
 import type { Connection, Edge, GraphEdge } from '@vue-flow/core'
 import type { CustomNode } from '@/types/nodeType'
-import FlowLog from '@/components/FlowLog.vue'
+import FlowLog from '@/components/log/WrapperView.vue'
 import FlowNode from '@/components/FlowNode.vue'
 import FlowEdge from '@/components/FlowEdge.vue'
 import FlowDevices from '@/components/FlowDevices.vue'
@@ -105,12 +105,20 @@ const displayLog = ref(false)
   <main class="flex flex-col">
     <header class="relative mr-4 flex h-10 gap-2">
       <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <BaseButton v-if="displayLog" variant="default" class="ml-auto"> Run </BaseButton>
-      <BaseButton v-else variant="default" class="ml-auto mr-48"> Run </BaseButton>
+      <BaseButton v-if="displayLog" variant="default" class="ml-auto h-9 pt-1 leading-tight">
+        Run
+      </BaseButton>
+      <BaseButton v-else variant="default" class="ml-auto mr-48 h-9 pt-1 leading-tight">
+        Run
+      </BaseButton>
       <flow-devices v-if="!displayLog" :nodes="nodes" />
     </header>
     <flow-log :show="displayLog" />
-    <section class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
+    <section
+      v-if="!displayLog"
+      class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]"
+      @drop="onDrop"
+    >
       <VueFlow
         v-if="!displayLog"
         v-model:nodes="nodes"

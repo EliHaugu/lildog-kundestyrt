@@ -60,7 +60,7 @@ const variantClass = computed(() => {
     case 'secondary':
       return 'bg-accent-400 text-bg-700 '
     default:
-      return 'bg-accent-600 text-white-100 h-fit'
+      return 'bg-accent-600 text-white-100'
   }
 })
 
