@@ -132,16 +132,27 @@ import { listItems } from '@/assets/mock_data'
     >
       <ul class="w-full">
         <li
-          v-for="device in deviceType.devices"
+          v-for="(device, index) in deviceType.devices"
           :key="device.id"
-          class="flex w-full items-center justify-between gap-2 rounded-md p-2 hover:cursor-pointer hover:bg-[#e3e3e3]"
+          class="flex w-full items-center rounded-md gap-5 p-2 hover:cursor-pointer hover:bg-[#e3e3e3]"
         >
-          <div class="w-full">
+          <div>  
+            {{ index + 1 }}.
+          </div>
+          <div>
             {{ device.name }}
+          </div>
+          <div class="w-10 rounded-lg flex content-start justify-center text-white-100"
+          :class="{
+      'bg-ble': device.connectionType === 'BLE',
+      'bg-wifi': device.connectionType === 'WiFi',
+      'bg-ade': device.connectionType === 'ADE',
+    }">
+            {{ device.connectionType }}
           </div>
           <BaseButton
             variant="secondary"
-            class="group flex h-12 w-12 items-center justify-center rounded-full border-[#000000] bg-opacity-0 p-0 text-error shadow-none hover:bg-error active:bg-[#9c1c1c]"
+            class="ml-auto group flex h-12 w-12 items-center justify-center rounded-full border-[#000000] bg-opacity-0 p-0 text-error shadow-none hover:bg-error active:bg-[#9c1c1c]"
           >
             <i
               class="mdi mdi-delete text-lg group-hover:text-white-100 group-active:text-white-100"

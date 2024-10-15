@@ -24,7 +24,10 @@ export default {
       error: '#FF5B49',
       warning: '#FAFA00',
       success: '#00AA00',
-      idle: '#AAAAAA'
+      idle: '#AAAAAA',
+      ade: '#B900CA',
+      ble: '#006FFF',
+      wifi: '#00CAC0'
     },
     extend: {}
   },
