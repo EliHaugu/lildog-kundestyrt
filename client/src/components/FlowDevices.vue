@@ -20,7 +20,7 @@ import { devices } from '@/assets/mock_data'
     aria-expanded="false"
     id="devices_menu"
     @click="openDevices"
-    class="absolute right-0 z-50 h-9 rounded-xl border border-accent-500 bg-primary-100 px-4 leading-8 shadow-md aria-expanded:pb-4"
+    class="absolute right-0 z-50 h-9 rounded-lg border border-accent-500 bg-primary-100 px-4 leading-8 shadow-md aria-expanded:pb-4"
   >
     <div class="flex hover:cursor-pointer">
       <h3>Stored Devices</h3>

@@ -14,6 +14,8 @@ import { ref } from 'vue'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
 import BaseButton from '../components/BaseButton.vue'
 
+import ExitIcon from '@/icons/ExitIcon.vue'
+
 const { onConnect, addEdges, updateEdge } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
 
@@ -103,16 +105,22 @@ const displayLog = ref(false)
 
 <template>
   <main class="flex flex-col">
-    <header class="relative mr-4 flex h-10 gap-2">
-      <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <BaseButton v-if="displayLog" variant="default" class="ml-auto h-9 pt-1 leading-tight">
+    <header class="relative mr-4 flex items-center gap-2 rounded-xl bg-white-100 shadow-md dark:bg-accent-800 p-2">
+      <a href="/devices" aria-label="Return to all flows" class="group"><exit-icon /></a>
+
+      <h1>
+        {{ listItems.find((item) => item.id === $route.params.id)?.name }}
+      </h1>
+
+      <BaseButton v-if="displayLog" variant="default" class="ml-auto h-9 rounded-lg leading-tight">
         Run
       </BaseButton>
-      <BaseButton v-else variant="default" class="ml-auto mr-48 h-9 pt-1 leading-tight">
+      <BaseButton v-else variant="default" class="ml-auto mr-48 h-9 rounded-lg leading-tight">
         Run
       </BaseButton>
-      <flow-devices v-if="!displayLog" :nodes="nodes" />
+      <flow-devices v-if="!displayLog" :nodes="nodes" class="mr-2" />
     </header>
+
     <flow-log :show="displayLog" />
     <section class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <VueFlow
