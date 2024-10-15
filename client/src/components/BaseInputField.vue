@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineEmits , useAttrs } from 'vue'
+import { computed, defineEmits, useAttrs } from 'vue'
 
 const props = defineProps({
   type: {
@@ -40,11 +40,11 @@ const computedClass = computed(() => {
 })
 
 // Emit the updated input value
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue'])
 const onInput = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
-};
+  const target = event.target as HTMLInputElement
+  emit('update:modelValue', target.value)
+}
 </script>
 
 <style scoped></style>
