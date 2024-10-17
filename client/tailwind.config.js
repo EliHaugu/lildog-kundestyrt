@@ -18,6 +18,9 @@ export default {
         200: 'var(--primary-200)',
         300: 'var(--primary-300)'
       },
+      secondary: {
+        50: '#E5FFFF'
+      },
       white: {
         100: '#ffffff',
         200: '#fbfbfb'
