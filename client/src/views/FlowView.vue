@@ -111,8 +111,6 @@ const toggleLog = () => {
     <flow-log :show="displayLog" />
     <div class="mt-2 h-[calc(100vh-8rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow
-   
-
         v-if="!displayLog"
         v-model:nodes="nodes"
         v-model:edges="edges"
