@@ -36,7 +36,7 @@ const currentDevice = ref(0)
       </ul>
     </nav>
     <WebSocketProvider>
-      <log-list :device-id="currentDevice" />
+      <list-view :device-id="currentDevice" />
     </WebSocketProvider>
   </div>
 </template>
