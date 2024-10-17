@@ -1,20 +1,19 @@
 <script setup lang="ts">
 // import { MiniMap } from '@vue-flow/minimap'
-import { listItems } from '@/assets/mock_data'
+import FlowHeader from '@/components/flow/FlowHeader.vue'
 import { Background } from '@vue-flow/background'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import useDragAndDrop from '@/utils/useDragAndDrop'
+
 import type { Connection, Edge, GraphEdge } from '@vue-flow/core'
 import type { CustomNode } from '@/types/nodeType'
-import FlowLog from '@/components/FlowLog.vue'
-import FlowNode from '@/components/FlowNode.vue'
-import FlowEdge from '@/components/FlowEdge.vue'
-import FlowDevices from '@/components/FlowDevices.vue'
+
+import FlowLog from '@/components/flow/FlowLog.vue'
+import FlowNode from '@/components/flow/FlowNode.vue'
+import FlowEdge from '@/components/flow/FlowEdge.vue'
+
 import { ref } from 'vue'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
-import BaseButton from '../components/BaseButton.vue'
-
-import ExitIcon from '@/icons/ExitIcon.vue'
 
 const { onConnect, addEdges, updateEdge } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
@@ -101,29 +100,18 @@ const edges = ref<Edge[]>([
 ])
 
 const displayLog = ref(false)
+
+const toggleLog = () => {
+  displayLog.value = !displayLog.value
+}
 </script>
 
 <template>
   <main class="flex flex-col">
-    <header class="relative mr-4 flex items-center gap-2 rounded-xl bg-white-100 shadow-md dark:bg-accent-800 p-2">
-      <a href="/devices" aria-label="Return to all flows" class="group"><exit-icon /></a>
-
-      <h1>
-        {{ listItems.find((item) => item.id === $route.params.id)?.name }}
-      </h1>
-
-      <BaseButton v-if="displayLog" variant="default" class="ml-auto h-9 rounded-lg leading-tight">
-        Run
-      </BaseButton>
-      <BaseButton v-else variant="default" class="ml-auto mr-48 h-9 rounded-lg leading-tight">
-        Run
-      </BaseButton>
-      <flow-devices v-if="!displayLog" :nodes="nodes" class="mr-2" />
-    </header>
-
+    <flow-header :display-log="displayLog" @update:display-log="toggleLog" />
     <flow-log :show="displayLog" />
-    <section class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
-      <VueFlow
+    <div class="mt-2 h-[calc(100vh-8rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
+      <vue-flow
         v-if="!displayLog"
         v-model:nodes="nodes"
         v-model:edges="edges"
@@ -140,10 +128,7 @@ const displayLog = ref(false)
           <flow-edge v-bind="edgeProps" />
         </template>
         <Background />
-      </VueFlow>
-    </section>
-    <button @click="displayLog = !displayLog" class="fixed bottom-6 right-4" tabindex="1">
-      Display log: {{ displayLog }}
-    </button>
+      </vue-flow>
+    </div>
   </main>
 </template>

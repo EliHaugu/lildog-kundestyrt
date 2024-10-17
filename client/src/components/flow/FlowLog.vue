@@ -34,22 +34,6 @@ const currentDevice = ref(0)
           {{ item.name }}
         </li>
       </ul>
-      <a
-        href=""
-        tabindex="1"
-        class="ml-auto mr-4 flex h-fit flex-shrink-0 gap-2 rounded-lg bg-accent-400 px-4 py-1.5 shadow-md transition-colors duration-200 hover:bg-accent-500 dark:bg-accent-500 dark:hover:bg-accent-600"
-        >Export log
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          class="fill-accent-800"
-          height="24"
-          viewBox="0 -960 960 960"
-        >
-          <path
-            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58zM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160z"
-          /></svg
-      ></a>
     </nav>
     <WebSocketProvider>
       <log-list :device-id="currentDevice" />

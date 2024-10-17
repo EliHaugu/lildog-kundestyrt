@@ -11,7 +11,7 @@ const showSaveButton = ref(false)
 </script>
 
 <template>
-  <li class="h-full min-w-96 rounded-xl bg-primary-100 p-4 shadow-md z-10">
+  <li class="z-10 h-full min-w-96 rounded-xl bg-primary-100 p-4 shadow-md">
     <div class="flex">
       <h2 class="text-lg">{{ device!.name }}</h2>
       <h3 v-if="showSaveButton" class="ml-auto text-accent-800/50">Unsaved</h3>

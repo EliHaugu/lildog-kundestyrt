@@ -4,7 +4,7 @@
     height="24"
     viewBox="0 0 15 15"
     fill="none"
-    class="ml-2 rotate-180  group-hover:text-accent-500"
+    class="ml-2 rotate-180 group-hover:text-accent-500"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
