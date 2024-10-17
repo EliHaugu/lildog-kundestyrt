@@ -1,6 +1,6 @@
 import json
 
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer # type: ignore
 
 
 class LogConsumer(WebsocketConsumer):
