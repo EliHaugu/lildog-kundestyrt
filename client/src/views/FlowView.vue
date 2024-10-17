@@ -11,7 +11,6 @@ import type { CustomNode } from '@/types/nodeType'
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
-
 import { ref } from 'vue'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
@@ -112,6 +111,8 @@ const toggleLog = () => {
     <flow-log :show="displayLog" />
     <div class="mt-2 h-[calc(100vh-8rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow
+   
+
         v-if="!displayLog"
         v-model:nodes="nodes"
         v-model:edges="edges"
