@@ -65,6 +65,7 @@ const filteredDeviceTypes = computed(() => {
         :deviceType="deviceType"
       />
     </ul>
+    <!-- page for making new device type -->
     <form
       class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
       v-if="showNewDeviceTypeForm"

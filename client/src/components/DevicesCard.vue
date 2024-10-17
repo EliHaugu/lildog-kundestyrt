@@ -3,6 +3,7 @@ import { inject, ref, type Ref } from 'vue'
 import BaseButton from '../components/BaseButton.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
 import '@mdi/font/css/materialdesignicons.css'
+import EditPen from '@/icons/EditPen.vue'
 
 // Import or define the DeviceType type
 import type { Device, DeviceType } from '../types/DeviceTypes'
@@ -104,29 +105,49 @@ import { listItems } from '@/assets/mock_data'
 </script>
 
 <template>
-  <div class="flex h-fit min-w-96 flex-col gap-2 rounded-xl border-2 border-[#dcdcdc] p-2">
+  <div class="w-1/3 rounded-md bg-wifi p-2">
     <div :class="['flex items-center justify-between']">
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
-      <div class="flex gap-2">
-        <BaseButton
+      <button>
+        <EditPen />
+      </button>
+    </div>
+    <div class="item flex">
+      <label
+        class="m-2 flex w-10 content-start justify-center rounded-lg text-white-100"
+        :class="{
+          'bg-ble': deviceType.connectionType === 'BLE',
+          'bg-wifi': deviceType.connectionType === 'WiFi',
+          'bg-ade': deviceType.connectionType === 'ADE'
+        }"
+      >
+        {{ deviceType.connectionType }}
+      </label>
+      <label class="m-2 w-fit rounded-xl border-2 pl-1 pr-1">
+        {{ deviceType.devices?.length }} devices
+      </label>
+    </div>
+    <BaseButton variant="outline"> See devices </BaseButton>
+  </div>
+
+  <!-- <BaseButton
           variant="outline"
           class="w-fit shadow-none active:bg-accent-700 active:text-white-100"
           @click="showNewDeviceForm = !showNewDeviceForm"
         >
           Add Device
           <i class="mdi mdi-plus p-1 text-xl"></i>
-        </BaseButton>
-        <BaseButton
+        </BaseButton> -->
+  <!-- <BaseButton
           class="w-fit bg-opacity-0 shadow-none"
           variant="secondary"
           @click="toggleDevices"
         >
           <i v-if="showDevices" class="mdi mdi-chevron-up p-1 text-xl"></i>
           <i v-else class="mdi mdi-chevron-down p-1 text-xl"></i>
-        </BaseButton>
-      </div>
-    </div>
-    <div
+        </BaseButton> -->
+
+  <!-- <div
       :class="['flex w-full flex-row gap-2 pt-2', showDevices ? 'border-t-2 border-[#d4d4d4]' : '']"
       v-if="showDevices"
     >
@@ -161,9 +182,8 @@ import { listItems } from '@/assets/mock_data'
           </BaseButton>
         </li>
       </ul>
-    </div>
-  </div>
-  <form
+    </div> -->
+  <!-- <form
     class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
     v-if="showNewDeviceForm"
   >
@@ -207,6 +227,6 @@ import { listItems } from '@/assets/mock_data'
       <BaseButton variant="outline" @click="showNewDeviceForm = false"> Cancel </BaseButton>
       <BaseButton @click="addNewDevice"> Add Device </BaseButton>
     </div>
-  </form>
-  <div v-if="showNewDeviceForm" class="fixed inset-0 bg-[#000000] opacity-30"></div>
+  </form> -->
+  <!-- <div v-if="showNewDeviceForm" class="fixed inset-0 bg-[#000000] opacity-30"></div> -->
 </template>
