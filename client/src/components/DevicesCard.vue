@@ -4,6 +4,7 @@ import BaseButton from '../components/BaseButton.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
+import RightArrow from '@/icons/RightArrow.vue'
 
 // Import or define the DeviceType type
 import type { Device, DeviceType } from '../types/DeviceTypes'
@@ -105,14 +106,14 @@ import { listItems } from '@/assets/mock_data'
 </script>
 
 <template>
-  <div class="w-1/3 rounded-md bg-wifi p-2">
+  <div class="w-[25rem] rounded-md bg-secondary-50 dark:bg-accent-700 p-3 h-40" style="z-index: 2;"> <!-- usikker på om jeg trenger z-indeks her -->
     <div :class="['flex items-center justify-between']">
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
-      <button>
+      <BaseButton variant="outline" class="bg-secondary-50 dark:bg-accent-700 h-fit border-none shadow-none rounded-lg">
         <EditPen />
-      </button>
+      </BaseButton>
     </div>
-    <div class="item flex">
+    <div class="flex mt-1">
       <label
         class="m-2 flex w-10 content-start justify-center rounded-lg text-white-100"
         :class="{
@@ -123,11 +124,11 @@ import { listItems } from '@/assets/mock_data'
       >
         {{ deviceType.connectionType }}
       </label>
-      <label class="m-2 w-fit rounded-xl border-2 pl-1 pr-1">
+      <label class="m-2  w-fit rounded-xl border-2 px-2 bg-[#E6EBFE] border-[#6B8AFA]">
         {{ deviceType.devices?.length }} devices
       </label>
     </div>
-    <BaseButton variant="outline"> See devices </BaseButton>
+    <BaseButton variant="outline" class="bg-secondary-50 dark:bg-accent-700 w-fit flex gap-2 border-0 shadow-none rounded-lg mt-3 ml-auto " > See devices <RightArrow/> </BaseButton>
   </div>
 
   <!-- <BaseButton
