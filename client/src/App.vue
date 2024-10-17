@@ -16,7 +16,7 @@ provide('updateDeviceTypes', updateDeviceTypes)
 
 <template>
   <Layout />
-  <RouterView class="ml-[17rem] mt-16 w-[calc(100vw-17rem)]" />
+  <RouterView class="ml-[17rem] mt-8 w-[calc(100vw-17rem)]" />
 </template>
 
 <style>

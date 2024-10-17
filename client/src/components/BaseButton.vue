@@ -1,7 +1,8 @@
 <template>
   <button
+    class="transition-colors duration-200"
     :class="[
-      'rounded-xl px-4 py-2 shadow-md',
+      'px-4 py-2 shadow-md',
       variantClass,
       sizeClass,
       { 'hover:bg-opacity-80': hoverEffect, 'cursor-not-allowed opacity-50': disabled }
@@ -9,7 +10,7 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <slot></slot>
+    <slot />
   </button>
 </template>
 
@@ -59,6 +60,8 @@ const variantClass = computed(() => {
       return 'bg-primary-200 text-bg-700 transition-colours duration-200 hover:bg-accent-500 border border-accent-600'
     case 'secondary':
       return 'bg-accent-400 text-bg-700 '
+    case 'light':
+      return 'bg-accent-500 text-bg-900 hover:bg-accent-600'
     default:
       return 'bg-accent-600 text-white-100'
   }

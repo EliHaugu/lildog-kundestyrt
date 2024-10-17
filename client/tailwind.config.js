@@ -5,6 +5,7 @@ export default {
   theme: {
     colors: {
       accent: {
+        300: '#C4D4CD',
         400: '#BDEEED',
         500: '#469796',
         600: '#005958',
