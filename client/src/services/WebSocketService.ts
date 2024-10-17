@@ -6,17 +6,24 @@ class WebSocketService implements IWebSocketService {
   private eventListeners: ((log: Log) => void)[] = []
 
   public connect(port: number) {
-    this.socket = new WebSocket(`ws://localhost:${port}`)
+    this.socket = new WebSocket(`ws://localhost:${port}/ws/logs/`)  
 
     this.socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data)
 
-        if (data.id && Array.isArray(data.log)) {
-          this.notifyListeners(data)
-          console.log('WebSocket message received:', data)
+        
+        if (Array.isArray(data)) {
+          data.forEach((log: Log) => {
+            if (log.id && log.name && Array.isArray(log.log)) {
+              this.notifyListeners(log) 
+              console.log('WebSocket message received:', log)
+            } else {
+              console.error('Invalid log format:', log)
+            }
+          })
         } else {
-          console.error('Invalid WebSocket message format:', data)
+          console.error('Expected an array but received:', data)
         }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error)
