@@ -28,9 +28,9 @@ import ChevronIcon from '@/icons/ChevronIcon.vue'
     </div>
     <div
       v-if="displayDevices"
-      class="absolute right-0 top-12 z-50 max-h-[calc(100vh-8rem)] w-[16rem] overflow-scroll rounded-xl border border-accent-500 bg-primary-200 p-2"
+      class="absolute right-0 top-12 z-50 max-h-[calc(100vh-8rem)] w-[16rem] rounded-xl border border-accent-500 bg-primary-200"
     >
-      <ul class="flex flex-col gap-2">
+      <ul class="max-h-[calc(100vh-9rem)] overflow-y-scroll flex flex-col gap-2 mr-2 mt-2 px-2 pb-2">
         <li
           :key="device.id"
           :draggable="true"

@@ -3,7 +3,7 @@ defineProps<{
   show: boolean
 }>()
 
-import LogList from '@/components/LogList.vue'
+import ListView from '@/components/log/ListView.vue'
 import { logItems } from '@/assets/mock_data'
 import { ref } from 'vue'
 import WebSocketProvider from '@/providers/WebSocketProvider.vue'
