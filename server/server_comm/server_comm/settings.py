@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
 ALLOWED_HOSTS: list[str] = [
-    'localhost',     # For local development
+    'localhost',  # For local development
     '127.0.0.1',
 ]
 

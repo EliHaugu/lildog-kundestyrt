@@ -1,6 +1,7 @@
-# your_app/consumers.py
 import json
+
 from channels.generic.websocket import WebsocketConsumer
+
 
 class LogConsumer(WebsocketConsumer):
     def connect(self):
