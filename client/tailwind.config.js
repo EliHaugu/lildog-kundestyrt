@@ -18,6 +18,9 @@ export default {
         200: 'var(--primary-200)',
         300: 'var(--primary-300)'
       },
+      secondary: {
+        50: '#E5FFFF'
+      },
       white: {
         100: '#ffffff',
         200: '#fbfbfb'
@@ -25,7 +28,10 @@ export default {
       error: '#FF5B49',
       warning: '#FAFA00',
       success: '#00AA00',
-      idle: '#AAAAAA'
+      idle: '#AAAAAA',
+      ade: '#B900CA',
+      ble: '#006FFF',
+      wifi: '#00CAC0'
     },
     extend: {}
   },
