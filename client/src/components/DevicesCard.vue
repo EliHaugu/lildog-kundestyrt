@@ -5,17 +5,17 @@ import BaseInputField from '@/components/BaseInputField.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
 import RightArrow from '@/icons/RightArrow.vue'
-import type { Device, DeviceType } from '../types/DeviceTypes'
+import type { DeviceType } from '../types/DeviceTypes'
 
 const props = defineProps<{
   deviceType: DeviceType
 }>()
 
-const showDevices = ref(false)
+// const showDevices = ref(false)
 
-const toggleDevices = () => {
-  showDevices.value = !showDevices.value
-}
+// const toggleDevices = () => {
+//   showDevices.value = !showDevices.value
+// }
 
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
 const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(
@@ -50,86 +50,86 @@ const updateDeviceType = () => {
   showEditDeviceTypeForm.value = false
 }
 
-const showNewDeviceForm = ref(false)
-const newDeviceName = ref('')
-const newDeviceConnection = ref(props.deviceType.connectionType || '')
+// const showNewDeviceForm = ref(false)
+// const newDeviceName = ref('')
+// const newDeviceConnection = ref(props.deviceType.connectionType || '')
 
-const addNewDevice = () => {
-  if (!newDeviceName.value || !newDeviceConnection.value) {
-    if (!newDeviceName.value) {
-      console.error('Device name is required')
-    }
-    if (!newDeviceConnection.value) {
-      console.error('Device connection is required')
-    }
-    return
-  } else if (
-    deviceTypes.value.some((deviceType) =>
-      deviceType.devices?.some((device) => device.name === newDeviceName.value)
-    )
-  ) {
-    console.error('Device name already exists')
-    return
-  }
+// const addNewDevice = () => {
+//   if (!newDeviceName.value || !newDeviceConnection.value) {
+//     if (!newDeviceName.value) {
+//       console.error('Device name is required')
+//     }
+//     if (!newDeviceConnection.value) {
+//       console.error('Device connection is required')
+//     }
+//     return
+//   } else if (
+//     deviceTypes.value.some((deviceType) =>
+//       deviceType.devices?.some((device) => device.name === newDeviceName.value)
+//     )
+//   ) {
+//     console.error('Device name already exists')
+//     return
+//   }
 
-  const newDevice: Device = {
-    id: Date.now(),
-    name: newDeviceName.value,
-    deviceType: props.deviceType.name,
-    connectionType: 'default', // Replace with actual connection type if available
-    connectionId: newDeviceConnection.value,
-    fields: { key: '', value: '' }
-  }
+//   const newDevice: Device = {
+//     id: Date.now(),
+//     name: newDeviceName.value,
+//     deviceType: props.deviceType.name,
+//     connectionType: 'default', // Replace with actual connection type if available
+//     connectionId: newDeviceConnection.value,
+//     fields: { key: '', value: '' }
+//   }
 
-  const devices = props.deviceType.devices || []
+//   const devices = props.deviceType.devices || []
 
-  updateDeviceTypes(
-    deviceTypes.value.map((deviceType) => {
-      if (deviceType.name === props.deviceType.name) {
-        return {
-          ...deviceType,
-          devices: [...devices, newDevice]
-        }
-      }
-      return deviceType
-    })
-  )
+//   updateDeviceTypes(
+//     deviceTypes.value.map((deviceType) => {
+//       if (deviceType.name === props.deviceType.name) {
+//         return {
+//           ...deviceType,
+//           devices: [...devices, newDevice]
+//         }
+//       }
+//       return deviceType
+//     })
+//   )
 
-  showNewDeviceForm.value = false
-}
+//   showNewDeviceForm.value = false
+// }
 
-const deleteDevice = (device: Device) => {
-  updateDeviceTypes(
-    deviceTypes.value.map((deviceType) => {
-      if (deviceType.name === props.deviceType.name) {
-        return {
-          ...deviceType,
-          devices: deviceType.devices?.filter((d) => d.id !== device.id)
-        }
-      }
-      return deviceType
-    })
-  )
-}
+// const deleteDevice = (device: Device) => {
+//   updateDeviceTypes(
+//     deviceTypes.value.map((deviceType) => {
+//       if (deviceType.name === props.deviceType.name) {
+//         return {
+//           ...deviceType,
+//           devices: deviceType.devices?.filter((d) => d.id !== device.id)
+//         }
+//       }
+//       return deviceType
+//     })
+//   )
+// }
 
-const response = ref([
-  {
-    id: 1,
-    number: 300,
-    status: 'OK',
-    name: 'Device 1'
-  }
-])
+// const response = ref([
+//   {
+//     id: 1,
+//     number: 300,
+//     status: 'OK',
+//     name: 'Device 1'
+//   }
+// ])
 
 const showEditDeviceTypeForm = ref(false)
 
-const testConnection = ref(false)
+// const testConnection = ref(false)
 
-const toggleTestConnection = () => {
-  testConnection.value = !testConnection.value
-}
+// const toggleTestConnection = () => {
+//   testConnection.value = !testConnection.value
+// }
 
-import { listItems } from '@/assets/mock_data'
+// import { listItems } from '@/assets/mock_data'
 </script>
 
 <template>
