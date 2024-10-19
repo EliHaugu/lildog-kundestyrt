@@ -50,21 +50,27 @@ const filteredDeviceTypes = computed(() => {
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex justify-between">
+      <h1 class="text-2xl font-semibold">Configure Devices</h1>
       <form action="" class="flex w-1/3 gap-4">
-        <BaseInputField v-model="searchQuery" placeholder="Search device types" />
+        <BaseInputField
+          v-model="searchQuery"
+          placeholder="Search device types"
+          class="rounded-xl"
+        />
       </form>
-      <BaseButton class="mr-4 w-fit" @click="showNewDeviceTypeForm = true">
+      <BaseButton class="mr-4 w-fit rounded-xl" @click="showNewDeviceTypeForm = true">
         New device type
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </BaseButton>
     </section>
-    <ul class="mr-4 grid grid-cols-1 gap-4">
+    <ul class="mr-4 flex flex-wrap gap-4">
       <DevicesCard
         v-for="deviceType in filteredDeviceTypes"
         :key="deviceType.name"
         :deviceType="deviceType"
       />
     </ul>
+    <!-- page for making new device type -->
     <form
       class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
       v-if="showNewDeviceTypeForm"
