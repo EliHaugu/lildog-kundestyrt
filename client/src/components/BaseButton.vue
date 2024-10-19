@@ -1,8 +1,9 @@
 <template>
   <button
-    class="transition-colors duration-200"
+    :type="type"
+    class="transition-colors duration-200 rounded-xl"
     :class="[
-      'px-4 py-2 shadow-md',
+      'px-4 py-2 shadow-md flex',
       variantClass,
       sizeClass,
       { 'hover:bg-opacity-80': hoverEffect, 'cursor-not-allowed opacity-50': disabled }
@@ -19,7 +20,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   type: {
-    type: String,
+    type: String as () => 'button' | 'submit' | 'reset',
     default: 'button'
   },
   variant: {

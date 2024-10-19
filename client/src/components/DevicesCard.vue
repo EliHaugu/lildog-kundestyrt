@@ -6,10 +6,13 @@ import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
 import RightArrow from '@/icons/RightArrow.vue'
 import type { DeviceType } from '../types/DeviceTypes'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   deviceType: DeviceType
 }>()
+
+const router = useRouter()
 
 // const showDevices = ref(false)
 
@@ -48,6 +51,12 @@ const updateDeviceType = () => {
   updateDeviceTypes(updatedDeviceTypes)
   editDeviceType.value = null
   showEditDeviceTypeForm.value = false
+}
+
+const navigateToDevice = (deviceName: string) => {
+  // Assuming currentPath is where you are currently, you can get the current path from router
+  const currentPath = router.currentRoute.value.fullPath
+  router.push(`${currentPath}/${deviceName}`) // Navigate to currentPath + deviceId
 }
 
 // const showNewDeviceForm = ref(false)
@@ -167,6 +176,7 @@ const showEditDeviceTypeForm = ref(false)
     <BaseButton
       variant="outline"
       class="ml-auto mt-3 flex w-fit gap-2 rounded-lg border-0 bg-secondary-50 shadow-none dark:bg-accent-700"
+      @click="navigateToDevice(deviceType.name)"
     >
       See devices <RightArrow />
     </BaseButton>

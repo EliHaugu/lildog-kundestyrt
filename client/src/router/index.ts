@@ -7,6 +7,7 @@ import LogView from '@/components/flow/FlowLog.vue'
 
 import DevicesView from '@/views/DevicesView.vue'
 import ApiView from '@/views/ApiView.vue'
+import DeviceTypeDetailView from '@/views/DeviceTypeDetailView.vue'
 import NewDeviceView from '@/views/NewDeviceView.vue'
 
 const routes = [
@@ -40,6 +41,11 @@ const routes = [
     path: '/api',
     name: 'api',
     component: ApiView
+  },
+  {
+    path: '/devices/:deviceTypeName',
+    name: 'deviceTypeDetail',
+    component: DeviceTypeDetailView
   }
 ]
 

@@ -50,7 +50,7 @@ const filteredDeviceTypes = computed(() => {
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex justify-between">
-      <h1 class="text-2xl font-semibold">Configure Devices</h1>
+      <h1 class="text-2xl font-semibold">Configure devices</h1>
       <form action="" class="flex w-1/3 gap-4">
         <BaseInputField
           v-model="searchQuery"
