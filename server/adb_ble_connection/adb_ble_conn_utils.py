@@ -55,7 +55,7 @@ if __name__ == "__main__":
     result_file = os.path.join('test_connect_result.txt')
 
     android_device_id = "R5CW51LN1PD"
-    target_uuid = "0000180D-0000-1000-8000-00805f9b34fb" #HR service UUID
+    target_uuid = "0000180D-0000-1000-8000-00805f9b34fb"  # HR service UUID
     extra_address = "F1:CD:70:40:99:AA"  # MAC address of bluetooth device
 
     stdout, stderr = run_adb_test(
