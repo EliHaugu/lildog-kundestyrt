@@ -1,9 +1,9 @@
 <template>
   <button
     :type="type"
-    class="transition-colors duration-200 rounded-xl"
+    class="rounded-xl transition-colors duration-200"
     :class="[
-      'px-4 py-2 shadow-md flex',
+      'flex px-4 py-2 shadow-md',
       variantClass,
       sizeClass,
       { 'hover:bg-opacity-80': hoverEffect, 'cursor-not-allowed opacity-50': disabled }
