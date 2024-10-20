@@ -35,13 +35,13 @@ onMounted(() => {
     <nav class="mt-16 flex flex-col gap-2">
       <router-link
         to="/devices"
-        :aria-expanded="$route.name === 'devices'"
+        :aria-expanded="$route.path.includes('/devices')"
         class="text-md nav_item__rounded relative z-10 inline-flex items-center gap-2 rounded-l-xl fill-white-100 py-1.5 pl-4 pr-2 leading-10 text-white-100 hover:z-50 hover:cursor-pointer hover:bg-primary-300 hover:fill-accent-500 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-primary-200 aria-expanded:fill-accent-500 aria-expanded:text-accent-900 aria-expanded:duration-0 dark:hover:bg-primary-200 dark:hover:text-white-100 dark:aria-expanded:text-white-100"
         ><devices-icon /> Configure Devices</router-link
       >
       <router-link
         to="/flows"
-        :aria-expanded="$route.name === 'flows'"
+        :aria-expanded="$route.path.includes('/flows')"
         class="text-md nav_item__rounded relative z-10 inline-flex items-center gap-2 rounded-l-xl fill-white-100 py-1.5 pl-4 pr-2 leading-10 text-white-100 hover:z-50 hover:cursor-pointer hover:bg-primary-300 hover:fill-accent-500 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-primary-200 aria-expanded:fill-accent-500 aria-expanded:text-accent-900 aria-expanded:duration-0 dark:hover:bg-primary-200 dark:hover:text-white-100 dark:aria-expanded:text-white-100"
         ><flows-icon /> View Flows</router-link
       >
