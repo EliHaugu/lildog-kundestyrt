@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test-suite description="Bluetooth connection between Android device and nRF Kit">
+
+    <set name="TARGET_UUID" value="${TARGET_UUID}" />
+
+    <target id="devkit" name="Dev Kit" address="${EXTRA_ADDRESS}" />
+
+    <test id="scan_and_connect" description="Scan and connect to the nRF Kit" target="devkit">
+        
+        <scan-for description="Scanning for nRF Kit" address="${EXTRA_ADDRESS}" bind-target="devkit" timeout="10000" expected="SUCCESS"/>
+
+        <connect description="Connecting to nRF Kit" timeout="5000" target="devkit" expected="SUCCESS" />
+
+        <discover-services description="Discover services on the connected device" target="devkit" expected="SUCCESS" />
+
+        <assert-service description="Verify that the service is present" uuid="${TARGET_UUID}" target="devkit" />
+
+    </test>
+
+    <run-test ref="scan_and_connect" description="Scan and connect to nRF Kit" />
+
+</test-suite>
