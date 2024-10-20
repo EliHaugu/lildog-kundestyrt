@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="rounded-xl transition-colors duration-200"
+    class="transition-colors duration-200"
     :class="[
       'flex px-4 py-2 shadow-md',
       variantClass,

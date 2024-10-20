@@ -6,7 +6,7 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import useDragAndDrop from '@/utils/useDragAndDrop'
 
 import type { Connection, Edge, GraphEdge } from '@vue-flow/core'
-import type { CustomNode } from '@/types/nodeType'
+import type { CustomNode } from '@/types/NodeType'
 
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
@@ -109,7 +109,11 @@ const toggleLog = () => {
   <main class="flex flex-col">
     <flow-header :display-log="displayLog" @update:display-log="toggleLog" />
     <flow-log :show="displayLog" />
-    <div class="mt-2 h-[calc(100vh-8rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
+    <div
+      v-show="!displayLog"
+      class="mt-2 h-[calc(100vh-8rem)] w-[calc(100vw-18rem)]"
+      @drop="onDrop"
+    >
       <vue-flow
         v-if="!displayLog"
         v-model:nodes="nodes"

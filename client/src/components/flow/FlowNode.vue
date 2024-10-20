@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CustomData } from '@/types/nodeType'
+import type { CustomData } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import type { NodeProps } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
