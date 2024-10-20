@@ -5,7 +5,6 @@ defineProps<{
 
 import FlowLogList from './FlowLogList.vue'
 import WebSocketProvider from '@/providers/WebSocketProvider.vue'
-import BaseButton from '../BaseButton.vue'
 
 import { logItems } from '@/assets/mock_data'
 import { ref } from 'vue'
