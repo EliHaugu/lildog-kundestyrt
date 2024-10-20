@@ -4,7 +4,7 @@
       <h2 class="text-lg">Add new device</h2>
       <form action="" class="relative flex flex-col gap-2 pb-6 pt-4">
         <label for="newDeviceName">Name Device:</label>
-        <BaseInputField placeholder="Device name" />
+        <base-input-field placeholder="Device name" />
         <div>
           <label for="newConnectionType">Connection Type:</label>
           <select
@@ -19,7 +19,7 @@
           </select>
         </div>
         <div class="mt-4 flex items-center gap-2">
-          <BaseButton @click="toggleTestConnection"> Test Connection </BaseButton>
+          <base-button @click="toggleTestConnection"> Test Connection </base-button>
 
           <label>Response:</label>
           <label class="font-bold" v-if="testConnection" for="response">
@@ -34,8 +34,8 @@
               {{ item.name }}
             </option>
           </select>
-          <BaseButton variant="secondary" type="submit"> Add to devices </BaseButton>
-          <BaseButton variant="outline" @click="cancelAction"> Cancel </BaseButton>
+          <base-button variant="secondary" type="submit"> Add to devices </base-button>
+          <base-button variant="outline" @click="cancelAction"> Cancel </base-button>
         </div>
       </form>
     </div>

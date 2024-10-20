@@ -65,17 +65,17 @@ const showEditDeviceTypeForm = ref(false)
     <!-- usikker på om jeg trenger z-indeks her -->
     <div :class="['flex items-center justify-between']">
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
-      <BaseButton
+      <base-button
         @click="editDeviceClass(deviceType)"
         variant="outline"
         class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
       >
-        <EditPen />
-      </BaseButton>
+        <edit-pen />
+      </base-button>
     </div>
     <div class="mt-1 flex">
       <label
-        class="m-2 flex w-10 content-start justify-center rounded-lg text-white-100"
+        class="my-2 px-2 flex  content-start items-center justify-center rounded-xl text-white-100"
         :class="{
           'bg-ble': deviceType.connectionType === 'BLE',
           'bg-wifi': deviceType.connectionType === 'WiFi',
@@ -84,7 +84,7 @@ const showEditDeviceTypeForm = ref(false)
       >
         {{ deviceType.connectionType }}
       </label>
-      <label class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-[#E6EBFE] px-2">
+      <label class="m-2 w-fit rounded-xl border-2 border-accent-500 bg-accent-700 text-white-100 px-2">
         {{
           deviceType.devices?.length === 1
             ? '1 device'
@@ -92,13 +92,13 @@ const showEditDeviceTypeForm = ref(false)
         }}
       </label>
     </div>
-    <BaseButton
+    <base-button
       variant="outline"
       class="ml-auto mt-3 flex w-fit gap-2 rounded-lg border-0 bg-secondary-50 shadow-none dark:bg-accent-700"
       @click="navigateToDevice(deviceType.name)"
     >
-      See devices <RightArrow />
-    </BaseButton>
+      See devices <right-arrow />
+    </base-button>
   </div>
   <form
     class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
@@ -107,7 +107,7 @@ const showEditDeviceTypeForm = ref(false)
     <h2 class="text-lg font-semibold">Edit - Device Type</h2>
     <div class="flex flex-col gap-1">
       <label for="name" class="text-md">Device type name</label>
-      <BaseInputField v-model="editDeviceType.name" label="Name" name="name" placeholder="" />
+      <base-input-field v-model="editDeviceType.name" label="Name" name="name" placeholder="" />
     </div>
     <div class="flex flex-col gap-1">
       <label for="connection-type" class="text-md">Connection type</label>
@@ -123,8 +123,8 @@ const showEditDeviceTypeForm = ref(false)
       </select>
     </div>
     <div class="mt-6 flex justify-between gap-6">
-      <BaseButton variant="outline" @click="cancelEditDeviceType"> Cancel </BaseButton>
-      <BaseButton @click="updateDeviceType"> Update </BaseButton>
+      <base-button variant="outline" @click="cancelEditDeviceType">Cancel</base-button>
+      <base-button @click="updateDeviceType">Update</base-button>
     </div>
   </form>
   <div

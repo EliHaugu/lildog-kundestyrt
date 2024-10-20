@@ -23,7 +23,7 @@ const deleteDevice = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-between gap-6 rounded-md px-2 py-1 hover:bg-secondary-50">
+  <div class="flex items-center justify-between gap-6 rounded-md px-2 py-1 hover:bg-secondary-50 dark:hover:bg-accent-700">
     <div class="flex items-center justify-start gap-3">
       <p class="w-12">{{ device.id }}</p>
       <p class="w-64">{{ device.name }}</p>

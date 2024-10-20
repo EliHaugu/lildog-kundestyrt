@@ -97,11 +97,11 @@ function handleCancelNewDevice() {
 
 <template>
   <main class="pb-8 pr-4">
-    <div class="flex flex-col gap-12" v-if="deviceType">
+    <div class="flex flex-col gap-2" v-if="deviceType">
       <div class="flex w-fit items-center justify-between gap-1">
         <router-link
           to="/devices"
-          class="rounded-md px-2 py-1 text-2xl font-semibold hover:bg-accent-300"
+          class="rounded-md px-2 py-1 text-2xl font-semibold hover:text-white-100 hover:bg-accent-800"
           >Configure devices</router-link
         >
         <svg
@@ -115,7 +115,7 @@ function handleCancelNewDevice() {
         </svg>
         <h1 class="text-2xl font-semibold">{{ deviceType.name }}</h1>
       </div>
-      <div class="flex justify-start gap-6">
+      <div class="z-20 flex justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Connection type:</p>
           <label
@@ -131,7 +131,7 @@ function handleCancelNewDevice() {
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
-          <label class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-[#E6EBFE] px-2">
+          <label class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] text-white-100  bg-accent-600 px-2">
             {{
               deviceType.devices?.length === 1
                 ? '1 device'
@@ -142,12 +142,12 @@ function handleCancelNewDevice() {
       </div>
       <div class="flex flex-col gap-3">
         <div class="flex items-center justify-between gap-6">
-          <div class="flex w-full items-center justify-start gap-3 text-xl font-semibold">
+          <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
             <h2 class="w-12">ID</h2>
             <h2 class="w-64">Device instance name</h2>
             <h2 class="w-12">Status</h2>
           </div>
-          <base-button class="w-40 justify-between" @click="addNewDevice = true">
+          <base-button class="w-40 justify-between rounded-md" @click="addNewDevice = true">
             Add device <plus-icon />
           </base-button>
         </div>
@@ -172,13 +172,20 @@ function handleCancelNewDevice() {
     >
       <h2 class="mb-4 text-xl font-semibold">Edit Device</h2>
       <form>
-        <div class="mb-4 flex flex-col gap-1">
+        <div class="mb-2 flex flex-col gap-1">
           <label for="name" class="text-md">Device type name</label>
           <base-input-field v-model="editDevice.name" label="Name" name="name" placeholder="" />
         </div>
-        <div class="flex justify-between gap-4">
-          <base-button variant="outline" @click="handleCancelEdit">Cancel</base-button>
-          <base-button @click="updateDevice">Update</base-button>
+        <div class="flex gap-2">
+          <base-button
+            class="flex-grow justify-center rounded-md"
+            variant="outline"
+            @click="handleCancelEdit"
+            >Cancel</base-button
+          >
+          <base-button class="flex-grow justify-center rounded-md" @click="updateDevice"
+            >Update</base-button
+          >
         </div>
       </form>
     </div>
@@ -204,11 +211,20 @@ function handleCancelNewDevice() {
             required
           />
         </div>
-        <div class="flex justify-between gap-4">
-          <base-button type="button" variant="outline" @click="handleCancelNewDevice"
+        <div class="flex justify-between gap-2">
+          <base-button
+            class="flex-grow justify-center rounded-md"
+            type="button"
+            variant="outline"
+            @click="handleCancelNewDevice"
             >Cancel</base-button
           >
-          <base-button type="button" @click="handleAddNewDevice">Add new device</base-button>
+          <base-button
+            class="flex-grow justify-center rounded-md"
+            type="button"
+            @click="handleAddNewDevice"
+            >Add new device</base-button
+          >
         </div>
       </form>
     </div>
