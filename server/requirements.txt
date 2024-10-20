@@ -5,6 +5,7 @@ babel==2.16.0
 black==24.8.0
 certifi==2024.8.30
 cffi==1.16.0
+channels==4.1.0
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
