@@ -75,7 +75,7 @@ const showEditDeviceTypeForm = ref(false)
     </div>
     <div class="mt-1 flex">
       <label
-        class="my-2 px-2 flex  content-start items-center justify-center rounded-xl text-white-100"
+        class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-ble': deviceType.connectionType === 'BLE',
           'bg-wifi': deviceType.connectionType === 'WiFi',
@@ -84,7 +84,9 @@ const showEditDeviceTypeForm = ref(false)
       >
         {{ deviceType.connectionType }}
       </label>
-      <label class="m-2 w-fit rounded-xl border-2 border-accent-500 bg-accent-700 text-white-100 px-2">
+      <label
+        class="m-2 w-fit rounded-xl border-2 border-accent-500 bg-accent-700 px-2 text-white-100"
+      >
         {{
           deviceType.devices?.length === 1
             ? '1 device'

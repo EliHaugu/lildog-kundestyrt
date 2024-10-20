@@ -49,7 +49,7 @@ const filteredDeviceTypes = computed(() => {
 
 <template>
   <main class="flex flex-col gap-6">
-    <section class="flex gap-2 h-10">
+    <section class="flex h-10 gap-2">
       <h1 class="p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
       <form action="" class="ml-auto flex flex-grow gap-4">
         <base-input-field
@@ -98,8 +98,15 @@ const filteredDeviceTypes = computed(() => {
         </select>
       </div>
       <div class="mt-6 flex justify-between gap-2">
-        <base-button class="rounded-md flex-grow justify-center" variant="outline" @click="showNewDeviceTypeForm = false">Cancel</base-button>
-        <base-button class="rounded-md flex-grow justify-center" @click="addNewDeviceType">Create</base-button>
+        <base-button
+          class="flex-grow justify-center rounded-md"
+          variant="outline"
+          @click="showNewDeviceTypeForm = false"
+          >Cancel</base-button
+        >
+        <base-button class="flex-grow justify-center rounded-md" @click="addNewDeviceType"
+          >Create</base-button
+        >
       </div>
     </form>
     <div v-if="showNewDeviceTypeForm" class="fixed inset-0 bg-[#000000] opacity-30"></div>

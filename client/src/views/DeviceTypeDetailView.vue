@@ -101,7 +101,7 @@ function handleCancelNewDevice() {
       <div class="flex w-fit items-center justify-between gap-1">
         <router-link
           to="/devices"
-          class="rounded-md px-2 py-1 text-2xl font-semibold hover:text-white-100 hover:bg-accent-800"
+          class="rounded-md px-2 py-1 text-2xl font-semibold hover:bg-accent-800 hover:text-white-100"
           >Configure devices</router-link
         >
         <svg
@@ -131,7 +131,9 @@ function handleCancelNewDevice() {
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
-          <label class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] text-white-100  bg-accent-600 px-2">
+          <label
+            class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100"
+          >
             {{
               deviceType.devices?.length === 1
                 ? '1 device'
