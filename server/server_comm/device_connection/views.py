@@ -6,7 +6,7 @@ from consts import conn_type_id_mapping
 from data_manager.models import Flow
 from django.http import JsonResponse
 from django.views import View
-from serial import Serial
+from serial import Serial, SerialTimeoutException
 from serial.tools import list_ports
 
 
@@ -21,7 +21,7 @@ class SerialDeviceConnectionView(View):
     def check_connection(self, conn_id: str):
         try:
             device_port = self.get_device_port(conn_id)
-            serial_device = Serial(device_port)
+            serial_device = Serial(device_port, timeout=10)
 
             serial_device.write(b'ping\n')
             time.sleep(1)
@@ -43,6 +43,14 @@ class SerialDeviceConnectionView(View):
                         'response': None,
                     }
                 )
+        except SerialTimeoutException as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'serial device timed out',
+                    'response': str(e),
+                }
+            )
         except Exception as e:
             return JsonResponse(
                 {
