@@ -87,6 +87,26 @@ class Device(models.Model):
     category: models.ForeignKey = models.ForeignKey(
         Category, on_delete=models.CASCADE
     )
+    connection_ids: models.JSONField = models.JSONField(
+        default=dict
+    )
+
+    def clean(self):
+        conn_type_id_mapping = {
+            "uart": "serial_number",
+            "adb": "adb_device_id",
+        }
+
+        for conn_type, id_field in conn_type_id_mapping:
+            if (conn_type in self.category.connection_types and
+                id_field not in self.category.connection_types and
+                not self.connection_ids.get(id_field)):
+                    raise ValidationError(
+                        f"All {conn_type} devices must have a {id_field} field.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.device_id
