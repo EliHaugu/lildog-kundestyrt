@@ -1,3 +1,4 @@
+from consts import conn_type_id_mapping
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -87,6 +88,22 @@ class Device(models.Model):
     category: models.ForeignKey = models.ForeignKey(
         Category, on_delete=models.CASCADE
     )
+    connection_ids: models.JSONField = models.JSONField(default=dict)
+
+    def clean(self):
+        for conn_type, conn_id in conn_type_id_mapping:
+            if (
+                conn_type in self.category.connection_types
+                and conn_id not in self.category.connection_types
+                and not self.connection_ids.get(conn_id)
+            ):
+                raise ValidationError(
+                    f"All {conn_type} devices must have a {conn_id} field."
+                )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.device_id
