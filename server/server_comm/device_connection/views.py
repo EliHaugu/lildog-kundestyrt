@@ -1,6 +1,7 @@
 import subprocess
 import time
 
+import requests
 from consts import conn_type_id_mapping
 from data_manager.models import Flow
 from django.http import JsonResponse
@@ -105,6 +106,55 @@ class AndroidDeviceConnectionView(View):
                     'status': 'not_connected',
                     'message': 'android device not connected',
                     'response': None,
+                }
+            )
+
+
+class APIConnectionView(View):
+    def check_connection(self, api_url: str):
+        try:
+            res = requests.get(api_url, timeout=10)
+
+            if res.status_code == 200:
+                return JsonResponse(
+                    {
+                        'status': 'connected',
+                        'message': 'connected to api',
+                        'response': res.json(),
+                    }
+                )
+            else:
+                JsonResponse(
+                    {
+                        'status': 'error',
+                        'message': (
+                            f'unexpected api response {res.status_code}'
+                        ),
+                        'response': res.json(),
+                    }
+                )
+        except requests.exceptions.Timeout as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'api request timed out',
+                    'response': str(e),
+                }
+            )
+        except requests.exceptions.ConnectionError as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'could not connect to api',
+                    'response': str(e),
+                }
+            )
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'an error occurred',
+                    'response': str(e),
                 }
             )
 
