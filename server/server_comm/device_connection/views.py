@@ -141,3 +141,6 @@ class FlowDeviceConnectionView(View):
                     case "uart":
                         serial_view = SerialDeviceConnectionView()
                         serial_view.check_connection(conn_id)
+                    case "adb":
+                        android_view = AndroidDeviceConnectionView()
+                        android_view.check_connection(conn_id)
