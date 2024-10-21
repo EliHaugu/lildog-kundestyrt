@@ -1,3 +1,4 @@
+import subprocess
 import time
 
 from consts import conn_type_id_mapping
@@ -29,7 +30,7 @@ class SerialDeviceConnectionView(View):
                 return JsonResponse(
                     {
                         'status': 'connected',
-                        'message': 'UART device responded!',
+                        'message': 'serial device connected',
                         'response': res,
                     }
                 )
@@ -37,13 +38,74 @@ class SerialDeviceConnectionView(View):
                 return JsonResponse(
                     {
                         'status': 'no_response',
-                        'message': 'UART device did not respond...',
+                        'message': 'serial device did not respond',
                         'response': None,
                     }
                 )
         except Exception as e:
             return JsonResponse(
-                {'status': 'error', 'message': str(e), 'response': None}
+                {
+                    'status': 'error',
+                    'message': 'an error occurred',
+                    'response': str(e),
+                }
+            )
+
+
+class AndroidDeviceConnectionView(View):
+    def get_adb_devices(self):
+        try:
+            adb_devices = subprocess.run(
+                ['adb', 'devices'], capture_output=True, text=True, check=True
+            ).stdout.splitlines()[1:-1]
+            adb_devices = [line.split("\t")[0] for line in adb_devices]
+            return adb_devices
+
+        except subprocess.CalledProcessError as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'adb command failed',
+                    'response': str(e),
+                }
+            )
+
+        except FileNotFoundError as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'adb not found',
+                    'response': str(e),
+                }
+            )
+
+        except Exception as e:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'an error occurred',
+                    'response': str(e),
+                }
+            )
+
+    def check_connection(self, conn_id: str):
+        adb_devices = self.get_adb_devices()
+
+        if conn_id in adb_devices:
+            return JsonResponse(
+                {
+                    'status': 'connected',
+                    'message': 'android device connected',
+                    'response': None,
+                }
+            )
+        else:
+            return JsonResponse(
+                {
+                    'status': 'not_connected',
+                    'message': 'android device not connected',
+                    'response': None,
+                }
             )
 
 
