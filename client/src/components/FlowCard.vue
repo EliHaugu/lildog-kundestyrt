@@ -3,19 +3,18 @@ import BaseButton from '@/components/BaseButton.vue'
 import type { Flow, Flows } from '@/types/FlowType'
 import { inject, type Ref, ref } from 'vue'
 import EditPen from '@/icons/EditPen.vue'
-import { router } from '@/router';
-import RightArrow from '@/icons/RightArrow.vue';
+import { router } from '@/router'
+import RightArrow from '@/icons/RightArrow.vue'
 
 const flows = inject<Ref<Flows>>('flows', ref([]))
 const props = defineProps<{
   flow: Flow
 }>()
 
-const navigateToFlow = (id: number ) => {
+const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
   router.push(`${currentPath}/${props.flow.id}`)
 }
-
 </script>
 
 <template>
@@ -29,7 +28,7 @@ const navigateToFlow = (id: number ) => {
         <edit-pen />
       </base-button>
     </div>
-    <div class="mt-1 gap-1 flex">
+    <div class="mt-1 flex gap-1">
       <label
         class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
@@ -54,8 +53,8 @@ const navigateToFlow = (id: number ) => {
       </label>
     </div>
     <base-button
-        variant="light"
-      class="ml-auto mt-7 flex gap-2 rounded-xl border-0 h-6 items-center text-white-100"
+      variant="light"
+      class="ml-auto mt-7 flex h-6 items-center gap-2 rounded-xl border-0 text-white-100"
       @click="navigateToFlow(flow.id)"
     >
       Run Flow <right-arrow fill="white" />

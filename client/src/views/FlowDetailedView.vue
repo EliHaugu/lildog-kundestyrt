@@ -11,8 +11,21 @@ import type { CustomNode } from '@/types/NodeType'
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
+import type { Flows } from '@/types/FlowType'
+
+import { inject, computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const flows = inject<Ref<Flows>>('flows', ref([]))
+
+const route = useRoute()
+const flowId = route.params.id
+const selectedFlow = computed(() => flows.value.find((flow) => flow.id === flowId))
+
+const nodes = ref<CustomNode[]>(selectedFlow.value?.nodes || [])
+const edges = ref<Edge[]>(selectedFlow.value?.edges || [])
 
 const { onConnect, addEdges, updateEdge } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
@@ -28,75 +41,6 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
     connection
   )
 }
-
-const nodes = ref<CustomNode[]>([
-  {
-    id: '1',
-    data: {
-      label: 'Button Press',
-      connection: 'BLE',
-      type: 'Action',
-      testState: 'idle',
-      fields: {
-        uuid: '123456789',
-        action: 'buttonPressed()'
-      }
-    },
-    position: { x: 400, y: 50 },
-    style: stripNodeStyles
-  },
-  {
-    id: '2',
-    data: {
-      label: 'Backend Updated',
-      connection: 'ADE',
-      type: 'Action',
-      testState: 'success',
-      fields: {
-        uuid: '987654321',
-        action: 'updateBackend()'
-      }
-    },
-    position: { x: 150, y: 200 },
-    style: stripNodeStyles
-  },
-  {
-    id: '3',
-    data: {
-      label: 'Driver Signal',
-      connection: 'BLE',
-      type: 'Assertion',
-      testState: 'warning',
-      fields: {
-        uuid: '123456789',
-        assertion: 'driverSignalSent()'
-      }
-    },
-    position: { x: 650, y: 200 },
-    style: stripNodeStyles
-  },
-  {
-    id: '4',
-    data: {
-      label: 'Light Turned On',
-      connection: 'WiFi',
-      type: 'Assertion',
-      testState: 'error',
-      fields: {
-        uuid: '987654321',
-        assertion: 'lightIsOn()'
-      }
-    },
-    position: { x: 400, y: 350 },
-    style: stripNodeStyles
-  }
-])
-
-const edges = ref<Edge[]>([
-  { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
-  { id: 'e1-3', source: '1', target: '3', type: 'smoothstep', updatable: true },
-  { id: 'e3-4', source: '3', target: '4', type: 'smoothstep', updatable: true }
-])
 
 const displayLog = ref(false)
 

@@ -190,7 +190,7 @@ export const devices: CustomNode[] = [
 
 export const mock_flows: Flow[] = [
   {
-    id: 1,
+    id: '1',
     name: 'First Flow',
     status: 'Completed',
     connectionTypes: ['BLE', 'ADE', 'WiFi'],
@@ -220,7 +220,7 @@ export const mock_flows: Flow[] = [
     ] as Edge[]
   },
   {
-    id: 2,
+    id: '2',
     name: 'Second Flow',
     status: 'In-progress',
     connectionTypes: ['BLE', 'WiFi'],

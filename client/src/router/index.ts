@@ -14,7 +14,7 @@ const routes = [
     component: DevicesView
   },
   {
-    path: '/flows',
+    path: '/flow',
     name: 'flows',
     component: FlowView
   },

@@ -2,7 +2,7 @@ import type { Edge } from '@vue-flow/core'
 import type { CustomNode } from './NodeType'
 
 type Flow = {
-  id: number
+  id: string
   name: string
   status?: string
   connectionTypes?: string[]
