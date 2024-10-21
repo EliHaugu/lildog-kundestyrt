@@ -1,21 +1,21 @@
+import time
+
+from consts import conn_type_id_mapping
+from data_manager.models import Flow
 from django.http import JsonResponse
 from django.views import View
 from serial import Serial
 from serial.tools import list_ports
-import time
-from consts import conn_type_id_mapping
 
-from data_manager.models import Flow
 
 class SerialDeviceConnectionView(View):
-    def get_device_port(conn_id: str):
+    def get_device_port(self, conn_id: str):
         ports = list_ports.comports()
         for port in ports:
             if port.serial_number == conn_id:
                 return port.device
         return None
 
-    
     def check_connection(self, conn_id: str):
         try:
             device_port = self.get_device_port(conn_id)
@@ -24,22 +24,28 @@ class SerialDeviceConnectionView(View):
             serial_device.write(b'ping\n')
             time.sleep(1)
             res = serial_device.readline().strip()
-            
+
             if res:
-                return JsonResponse({
-                    'status': 'connected',
-                    'message': 'UART device responded!',
-                    'response': res})
+                return JsonResponse(
+                    {
+                        'status': 'connected',
+                        'message': 'UART device responded!',
+                        'response': res,
+                    }
+                )
             else:
-                return JsonResponse({
-                    'status': 'no_response',
-                    'message': 'UART device did not respond...',
-                    'response': None})
+                return JsonResponse(
+                    {
+                        'status': 'no_response',
+                        'message': 'UART device did not respond...',
+                        'response': None,
+                    }
+                )
         except Exception as e:
-            return JsonResponse({
-                'status': 'error',
-                'message': str(e),
-                'response': None})
+            return JsonResponse(
+                {'status': 'error', 'message': str(e), 'response': None}
+            )
+
 
 class FlowDeviceConnectionView(View):
     def parse_devices(self, request):
@@ -61,10 +67,10 @@ class FlowDeviceConnectionView(View):
 
         return devices
 
-    def connect_devices(self, flow_id):
+    def connect_devices(self, flow_id: str):
         devices = self.parse_devices(flow_id)
 
-        for device, connection_info in devices.items():
+        for connection_info in devices.values():
             for conn in connection_info:
                 conn_type = conn[0]
                 conn_id = conn[1]
@@ -73,4 +79,3 @@ class FlowDeviceConnectionView(View):
                     case "uart":
                         serial_view = SerialDeviceConnectionView()
                         serial_view.check_connection(conn_id)
-

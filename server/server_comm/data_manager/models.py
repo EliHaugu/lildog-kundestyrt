@@ -1,7 +1,8 @@
+from consts import conn_type_id_mapping
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
-from consts import conn_type_id_mapping
+
 
 class Category(models.Model):
     WIFI = "wifi"
@@ -87,17 +88,18 @@ class Device(models.Model):
     category: models.ForeignKey = models.ForeignKey(
         Category, on_delete=models.CASCADE
     )
-    connection_ids: models.JSONField = models.JSONField(
-        default=dict
-    )
+    connection_ids: models.JSONField = models.JSONField(default=dict)
 
     def clean(self):
-        for conn_type, conn_id_field in conn_type_id_mapping:
-            if (conn_type in self.category.connection_types and
-                conn_id_field not in self.category.connection_types and
-                not self.connection_ids.get(conn_id_field)):
-                    raise ValidationError(
-                        f"All {conn_type} devices must have a {conn_id_field} field.")
+        for conn_type, conn_id in conn_type_id_mapping:
+            if (
+                conn_type in self.category.connection_types
+                and conn_id not in self.category.connection_types
+                and not self.connection_ids.get(conn_id)
+            ):
+                raise ValidationError(
+                    f"All {conn_type} devices must have a {conn_id} field."
+                )
 
     def save(self, *args, **kwargs):
         self.full_clean()
