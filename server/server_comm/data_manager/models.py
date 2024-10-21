@@ -1,7 +1,7 @@
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
-
+from consts import conn_type_id_mapping
 
 class Category(models.Model):
     WIFI = "wifi"
@@ -92,17 +92,12 @@ class Device(models.Model):
     )
 
     def clean(self):
-        conn_type_id_mapping = {
-            "uart": "serial_number",
-            "adb": "adb_device_id",
-        }
-
-        for conn_type, id_field in conn_type_id_mapping:
+        for conn_type, conn_id_field in conn_type_id_mapping:
             if (conn_type in self.category.connection_types and
-                id_field not in self.category.connection_types and
-                not self.connection_ids.get(id_field)):
+                conn_id_field not in self.category.connection_types and
+                not self.connection_ids.get(conn_id_field)):
                     raise ValidationError(
-                        f"All {conn_type} devices must have a {id_field} field.")
+                        f"All {conn_type} devices must have a {conn_id_field} field.")
 
     def save(self, *args, **kwargs):
         self.full_clean()
