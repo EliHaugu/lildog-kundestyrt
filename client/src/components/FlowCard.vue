@@ -15,7 +15,7 @@ const flows = inject<Ref<Flow[]>>('flows', ref([]))
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
-  router.push(`${currentPath}/${props.flow.id}`)
+  router.push(`${currentPath}/${id}`)
 }
 
 // Flow editor
@@ -67,7 +67,7 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     </div>
     <div class="mt-1 flex gap-1">
       <label
-        class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+        class="my-2 mr-6 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': flow.status === 'Completed',
           'bg-warning': flow.status === 'In-progress',
