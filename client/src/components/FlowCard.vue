@@ -4,7 +4,7 @@ import BaseInputField from './BaseInputField.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import { router } from '@/router'
-import RightArrow from '@/icons/RightArrow.vue'
+import PlayIcon from '@/icons/RightArrow.vue'
 import { inject, ref, type Ref } from 'vue'
 
 const props = defineProps<{
@@ -54,11 +54,15 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
 </script>
 
 <template>
-  <div class="h-40 w-[25rem] rounded-md bg-secondary-50 p-3 dark:bg-accent-700" style="z-index: 1">
+  <div
+    class="h-40 w-[25rem] cursor-pointer rounded-md bg-secondary-50 p-3 hover:shadow-md dark:bg-accent-700"
+    @click="navigateToFlow(flow.id)"
+    style="z-index: 1"
+  >
     <div :class="['flex items-center justify-between']">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
       <base-button
-        @click="editFlow(flow)"
+        @click.stop="editFlow(flow)"
         variant="outline"
         class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
       >
@@ -71,7 +75,8 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
         :class="{
           'bg-success': flow.status === 'Completed',
           'bg-warning': flow.status === 'In-progress',
-          'bg-error': flow.status === 'Inactive'
+          'bg-error': flow.status === 'Failed',
+          'bg-accent-500': flow.status === 'Untested'
         }"
       >
         {{ flow.status }}
@@ -92,9 +97,9 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     <base-button
       variant="light"
       class="ml-auto mt-7 flex h-6 items-center gap-2 rounded-xl border-0 text-white-100"
-      @click="navigateToFlow(flow.id)"
+      @click.stop=""
     >
-      Run Flow <right-arrow fill="white" />
+      Run Flow <play-icon fill="white" />
     </base-button>
   </div>
   <!-- flow editor -->
