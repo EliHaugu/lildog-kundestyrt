@@ -71,7 +71,7 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     </div>
     <div class="mt-1 flex gap-1">
       <label
-        class="my-2 mr-6 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+        class="my-2 mr-6 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': flow.status === 'Completed',
           'bg-warning': flow.status === 'In-progress',
@@ -84,7 +84,7 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
       <label
         v-for="(connectionType, index) in flow.connectionTypes"
         :key="index"
-        class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+        class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-ble': connectionType === 'BLE',
           'bg-wifi': connectionType === 'WiFi',

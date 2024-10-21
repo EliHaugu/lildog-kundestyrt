@@ -54,8 +54,8 @@ const addNewFlow = () => {
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold">Configure flows</h1>
-      <form action="" class="ml-auto flex flex-grow gap-4">
+      <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
+      <form action="" class="ml-auto flex flex-grow gap-4 pr-2">
         <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
       </form>
       <base-button class="mr-4 w-fit items-center rounded-lg" @click="createNewFlow">
