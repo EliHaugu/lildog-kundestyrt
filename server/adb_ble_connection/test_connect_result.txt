@@ -1,0 +1,59 @@
+20-10-2024 20:20:32
+Version: 4.28.1
+Device: SM-S916B, Android version: 14 (UP1A.231005.007.S916BXXS6CXGA)
+
+Starting 'Scan and connect to the nRF Kit' for 'Scan and connect to nRF Kit'
+   Scanning for nRF Kit...
+20:20:32.707 F1:CD:70:40:99:AA -40 0319400302010603030D180B094E6F726469635F485200
+   OK
+   Connecting to nRF Kit...OK
+   Discover services on the connected device...OK
+   Verify that the service is present...OK
+
+nRF Connect Test, 2024-10-20
+Bluetooth connection between Android device and nRF Kit (test_connect.xml)
+A	20:20:32.558	Starting 'Scan and connect to the nRF Kit' for 'Scan and connect to nRF Kit'
+A	20:20:32.565	Scanning for nRF Kit...
+V	20:20:32.574	Starting scan...
+D	20:20:32.583	scanner.startScan(null, LOW_LATENCY, callback)
+V	20:20:32.717	Stopping scanning...
+D	20:20:32.730	scanner.stopScan(callback)
+I	20:20:32.741	Device found: F1:CD:70:40:99:AA
+A	20:20:32.752	Connecting to nRF Kit...
+V	20:20:32.776	Connecting to F1:CD:70:40:99:AA...
+D	20:20:32.776	gatt = device.connectGatt(autoConnect = false, TRANSPORT_LE, preferred PHY = LE 1M)
+D	20:20:33.095	[Callback] Connection state changed with status: 0 and new state: CONNECTED (2)
+I	20:20:33.095	Connected to F1:CD:70:40:99:AA
+A	20:20:33.107	Discover services on the connected device...
+V	20:20:33.116	Discovering services...
+D	20:20:33.116	gatt.discoverServices()
+D	20:20:33.268	[Callback] Services discovered with status: 0
+I	20:20:33.268	Services discovered
+V	20:20:33.278	Generic Attribute (0x1801)
+- Service Changed [I] (0x2A05)
+   Client Characteristic Configuration (0x2902)
+- Client Supported Features [R W] (0x2B29)
+- Database Hash [R] (0x2B2A)
+Generic Access (0x1800)
+- Device Name [R] (0x2A00)
+- Appearance [R] (0x2A01)
+- Peripheral Preferred Connection Parameters [R] (0x2A04)
+Heart Rate (0x180D)
+- Heart Rate Measurement [N] (0x2A37)
+   Client Characteristic Configuration (0x2902)
+- Body Sensor Location [R] (0x2A38)
+- Heart Rate Control Point [W] (0x2A39)
+D	20:20:33.278	gatt.setCharacteristicNotification(00002a05-0000-1000-8000-00805f9b34fb, true)
+D	20:20:33.279	gatt.setCharacteristicNotification(00002a37-0000-1000-8000-00805f9b34fb, true)
+A	20:20:33.282	Verify that the service is present...
+V	20:20:33.290	Reading services...
+I	20:20:33.290	Service (uuid=0000180D-0000-1000-8000-00805f9b34fb, instance-id=0) found
+V	20:20:33.308	Cleaning up...
+I	20:20:33.800	PHY updated (TX: LE 2M, RX: LE 2M)
+V	20:20:35.320	Disconnecting...
+D	20:20:35.320	gatt.disconnect()
+D	20:20:35.343	[Callback] Connection state changed with status: 0 and new state: DISCONNECTED (0)
+I	20:20:35.343	Disconnected
+D	20:20:35.344	gatt.close()
+D	20:20:35.355	wait(200)
+A	20:20:35.560	'Scan and connect to nRF Kit' completed
