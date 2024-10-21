@@ -222,7 +222,7 @@ export const mock_flows: Flow[] = [
   {
     id: '2',
     name: 'Second Flow',
-    status: 'In-progress',
+    status: 'Inactive',
     connectionTypes: ['BLE', 'WiFi'],
     nodes: [
       {
