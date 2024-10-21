@@ -15,7 +15,7 @@ import ExportIcon from '@/icons/ExportIcon.vue'
   <header
     class="relative mr-4 flex items-center gap-2 rounded-xl bg-white-100 p-2 shadow-md dark:bg-accent-800"
   >
-    <a href="/devices" aria-label="Return to all flows" class="group"><exit-icon /></a>
+    <a href="/flow" aria-label="Return to all flows" class="group"><exit-icon /></a>
     <h1>
       {{ listItems.find((item) => item.id === $route.params.id)?.name }}
     </h1>
