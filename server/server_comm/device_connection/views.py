@@ -52,6 +52,19 @@ class SerialDeviceConnectionView(View):
                 }
             )
 
+    def get(self, request):
+        conn_id = request.GET.get('conn_id')
+        if conn_id:
+            return self.check_connection(conn_id)
+        else:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'conn_id is required',
+                    'response': None,
+                }
+            )
+
 
 class AndroidDeviceConnectionView(View):
     def get_adb_devices(self):
@@ -109,6 +122,19 @@ class AndroidDeviceConnectionView(View):
                 }
             )
 
+    def get(self, request):
+        conn_id = request.GET.get('conn_id')
+        if conn_id:
+            return self.check_connection(conn_id)
+        else:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'conn_id is required',
+                    'response': None,
+                }
+            )
+
 
 class APIConnectionView(View):
     def check_connection(self, api_url: str):
@@ -158,12 +184,24 @@ class APIConnectionView(View):
                 }
             )
 
+    def get(self, request):
+        api_url = request.GET.get('api_url')
+        if api_url:
+            return self.check_connection(api_url)
+        else:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'api_url is required',
+                    'response': None,
+                }
+            )
+
 
 class FlowDeviceConnectionView(View):
-    def parse_devices(self, request):
-        flow_id = request.GET.get('flow_id')
+    def parse_devices(self, flow_id: str):
         flow = Flow.objects.get(id=flow_id)
-        devices = {}
+        devices: dict[str, list] = {}
 
         for node in flow.nodes.all():
             device = node.device
@@ -194,3 +232,16 @@ class FlowDeviceConnectionView(View):
                     case "adb":
                         android_view = AndroidDeviceConnectionView()
                         android_view.check_connection(conn_id)
+
+    def get(self, request):
+        flow_id = request.GET.get('flow_id')
+        if flow_id:
+            return self.connect_devices(flow_id)
+        else:
+            return JsonResponse(
+                {
+                    'status': 'error',
+                    'message': 'flow_id is required',
+                    'response': None,
+                }
+            )
