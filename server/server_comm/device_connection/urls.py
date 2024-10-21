@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views import AndroidDeviceConnectionView, SerialDeviceConnectionView
+from .views import (
+    AndroidDeviceConnectionView,
+    APIConnectionView,
+    SerialDeviceConnectionView,
+)
 
 urlpatterns = [
     path(
@@ -13,4 +17,5 @@ urlpatterns = [
         AndroidDeviceConnectionView.as_view(),
         name="android-connection",
     ),
+    path("api/", APIConnectionView.as_view(), name="api-connection"),
 ]
