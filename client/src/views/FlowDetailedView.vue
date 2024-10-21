@@ -12,7 +12,6 @@ import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
 import { ref, type Ref } from 'vue'
-import { stripNodeStyles } from '@/utils/stripNodeStyles'
 import type { Flows } from '@/types/FlowType'
 
 import { inject, computed } from 'vue'

@@ -16,7 +16,12 @@ provide('updateDeviceTypes', updateDeviceTypes)
 
 const flows = ref<Flow[]>(mock_flows)
 
+function updateFlows(newData: Flow[]) {
+  flows.value = newData
+}
+
 provide('flows', flows)
+provide('updateFlows', updateFlows)
 </script>
 <template>
   <Layout />
