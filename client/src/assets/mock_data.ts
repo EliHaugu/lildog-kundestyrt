@@ -1,6 +1,8 @@
 import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { Flow } from '@/types/FlowType'
 import type { CustomNode } from '@/types/NodeType'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
+import type { Edge } from '@vue-flow/core'
 
 export const listItems = [
   {
@@ -183,6 +185,60 @@ export const devices: CustomNode[] = [
     data: { label: 'Button Signal', connection: 'BLE' },
     position: { x: 0, y: 0 },
     style: stripNodeStyles
+  }
+]
+
+export const mock_flows: Flow[] = [
+  {
+    id: 1,
+    name: 'First Flow',
+    status: 'Completed',
+    connectionTypes: ['BLE', 'ADE', 'WiFi'],
+    nodes: [
+      {
+        id: '1',
+        data: { label: 'Button Press', connection: 'BLE' },
+        position: { x: 0, y: 0 },
+        style: stripNodeStyles
+      },
+      {
+        id: '2',
+        data: { label: 'Backend Updated', connection: 'ADE' },
+        position: { x: 150, y: 100 },
+        style: stripNodeStyles
+      },
+      {
+        id: '3',
+        data: { label: 'Driver Signal', connection: 'BLE' },
+        position: { x: 300, y: 200 },
+        style: stripNodeStyles
+      }
+    ] as CustomNode[],
+    edges: [
+      { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
+      { id: 'e2-3', source: '2', target: '3', type: 'smoothstep', updatable: true }
+    ] as Edge[]
+  },
+  {
+    id: 2,
+    name: 'Second Flow',
+    status: 'In-progress',
+    connectionTypes: ['BLE', 'WiFi'],
+    nodes: [
+      {
+        id: '1',
+        data: { label: 'Button Signal', connection: 'BLE' },
+        position: { x: 0, y: 0 },
+        style: stripNodeStyles
+      },
+      {
+        id: '2',
+        data: { label: 'Light Turned On', connection: 'WiFi' },
+        position: { x: 150, y: 150 },
+        style: stripNodeStyles
+      }
+    ] as CustomNode[],
+    edges: [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true }] as Edge[]
   }
 ]
 
