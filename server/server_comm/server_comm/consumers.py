@@ -1,16 +1,16 @@
 import json
 
-from channels.generic.websocket import WebsocketConsumer  # type: ignore
+from channels.generic.websocket import AsyncWebsocketConsumer  # type: ignore
 
 
-class LogConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+class LogConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         pass
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         device_id = text_data_json['deviceId']
 
@@ -20,4 +20,4 @@ class LogConsumer(WebsocketConsumer):
         ]
 
         # Send logs back to WebSocket client
-        self.send(text_data=json.dumps(logs))
+        await self.send(text_data=json.dumps(logs))

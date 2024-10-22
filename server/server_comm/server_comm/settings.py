@@ -39,6 +39,7 @@ ALLOWED_HOSTS: list[str] = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -47,7 +48,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "data_manager",
-    "channels",
 ]
 
 MIDDLEWARE = [
@@ -78,8 +78,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "server_comm.wsgi.application"
 ASGI_APPLICATION = "server_comm.asgi.application"
+WSGI_APPLICATION = "server_comm.wsgi.application"
 
 
 # Database
