@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineEmits, useAttrs } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 const props = defineProps({
   type: {
