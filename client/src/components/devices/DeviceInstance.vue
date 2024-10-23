@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue'
+import { ref } from 'vue'
 import type { Device } from '@/types/DeviceTypes'
 import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
