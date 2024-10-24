@@ -4,6 +4,7 @@ import type { Flow, Flows } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import flowService from '@/services/FlowService'
 
 const searchQuery = ref('')
 
@@ -32,22 +33,28 @@ const cancelNewFlow = () => {
   showNewFlowForm.value = false
 }
 
-const addNewFlow = () => {
+const addNewFlow = async () => {
   if (!newFlowName.value) return
 
   const newFlow: Flow = {
-    id: (flows.value.length + 1).toString(),
-    name: newFlowName.value + (flows.value.length + 1).toString(),
+    id: '', // the backend generate id?
+    name: newFlowName.value,
     status: newFlowStatus,
     connectionTypes: [],
     nodes: [],
     edges: []
   }
 
-  flows.value.push(newFlow)
-
-  newFlowName.value = ''
-  showNewFlowForm.value = false
+  try {
+    await flowService.createFlow(newFlow)
+  
+    newFlowName.value = ''
+    showNewFlowForm.value = false
+    console.log('Flow created')
+  }
+  catch (error) {
+    console.error('Error creating flow:', error)
+}
 }
 </script>
 
