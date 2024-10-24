@@ -24,7 +24,7 @@ export default {
 
     // Create a new flow
     async createFlow(flowData: Flow): Promise<Flow> {
-        const response = await fetch(`${API_BASE_URL}/flows/`, {
+        const response = await fetch(`${API_BASE_URL}/flows`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default {
 
     //update a flow
     async updateFlow(id: string, flowData: Flow): Promise<Flow> {
-        const response = await fetch(`${API_BASE_URL}/flows/${id}/`,{
+        const response = await fetch(`${API_BASE_URL}/flows/${id}`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

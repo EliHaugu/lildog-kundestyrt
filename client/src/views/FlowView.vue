@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, computed, type Ref } from 'vue'
+import { ref, inject, computed, type Ref, onMounted } from 'vue'
 import type { Flow, Flows } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
@@ -8,10 +8,9 @@ import flowService from '@/services/FlowService'
 
 const searchQuery = ref('')
 
-const flows = inject<Ref<Flows>>('flows', ref([]))
+const flows = ref<Flow[]>([])
 
 const filteredFlows = computed(() => {
-  console.log(flows.value)
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
     flow.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -47,15 +46,31 @@ const addNewFlow = async () => {
 
   try {
     await flowService.createFlow(newFlow)
+    console.log('Flow created')
+    await fetchFlows()
+    console.log('Flows fetched')
   
     newFlowName.value = ''
     showNewFlowForm.value = false
-    console.log('Flow created')
   }
   catch (error) {
     console.error('Error creating flow:', error)
 }
 }
+
+// fetching list of all flows
+const fetchFlows = async () => {
+  try {
+    const response = await flowService.getFlows()
+    flows.value = response
+  } catch (error) {
+    console.error('Error fetching flows:', error)
+  }
+}
+
+//fetching list of all flows when the component is mounted
+onMounted(fetchFlows)
+
 </script>
 
 <template>
