@@ -1,3 +1,9 @@
+import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { Flow } from '@/types/FlowType'
+import type { CustomNode } from '@/types/NodeType'
+import { stripNodeStyles } from '@/utils/stripNodeStyles'
+import type { Edge } from '@vue-flow/core'
+
 export const listItems = [
   {
     id: '1',
@@ -19,18 +25,8 @@ export const listItems = [
 export const headerItems = [
   {
     id: 1,
-    name: 'New Device',
-    link: 'new'
-  },
-  {
-    id: 2,
-    name: 'Configure Devices',
+    name: 'Devices',
     link: 'devices'
-  },
-  {
-    id: 3,
-    name: 'API',
-    link: 'api'
   }
 ]
 
@@ -92,9 +88,6 @@ export const logItems = [
     ]
   }
 ]
-
-import type { CustomNode } from '@/types/nodeType'
-import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
 export const devices: CustomNode[] = [
   {
@@ -192,5 +185,140 @@ export const devices: CustomNode[] = [
     data: { label: 'Button Signal', connection: 'BLE' },
     position: { x: 0, y: 0 },
     style: stripNodeStyles
+  }
+]
+
+export const mock_flows: Flow[] = [
+  {
+    id: '1',
+    name: 'First Flow',
+    status: 'Completed',
+    connectionTypes: ['BLE', 'ADE', 'WiFi'],
+    nodes: [
+      {
+        id: '1',
+        data: { label: 'Button Press', connection: 'BLE' },
+        position: { x: 0, y: 0 },
+        style: stripNodeStyles
+      },
+      {
+        id: '2',
+        data: { label: 'Backend Updated', connection: 'ADE' },
+        position: { x: 150, y: 100 },
+        style: stripNodeStyles
+      },
+      {
+        id: '3',
+        data: { label: 'Driver Signal', connection: 'BLE' },
+        position: { x: 300, y: 200 },
+        style: stripNodeStyles
+      }
+    ] as CustomNode[],
+    edges: [
+      { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
+      { id: 'e2-3', source: '2', target: '3', type: 'smoothstep', updatable: true }
+    ] as Edge[]
+  },
+  {
+    id: '2',
+    name: 'Second Flow',
+    status: 'Failed',
+    connectionTypes: ['BLE', 'WiFi'],
+    nodes: [
+      {
+        id: '1',
+        data: { label: 'Button Signal', connection: 'BLE' },
+        position: { x: 0, y: 0 },
+        style: stripNodeStyles
+      },
+      {
+        id: '2',
+        data: { label: 'Light Turned On', connection: 'WiFi' },
+        position: { x: 150, y: 150 },
+        style: stripNodeStyles
+      }
+    ] as CustomNode[],
+    edges: [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true }] as Edge[]
+  }
+]
+
+export const mock_devices: Device[] = [
+  {
+    id: 1,
+    name: 'Device 1',
+    deviceType: 'Halsbånd',
+    connectionType: 'BLE',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 2,
+    name: 'Device 2',
+    deviceType: 'Halsbånd',
+    connectionType: 'ADE',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 3,
+    name: 'Device 3',
+    deviceType: 'HundeChip',
+    connectionType: 'WiFi',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 4,
+    name: 'Device 4',
+    deviceType: 'GPS-tracker',
+    connectionType: 'BLE',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  },
+  {
+    id: 5,
+    name: 'Device 5',
+    deviceType: 'Lys',
+    connectionType: 'BLE',
+    connectionId: 'X43476342',
+    fields: {
+      key: 'zxvc_234523',
+      value: '1234'
+    }
+  }
+]
+
+export const mock_device_types: DeviceType[] = [
+  {
+    name: 'Halsbånd',
+    connectionType: 'BLE',
+    devices: mock_devices.filter((device) => device.deviceType === 'Halsbånd')
+  },
+  {
+    name: 'HundeChip',
+    connectionType: 'ADE',
+    devices: mock_devices.filter((device) => device.deviceType === 'HundeChip')
+  },
+  {
+    name: 'GPS-tracker',
+    connectionType: 'WiFi',
+    devices: mock_devices.filter((device) => device.deviceType === 'GPS-tracker')
+  },
+  {
+    name: 'Lyspære',
+    connectionType: 'BLE',
+    devices: mock_devices.filter((device) => device.deviceType === 'Lys')
   }
 ]

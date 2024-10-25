@@ -1,22 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LandingView from '@//views/LandingView.vue'
 import FlowView from '@/views/FlowView.vue'
-import LogView from '@/components/FlowLog.vue'
+import LogView from '@/components/flow/FlowLog.vue'
 import DevicesView from '@/views/DevicesView.vue'
-import ApiView from '@/views/ApiView.vue'
+import DeviceTypeDetailView from '@/views/DeviceTypeDetailView.vue'
 import NewDeviceView from '@/views/NewDeviceView.vue'
+import FlowDetailedView from '@/views/FlowDetailedView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: LandingView
+    component: DevicesView
+  },
+  {
+    path: '/flow',
+    name: 'flows',
+    component: FlowView
   },
   {
     path: '/flow/:id',
     name: 'flow',
-    component: FlowView
+    component: FlowDetailedView
   },
   {
     path: '/flow/:id/log',
@@ -35,9 +40,9 @@ const routes = [
     component: DevicesView
   },
   {
-    path: '/api',
-    name: 'api',
-    component: ApiView
+    path: '/devices/:deviceTypeName',
+    name: 'deviceTypeDetail',
+    component: DeviceTypeDetailView
   }
 ]
 

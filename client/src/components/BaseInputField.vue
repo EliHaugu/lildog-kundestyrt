@@ -3,6 +3,8 @@
     :type="type"
     :placeholder="placeholder"
     :class="computedClass"
+    :value="modelValue"
+    @input="onInput"
     v-bind="$attrs"
     v-on="listeners"
   />
@@ -23,6 +25,10 @@ const props = defineProps({
   customClass: {
     type: String,
     default: ''
+  },
+  modelValue: {
+    type: String,
+    default: ''
   }
 })
 
@@ -30,8 +36,15 @@ const attrs = useAttrs()
 const listeners = attrs.on || {}
 
 const computedClass = computed(() => {
-  return `mb-4 w-auto flex-grow rounded-lg border border-accent-600 bg-primary-200 px-4 py-2 ${props.customClass}`
+  return `w-auto flex-grow rounded-lg border border-accent-600 bg-primary-200 px-4 py-2 ${props.customClass}`
 })
+
+// Emit the updated input value
+const emit = defineEmits(['update:modelValue'])
+const onInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  emit('update:modelValue', target.value)
+}
 </script>
 
 <style scoped></style>

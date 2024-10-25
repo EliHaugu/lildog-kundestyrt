@@ -5,7 +5,7 @@ export type CustomData = {
   connection?: string
   flowId?: string
   type?: string
-  testState: string
+  testState?: string
   fields?: { uuid?: string; action?: string; assertion?: string }
 }
 

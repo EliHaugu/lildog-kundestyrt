@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import type { CustomData } from '@/types/nodeType'
+import type { CustomData } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import type { NodeProps } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
 import { ref } from 'vue'
-import NodeFieldInput from './node/FieldInput.vue'
+import NodeFieldInput from './FlowNodeInput.vue'
+import SuccessIcon from '@/icons/SuccessIcon.vue'
+import WarningIcon from '@/icons/WarningIcon.vue'
+import ErrorIcon from '@/icons/ErrorIcon.vue'
 
 const props = defineProps<NodeProps<CustomData>>()
 const nodeTestState = ref(props.data.testState)
@@ -64,41 +67,9 @@ const getKeysByValue = (value: string) => {
       </h1>
 
       <div v-if="nodeTestState" class="icon-container p-1">
-        <svg
-          v-if="nodeTestState === 'success'"
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 -960 960 960"
-          class="rounded-md border bg-success"
-          fill="#00312F"
-        >
-          <path d="M382-240 154-468l57-57 171 171 367-367 57 57z" />
-        </svg>
-        <svg
-          v-if="nodeTestState === 'warning'"
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 -960 960 960"
-          class="rounded-md border bg-warning"
-          fill="#00312F"
-        >
-          <path d="M440-400v-360h80v360zm0 200v-80h80v80z" />
-        </svg>
-        <svg
-          v-if="nodeTestState === 'error'"
-          width="28"
-          height="28"
-          viewBox="0 0 15 15"
-          xmlns="http://www.w3.org/2000/svg"
-          class="rounded-md border bg-error"
-          fill="#00312F"
-        >
-          <path
-            d="M12.8536 2.85355C13.0488 2.65829 13.0488 2.34171 12.8536 2.14645C12.6583 1.95118 12.3417 1.95118 12.1464 2.14645L7.5 6.79289L2.85355 2.14645C2.65829 1.95118 2.34171 1.95118 2.14645 2.14645C1.95118 2.34171 1.95118 2.65829 2.14645 2.85355L6.79289 7.5L2.14645 12.1464C1.95118 12.3417 1.95118 12.6583 2.14645 12.8536C2.34171 13.0488 2.65829 13.0488 2.85355 12.8536L7.5 8.20711L12.1464 12.8536C12.3417 13.0488 12.6583 13.0488 12.8536 12.8536C13.0488 12.6583 13.0488 12.3417 12.8536 12.1464L8.20711 7.5L12.8536 2.85355Z"
-          />
-        </svg>
+        <success-icon v-if="nodeTestState === 'success'" />
+        <warning-icon v-if="nodeTestState === 'warning'" />
+        <error-icon v-if="nodeTestState === 'error'" />
       </div>
     </div>
 

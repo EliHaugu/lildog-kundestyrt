@@ -1,141 +1,89 @@
 <script setup lang="ts">
-// import { MiniMap } from '@vue-flow/minimap'
-import { listItems } from '@/assets/mock_data'
-import { Background } from '@vue-flow/background'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
-import useDragAndDrop from '@/utils/useDragAndDrop'
-import type { Connection, Edge, GraphEdge } from '@vue-flow/core'
-import type { CustomNode } from '@/types/nodeType'
-import FlowLog from '@/components/FlowLog.vue'
-import FlowNode from '@/components/FlowNode.vue'
-import FlowEdge from '@/components/FlowEdge.vue'
-import FlowDevices from '@/components/FlowDevices.vue'
-import { ref } from 'vue'
-import { stripNodeStyles } from '@/utils/stripNodeStyles'
-import BaseButton from '../components/BaseButton.vue'
+import { ref, inject, computed, type Ref } from 'vue'
+import type { Flow, Flows } from '@/types/FlowType'
+import FlowCard from '@/components/FlowCard.vue'
+import BaseInputField from '@/components/BaseInputField.vue'
+import BaseButton from '@/components/BaseButton.vue'
 
-const { onConnect, addEdges, updateEdge } = useVueFlow()
-const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
+const searchQuery = ref('')
 
-onConnect(addEdges)
+const flows = inject<Ref<Flows>>('flows', ref([]))
 
-function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Connection }) {
-  updateEdge(
-    {
-      ...edge,
-      type: 'smoothstep'
-    },
-    connection
+const filteredFlows = computed(() => {
+  console.log(flows.value)
+  if (!searchQuery.value) return flows.value
+  return flows.value.filter((flow) =>
+    flow.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
+})
+
+// new form functionality
+
+const showNewFlowForm = ref(false)
+const newFlowStatus = 'Untested'
+const newFlowName = ref('')
+
+const createNewFlow = () => {
+  showNewFlowForm.value = true
 }
 
-const nodes = ref<CustomNode[]>([
-  {
-    id: '1',
-    data: {
-      label: 'Button Press',
-      connection: 'BLE',
-      type: 'Action',
-      testState: 'idle',
-      fields: {
-        uuid: '123456789',
-        action: 'buttonPressed()'
-      }
-    },
-    position: { x: 400, y: 50 },
-    style: stripNodeStyles
-  },
-  {
-    id: '2',
-    data: {
-      label: 'Backend Updated',
-      connection: 'ADE',
-      type: 'Action',
-      testState: 'success',
-      fields: {
-        uuid: '987654321',
-        action: 'updateBackend()'
-      }
-    },
-    position: { x: 150, y: 200 },
-    style: stripNodeStyles
-  },
-  {
-    id: '3',
-    data: {
-      label: 'Driver Signal',
-      connection: 'BLE',
-      type: 'Assertion',
-      testState: 'warning',
-      fields: {
-        uuid: '123456789',
-        assertion: 'driverSignalSent()'
-      }
-    },
-    position: { x: 650, y: 200 },
-    style: stripNodeStyles
-  },
-  {
-    id: '4',
-    data: {
-      label: 'Light Turned On',
-      connection: 'WiFi',
-      type: 'Assertion',
-      testState: 'error',
-      fields: {
-        uuid: '987654321',
-        assertion: 'lightIsOn()'
-      }
-    },
-    position: { x: 400, y: 350 },
-    style: stripNodeStyles
+const cancelNewFlow = () => {
+  newFlowName.value = ''
+  showNewFlowForm.value = false
+}
+
+const addNewFlow = () => {
+  if (!newFlowName.value) return
+
+  const newFlow: Flow = {
+    id: (flows.value.length + 1).toString(),
+    name: newFlowName.value + (flows.value.length + 1).toString(),
+    status: newFlowStatus,
+    connectionTypes: [],
+    nodes: [],
+    edges: []
   }
-])
 
-const edges = ref<Edge[]>([
-  { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
-  { id: 'e1-3', source: '1', target: '3', type: 'smoothstep', updatable: true },
-  { id: 'e3-4', source: '3', target: '4', type: 'smoothstep', updatable: true }
-])
+  flows.value.push(newFlow)
 
-const displayLog = ref(false)
+  newFlowName.value = ''
+  showNewFlowForm.value = false
+}
 </script>
 
 <template>
-  <main class="flex flex-col">
-    <header class="relative mr-4 flex h-10 gap-2">
-      <h1>{{ listItems.find((item) => item.id === $route.params.id)?.name }}</h1>
-      <BaseButton v-if="displayLog" variant="default" class="ml-auto h-9 pt-1 leading-tight">
-        Run
-      </BaseButton>
-      <BaseButton v-else variant="default" class="ml-auto mr-48 h-9 pt-1 leading-tight">
-        Run
-      </BaseButton>
-      <flow-devices v-if="!displayLog" :nodes="nodes" />
-    </header>
-    <flow-log :show="displayLog" />
-    <section class="mt-2 h-[calc(100vh-10rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
-      <VueFlow
-        v-if="!displayLog"
-        v-model:nodes="nodes"
-        v-model:edges="edges"
-        @dragover="onDragOver"
-        @dragleave="onDragLeave"
-        @edge-update="onEdgeChange"
-      >
-        <!--  MiniMap element only available if auto sized elements are not used -->
-        <!--  <MiniMap class="rounded-lg" pannable zoomable /> -->
-        <template #node-default="customNodeProps">
-          <flow-node v-bind="customNodeProps" />
-        </template>
-        <template #edge-default="edgeProps">
-          <flow-edge v-bind="edgeProps" />
-        </template>
-        <Background />
-      </VueFlow>
+  <main class="flex flex-col gap-6">
+    <section class="flex h-10 gap-2">
+      <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
+      <form action="" class="ml-auto flex flex-grow gap-4 pr-2">
+        <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
+      </form>
+      <base-button class="mr-4 w-fit items-center rounded-lg" @click="createNewFlow">
+        New flow
+        <i class="mdi mdi-plus p-1 text-xl"></i>
+      </base-button>
     </section>
-    <button @click="displayLog = !displayLog" class="fixed bottom-6 right-4" tabindex="1">
-      Display log: {{ displayLog }}
-    </button>
+
+    <form
+      v-if="showNewFlowForm"
+      class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
+    >
+      <h2>Create new flow</h2>
+      <base-input-field v-model="newFlowName" label="Flow name" />
+      <div class="flex justify-between">
+        <base-button @click="cancelNewFlow" variant="outline">Cancel</base-button>
+        <base-button @click="addNewFlow">Create flow</base-button>
+      </div>
+    </form>
+
+    <div
+      v-if="showNewFlowForm"
+      class="fixed inset-0 bg-[#000000] opacity-30"
+      style="z-index: 2"
+    ></div>
+
+    <ul class="mr-4 flex flex-wrap gap-4">
+      <flow-card v-for="flow in filteredFlows" :key="flow.id" :flow="flow" />
+    </ul>
   </main>
 </template>
