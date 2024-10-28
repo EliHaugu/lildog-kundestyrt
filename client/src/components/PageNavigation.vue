@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import NavButton from './navigation/NavButton.vue'
 import DevicesIcon from '@/icons/DevicesIcon.vue'
 import FlowsIcon from '@/icons/FlowsIcon.vue'
 import ThemeIcon from '@/icons/ThemeIcon.vue'
@@ -30,24 +31,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="fixed left-0 top-0 h-screen w-64 bg-accent-800 pl-4">
-    <h1 class="ml-4 w-min text-3xl font-light text-accent-400">liltest</h1>
-    <nav class="mt-16 flex flex-col gap-2">
-      <router-link
-        to="/devices"
-        :aria-expanded="$route.path.includes('/devices')"
-        class="text-md nav_item__rounded relative z-10 inline-flex items-center gap-2 rounded-l-xl fill-white-100 py-1.5 pl-4 pr-2 leading-10 text-white-100 hover:z-50 hover:cursor-pointer hover:bg-primary-300 hover:fill-accent-500 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-primary-200 aria-expanded:fill-accent-500 aria-expanded:text-accent-900 aria-expanded:duration-0 dark:hover:bg-primary-200 dark:hover:text-white-100 dark:aria-expanded:text-white-100"
-        ><devices-icon /> Configure Devices</router-link
-      >
-      <router-link
-        to="/flow"
-        :aria-expanded="$route.path.includes('/flow')"
-        class="text-md nav_item__rounded relative z-10 inline-flex items-center gap-2 rounded-l-xl fill-white-100 py-1.5 pl-4 pr-2 leading-10 text-white-100 hover:z-50 hover:cursor-pointer hover:bg-primary-300 hover:fill-accent-500 hover:text-accent-900 hover:shadow-xl hover:transition-colors hover:duration-200 aria-expanded:bg-primary-200 aria-expanded:fill-accent-500 aria-expanded:text-accent-900 aria-expanded:duration-0 dark:hover:bg-primary-200 dark:hover:text-white-100 dark:aria-expanded:text-white-100"
-        ><flows-icon /> View Flows</router-link
-      >
+  <div class="h-screen bg-accent-800 pl-5 py-5 flex flex-col gap-12 min-w-max">
+    <h1 class="text-3xl font-light text-accent-400">liltest</h1>
+    <nav class="flex flex-col gap-4">
+      <nav-button to="/devices">
+        <devices-icon class="w-12" />
+        Configure Devices
+      </nav-button>
+      <nav-button to="/flow">
+        <flows-icon class="w-12" />
+        View flows
+      </nav-button>
     </nav>
-    <button @click="handleTheme" class="absolute bottom-4">
+    <button @click="handleTheme" class="mt-auto">
       <theme-icon />
     </button>
-  </section>
+  </div>
 </template>

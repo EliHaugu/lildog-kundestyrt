@@ -24,8 +24,9 @@ provide('flows', flows)
 provide('updateFlows', updateFlows)
 </script>
 <template>
-  <Layout />
-  <RouterView class="ml-[17rem] mt-8 w-[calc(100vw-17rem)]" />
+  <Layout>
+    <RouterView class="flex-grow z-10 my-5 mr-5 p-8 bg-accent-900 rounded-3xl" />
+  </Layout>
 </template>
 
 <style>

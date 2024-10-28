@@ -4,6 +4,7 @@ import type { Flow, Flows } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
+import Modal from '../components/common/Modal.vue'
 
 const searchQuery = ref('')
 
@@ -53,7 +54,7 @@ const addNewFlow = () => {
 
 <template>
   <main class="flex flex-col gap-6">
-    <section class="flex h-10 gap-2">
+    <div class="flex h-10 gap-2">
       <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
       <form action="" class="ml-auto flex flex-grow gap-4 pr-2">
         <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
@@ -62,19 +63,17 @@ const addNewFlow = () => {
         New flow
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
-    </section>
+    </div>
 
-    <form
-      v-if="showNewFlowForm"
-      class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
+    <modal
+      :showModal="showNewFlowForm"
+      submitButtonText="Create"
+      title="Create New Flow"
+      @submit="addNewFlow"
+      @close="cancelNewFlow"
     >
-      <h2>Create new flow</h2>
       <base-input-field v-model="newFlowName" label="Flow name" />
-      <div class="flex justify-between">
-        <base-button @click="cancelNewFlow" variant="outline">Cancel</base-button>
-        <base-button @click="addNewFlow">Create flow</base-button>
-      </div>
-    </form>
+    </modal>
 
     <div
       v-if="showNewFlowForm"

@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref, inject, computed } from 'vue'
 import type { Ref } from 'vue'
-import DevicesCard from '@/components/DevicesCard.vue'
+import DevicesCard from '@/components/devices/DevicesCard.vue'
 import BaseButton from '../components/common/BaseButton.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import Modal from '../components/common/Modal.vue'
