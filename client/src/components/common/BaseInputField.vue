@@ -1,13 +1,22 @@
 <template>
-  <input
-    :type="type"
-    :placeholder="placeholder"
-    :class="computedClass"
-    :value="modelValue"
-    @input="onInput"
-    v-bind="$attrs"
-    v-on="listeners"
-  />
+  <div class="flex flex-col gap-1">
+    <label v-if="label">{{ label }}</label>
+    <component
+      :is="inputComponent"
+      :type="type"
+      :placeholder="placeholder"
+      :class="computedClass"
+      :value="modelValue"
+      @input="onInput"
+      v-bind="$attrs"
+      v-on="listeners"
+    >
+      <option value="" disabled selected>Select connection type</option>
+      <option v-if="inputComponent === 'select'" v-for="option in options" :key="option" :value="option">
+        {{ option }}
+      </option>
+    </component>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +38,14 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: ''
+  },
+  label: {
+    type: String,
+    default: ''
+  },
+  options: {
+    type: Array as () => string[],
+    default: () => ['Option 1', 'Option 2', 'Option 3']
   }
 })
 
@@ -44,6 +61,17 @@ const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.value)
 }
+
+const inputComponent = computed(() => {
+  switch (props.type) {
+    case 'textarea':
+      return 'textarea'
+    case 'select':
+      return 'select'
+    default:
+      return 'input'
+  }
+})
 </script>
 
 <style scoped></style>

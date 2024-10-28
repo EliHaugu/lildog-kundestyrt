@@ -22,29 +22,9 @@
       />
     </ul>
     <!-- page for making new device type -->
-    <modal :showModal="isNewDeviceTypeFormVisible" :submit-button-text="'Create'" @submit="addNewDeviceType" @close="toggleModal">
-      <h2 class="text-lg font-semibold">Create new - Device Type</h2>
-      <div className="flex flex-col gap-1">
-        <label for="name" class="text-md">Device type name</label>
-        <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label for="connection-type" class="text-md">Connection type</label>
-        <select
-          name="connection-type"
-          class="rounded-lg border border-accent-600 bg-primary-200 p-2"
-          v-model="newDeviceTypeConnection"
-        >
-          <option value="" disabled selected>Select connection type</option>
-          <option
-            v-for="deviceType in deviceTypes"
-            :key="deviceType.name"
-            :value="deviceType.connectionType"
-          >
-            {{ deviceType.connectionType }}
-          </option>
-        </select>
-      </div>
+    <modal :showModal="isNewDeviceTypeFormVisible" :title="'Create Device Type'" :submit-button-text="'Create'" @submit="addNewDeviceType" @close="toggleModal">
+      <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
+      <base-input-field v-model="newDeviceTypeConnection" label="Connection type" name="connection-type" placeholder="" type="select" :options="connectionTypes" />
     </modal>
   </main>
 </template>
@@ -72,6 +52,10 @@ const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(
 const newDeviceTypeName = ref('')
 const newDeviceTypeConnection = ref('')
 const searchQuery = ref('')
+
+const connectionTypes = computed(() => {
+  return [...new Set(deviceTypes.value.map((deviceType) => deviceType.connectionType))]
+})
 
 const addNewDeviceType = () => {
   if (!newDeviceTypeName.value || !newDeviceTypeConnection.value) {
