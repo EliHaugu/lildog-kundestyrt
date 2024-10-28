@@ -61,7 +61,7 @@ const toggleLog = () => {
         v-if="!displayLog"
         v-model:nodes="nodes"
         v-model:edges="edges"
-        @dragover="onDragOver"
+        @dragover="onDragOver($event as DragEvent)"
         @dragleave="onDragLeave"
         @edge-update="onEdgeChange"
       >
