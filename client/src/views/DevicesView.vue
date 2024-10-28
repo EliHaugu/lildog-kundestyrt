@@ -22,9 +22,22 @@
       />
     </ul>
     <!-- page for making new device type -->
-    <modal :showModal="isNewDeviceTypeFormVisible" :title="'Create Device Type'" :submit-button-text="'Create'" @submit="addNewDeviceType" @close="toggleModal">
+    <modal
+      :showModal="isNewDeviceTypeFormVisible"
+      :title="'Create Device Type'"
+      :submit-button-text="'Create'"
+      @submit="addNewDeviceType"
+      @close="toggleModal"
+    >
       <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
-      <base-input-field v-model="newDeviceTypeConnection" label="Connection type" name="connection-type" placeholder="" type="select" :options="connectionTypes" />
+      <base-input-field
+        v-model="newDeviceTypeConnection"
+        label="Connection type"
+        name="connection-type"
+        placeholder=""
+        type="select"
+        :options="connectionTypes"
+      />
     </modal>
   </main>
 </template>
@@ -41,8 +54,8 @@ import type { DeviceType } from '@/types/DeviceTypes'
 const isNewDeviceTypeFormVisible = ref<boolean>(false)
 
 const toggleModal = () => {
-  isNewDeviceTypeFormVisible.value = !isNewDeviceTypeFormVisible.value;
-};
+  isNewDeviceTypeFormVisible.value = !isNewDeviceTypeFormVisible.value
+}
 
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
 const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(

@@ -1,7 +1,7 @@
 <template>
   <button
     :type="type"
-    class="transition-colors duration-200 rounded-md"
+    class="rounded-md transition-colors duration-200"
     :class="[
       'flex px-4 py-2 shadow-md',
       variantClass,
@@ -49,12 +49,12 @@ const emits = defineEmits(['click'])
 
 const handleClick = (event: Event) => {
   if (props.type !== 'submit') {
-    event.preventDefault();
+    event.preventDefault()
   }
   if (!props.disabled) {
-    emits('click', event);
+    emits('click', event)
   }
-};
+}
 
 const variantClass = computed(() => {
   switch (props.variant) {

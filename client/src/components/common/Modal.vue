@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import BaseButton from './BaseButton.vue';
+import BaseButton from './BaseButton.vue'
 
 const props = defineProps<{
-  showModal: boolean,
-  submitButtonText: string,
-  title?: string,
+  showModal: boolean
+  submitButtonText: string
+  title?: string
   onSubmit: () => void
 }>()
 
@@ -32,5 +32,5 @@ const handleSubmit = (event: Event) => {
   event.preventDefault()
   emit('submit')
   emit('close')
-} 
+}
 </script>

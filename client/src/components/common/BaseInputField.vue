@@ -12,7 +12,12 @@
       v-on="listeners"
     >
       <option value="" disabled selected>Select connection type</option>
-      <option v-if="inputComponent === 'select'" v-for="option in options" :key="option" :value="option">
+      <option
+        v-if="inputComponent === 'select'"
+        v-for="option in options"
+        :key="option"
+        :value="option"
+      >
         {{ option }}
       </option>
     </component>
