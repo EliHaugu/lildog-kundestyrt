@@ -1,7 +1,7 @@
 type Device = {
   id: number
   device_id: string
-  category: string
+  category: number
 }
 
 type DeviceType = {

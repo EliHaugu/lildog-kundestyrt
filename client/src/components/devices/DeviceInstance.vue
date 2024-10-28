@@ -10,7 +10,6 @@ defineEmits(['edit-device', 'delete-device'])
 defineProps<{
   device: Device
 }>()
-
 </script>
 
 <template>
@@ -26,10 +25,10 @@ defineProps<{
     </div>
     <div class="flex items-center justify-start gap-3">
       <base-button variant="icon" class="rounded-md" @click="$emit('edit-device')">
-        <edit-pen class="dark:fill-white-100"/>
+        <edit-pen class="dark:fill-white-100" />
       </base-button>
-      <base-button variant="icon" class=" rounded-md" @click="$emit('delete-device')">
-        <delete-icon class="fill-error"/>
+      <base-button variant="icon" class="rounded-md" @click="$emit('delete-device')">
+        <delete-icon class="fill-error" />
       </base-button>
     </div>
   </div>

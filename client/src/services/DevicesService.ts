@@ -2,13 +2,12 @@ import type { Device } from '@/types/DeviceTypes'
 
 /**
  * @param category category to fetch devices from
- * @returns list of devices following the Device type
+ * @returns list of devices received from the server
  */
-export async function fetchDevices(category: string): Promise<Device[]> {
+export async function fetchDevices(): Promise<Device[]> {
   const requestOptions = {
     method: 'GET'
   }
-  console.log('fetching devices')
 
   const response = await fetch(
     `http://127.0.0.1:8000/data_manager/api/devices`,
@@ -17,44 +16,48 @@ export async function fetchDevices(category: string): Promise<Device[]> {
     return response.json()
   })
 
-  console.log('response', response)
-
   return response
 }
 
 /**
- * @param device device to create
- * @returns true if the device was created successfully
+ * @param device device to create, containing all the needed fields
+ * @returns true if response is 200/OK, signifying that the device was created successfully
  */
 export async function createDevice(device: Device): Promise<Boolean> {
   const requestOptions = {
     method: 'POST',
-    body: JSON.stringify(device)
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      device_id: device.device_id,
+      category: device.category
+    })
   }
-
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices`, requestOptions)).ok
+  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok
 }
 
 /**
- *
- * @param device device to delete
- * @returns true if the device was deleted successfully
+ * @param device device to delete,
+ * @returns true if response is 200/OK, signifying that the device was deleted successfully
  */
-export async function deleteDevice(device: Device): Promise<Boolean> {
+export async function deleteDevice(id: number): Promise<Boolean> {
   const requestOptions = {
     method: 'DELETE'
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices`, requestOptions)).ok
+  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/${id}/`, requestOptions)).ok
 }
 
 /**
- *
- * @param device device to update
- * @returns true if the device was updated successfully
+ * @param device device to update, with the new values
+ * @returns true if response is 200/OK, signifying that the device was updated successfully
  */
-export async function updateDevice(device: Device): Promise<Boolean> {
+export async function updateDevice(id: number, device: Device): Promise<Boolean> {
   const requestOptions = {
-    method: 'PATCH'
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      device_id: device.device_id,
+      category: device.category
+    })
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices`, requestOptions)).ok
+  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/${id}/`, requestOptions)).ok
 }
