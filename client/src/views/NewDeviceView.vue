@@ -44,8 +44,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
-import BaseInputField from '@/components/BaseInputField.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
 import { listItems } from '@/assets/mock_data'
 
 const response = ref([

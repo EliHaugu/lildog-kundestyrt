@@ -2,8 +2,8 @@
 import { ref, inject, computed, type Ref } from 'vue'
 import type { Flow, Flows } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
-import BaseInputField from '@/components/BaseInputField.vue'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 
 const searchQuery = ref('')
 

@@ -39,7 +39,6 @@ const computedClass = computed(() => {
   return `w-auto flex-grow rounded-lg border border-accent-600 bg-primary-200 px-4 py-2 ${props.customClass}`
 })
 
-// Emit the updated input value
 const emit = defineEmits(['update:modelValue'])
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement

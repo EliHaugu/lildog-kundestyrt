@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseButton from '@/components/BaseButton.vue'
-import BaseInputField from './BaseInputField.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from './common/BaseInputField.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import { router } from '@/router'

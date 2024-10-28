@@ -2,8 +2,8 @@
 import type { DeviceType, Device } from '@/types/DeviceTypes'
 import { computed, inject, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import BaseButton from '@/components/BaseButton.vue'
-import BaseInputField from '@/components/BaseInputField.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import PlusIcon from '@/icons/PlusIcon.vue'
 

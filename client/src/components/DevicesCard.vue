@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, type Ref } from 'vue'
-import BaseButton from '../components/BaseButton.vue'
-import BaseInputField from '@/components/BaseInputField.vue'
+import BaseButton from './common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
 import RightArrow from '@/icons/RightArrow.vue'
