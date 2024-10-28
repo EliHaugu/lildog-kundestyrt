@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import { ref, inject, computed, type Ref, onMounted } from 'vue'
-import type { Flow, Flows } from '@/types/FlowType'
+import { ref, computed, onMounted } from 'vue'
+import type { Flow } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import flowService from '@/services/FlowService'
 
 const searchQuery = ref('')
-
 const flows = ref<Flow[]>([])
 
+// Function to fetch flows from the API
+const fetchFlows = async () => {
+  try {
+    const response = await flowService.getFlows()
+    flows.value = response
+  } catch (error) {
+    console.error('Error fetching flows:', error)
+    flows.value = []
+  }
+}
+
+// Computed property to filter flows based on search query
 const filteredFlows = computed(() => {
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
@@ -17,8 +28,10 @@ const filteredFlows = computed(() => {
   )
 })
 
-// new form functionality
+// Call fetchFlows when the component is mounted
+onMounted(fetchFlows)
 
+// New form functionality
 const showNewFlowForm = ref(false)
 const newFlowStatus = 'Untested'
 const newFlowName = ref('')
@@ -36,7 +49,7 @@ const addNewFlow = async () => {
   if (!newFlowName.value) return
 
   const newFlow: Flow = {
-    id: '', // the backend generate id?
+    id: '', // backend generates ID
     name: newFlowName.value,
     status: newFlowStatus,
     connectionTypes: [],
@@ -47,30 +60,13 @@ const addNewFlow = async () => {
   try {
     await flowService.createFlow(newFlow)
     console.log('Flow created')
-    await fetchFlows()
-    console.log('Flows fetched')
-  
+    await fetchFlows() // Re-fetch flows after adding a new flow
     newFlowName.value = ''
     showNewFlowForm.value = false
-  }
-  catch (error) {
-    console.error('Error creating flow:', error)
-}
-}
-
-// fetching list of all flows
-const fetchFlows = async () => {
-  try {
-    const response = await flowService.getFlows()
-    flows.value = response
   } catch (error) {
-    console.error('Error fetching flows:', error)
+    console.error('Error creating flow:', error)
   }
 }
-
-//fetching list of all flows when the component is mounted
-onMounted(fetchFlows)
-
 </script>
 
 <template>
@@ -86,6 +82,7 @@ onMounted(fetchFlows)
       </base-button>
     </section>
 
+    <!-- New Flow Form -->
     <form
       v-if="showNewFlowForm"
       class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
@@ -98,14 +95,21 @@ onMounted(fetchFlows)
       </div>
     </form>
 
+    <!-- Overlay for New Flow Form -->
     <div
       v-if="showNewFlowForm"
       class="fixed inset-0 bg-[#000000] opacity-30"
       style="z-index: 2"
     ></div>
 
+    <!-- Flow List Display -->
     <ul class="mr-4 flex flex-wrap gap-4">
-      <flow-card v-for="flow in filteredFlows" :key="flow.id" :flow="flow" />
+      <flow-card
+        v-for="flow in filteredFlows"
+        :key="flow.id"
+        :flow="flow"
+        @flowUpdated="fetchFlows"
+      />
     </ul>
   </main>
 </template>

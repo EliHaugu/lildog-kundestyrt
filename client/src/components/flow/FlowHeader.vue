@@ -1,15 +1,17 @@
 <script setup lang="ts">
-defineEmits(['update:displayLog'])
-defineProps({
-  displayLog: Boolean,
-  nodes: Array
-})
-
-import { listItems } from '@/assets/mock_data'
+import { defineEmits, defineProps } from 'vue'
 import BaseButton from '@/components/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
 import FlowDevices from '@/components/flow/FlowDevices.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
+
+const props = defineProps({
+  displayLog: Boolean,
+  nodes: Array,
+  flow: Object
+})
+
+defineEmits(['update:displayLog'])
 </script>
 <template>
   <header
@@ -17,7 +19,7 @@ import ExportIcon from '@/icons/ExportIcon.vue'
   >
     <a href="/flow" aria-label="Return to all flows" class="group"><exit-icon /></a>
     <h1>
-      {{ listItems.find((item) => item.id === $route.params.id)?.name }}
+      {{ props.flow?.name }}
     </h1>
 
     <div class="ml-auto flex gap-2">

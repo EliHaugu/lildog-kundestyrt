@@ -9,7 +9,7 @@ import SuccessIcon from '@/icons/SuccessIcon.vue'
 import WarningIcon from '@/icons/WarningIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 
-const props = defineProps<NodeProps<CustomData>>()
+const props = defineProps<NodeProps>()
 const nodeTestState = ref(props.data.testState)
 const nodeExpanded = ref(false)
 const edited = ref(false)

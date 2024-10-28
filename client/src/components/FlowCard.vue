@@ -3,15 +3,17 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseInputField from './BaseInputField.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
-import { router } from '@/router'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { inject, ref, type Ref } from 'vue'
+import { ref, defineEmits } from 'vue'
+import { useRouter } from 'vue-router'
+import flowService from '@/services/FlowService'
 
 const props = defineProps<{
   flow: Flow
 }>()
+const emit = defineEmits(['flowUpdated'])
 
-const flows = inject<Ref<Flow[]>>('flows', ref([]))
+const router = useRouter()
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
@@ -20,7 +22,6 @@ const navigateToFlow = (id: string) => {
 
 // Flow editor
 const showEditFlowForm = ref(false)
-
 const editFlowType = ref<Flow | null>(null)
 
 const editFlow = (flow: Flow) => {
@@ -33,24 +34,20 @@ const cancelEditFlow = () => {
   showEditFlowForm.value = false
 }
 
-const updateFlow = () => {
+const updateFlow = async () => {
   if (!editFlowType.value) return
 
-  const updatedFlowTypes = flows.value.map((flow) => {
-    if (flow.id === props.flow.id && editFlowType.value) {
-      return { ...editFlowType.value }
-    }
-    return flow
-  })
-
-  updateFlowCard(updatedFlowTypes)
-  editFlowType.value = null
-  showEditFlowForm.value = false
+  try {
+    await flowService.updateFlow(editFlowType.value.id, editFlowType.value)
+    console.log('Flow updated')
+    emit('flowUpdated')
+    showEditFlowForm.value = false
+  } catch (error) {
+    console.error('Error updating flow:', error)
+  } finally {
+    editFlowType.value = null
+  }
 }
-
-const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () => {
-  console.error('updateFlows function not provided')
-})
 </script>
 
 <template>

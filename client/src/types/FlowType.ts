@@ -6,8 +6,8 @@ type Flow = {
   name: string
   status?: string
   connectionTypes?: string[]
-  nodes?: CustomNode[]
-  edges?: Edge[]
+  nodes?: number[]
+  edges?: number[]
 }
 
 type Flows = Flow[]
