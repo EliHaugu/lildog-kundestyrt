@@ -25,7 +25,7 @@ provide('updateFlows', updateFlows)
 </script>
 <template>
   <Layout>
-    <RouterView class="flex-grow z-10 my-5 mr-5 p-8 bg-white-200 dark:bg-accent-900 rounded-3xl" />
+    <RouterView class="z-10 my-5 mr-5 flex-grow rounded-3xl bg-white-200 p-8 dark:bg-accent-900" />
   </Layout>
 </template>
 

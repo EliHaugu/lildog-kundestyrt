@@ -103,7 +103,7 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
       Run Flow <play-icon fill="white" />
     </base-button>
   </div>
-  
+
   <modal
     v-if="showEditFlowForm && editFlowType"
     :showModal="showEditFlowForm"
