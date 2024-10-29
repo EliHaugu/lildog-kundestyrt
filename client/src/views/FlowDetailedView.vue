@@ -18,6 +18,7 @@ import { useRoute } from 'vue-router'
 import flowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import EdgeService from '@/services/EdgeService'
+import { stripNodeStyles } from '@/utils/stripNodeStyles'
 
 const route = useRoute()
 const flowId = route.params.id as string
@@ -74,15 +75,17 @@ const fetchFlow = async () => {
 
     // Step 2: Fetch detailed node data by IDs, handling undefined `nodes`
     const nodeIds: number[] = response.nodes ?? []
-    const nodePromises = nodeIds.map((nodeId: number) => NodeService.getNode(nodeId))
+    const nodePromises = nodeIds.map((nodeId: number) => NodeService.getNodeProtocol(nodeId))
     const fetchedNodes = await Promise.all(nodePromises)
     console.log('Fetched nodes:', fetchedNodes)
 
     // Map fetched nodes to VueFlow format
     nodes.value = fetchedNodes.map((node: any) => ({
+      style: stripNodeStyles,
       id: node.id.toString(),
       position: { x: node.x_pos, y: node.y_pos },
-      data: { label: node.label, type: node.node_type }
+      data: { label: node.label, type: node.node_type, communicationProtocols: node.communication_protocols }
+
     }))
 
     // Step 3: Fetch detailed edge data by IDs, handling undefined `edges`
@@ -146,7 +149,7 @@ onMounted(fetchFlow)
         <!--  MiniMap element only available if auto sized elements are not used -->
         <!--  <MiniMap class="rounded-lg" pannable zoomable /> -->
         <template #node-default="customNodeProps">
-          <flow-node v-bind="customNodeProps" />
+          <flow-node v-bind="customNodeProps"  />
         </template>
         <template #edge-default="edgeProps">
           <flow-edge v-bind="edgeProps" />

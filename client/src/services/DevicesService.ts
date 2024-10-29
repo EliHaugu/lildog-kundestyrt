@@ -19,6 +19,25 @@ export async function fetchDevices(): Promise<Device[]> {
   return response
 }
 
+export async function fetchDevice(id: number): Promise<Device | null> {
+  const requestOptions = {
+    method: 'GET',
+  };
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/data_manager/api/devices/${id}/`, requestOptions);
+    if (!response.ok) {
+      throw new Error(`Error fetching device with ID ${id}: ${response.statusText}`);
+    }
+    const device: Device = await response.json();
+    return device;
+
+  } catch (error) {
+    console.error('Error in fetchDevice:', error);
+    return null; // Return null if there's an error
+  }
+}
+  
+
 /**
  * @param device device to create, containing all the needed fields
  * @returns true if response is 200/OK, signifying that the device was created successfully

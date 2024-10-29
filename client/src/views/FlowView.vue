@@ -5,20 +5,57 @@ import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/BaseInputField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import flowService from '@/services/FlowService'
+import NodeService from '@/services/NodeService'
+import {fetchDevice} from '@/services/DevicesService'
+import CategoryService from '@/services/CategoryService'
 
 const searchQuery = ref('')
 const flows = ref<Flow[]>([])
 
 // Function to fetch flows from the API
+// Function to fetch flows from the API
 const fetchFlows = async () => {
   try {
-    const response = await flowService.getFlows()
-    flows.value = response
+    const response = await flowService.getFlows();
+
+    const flowsWithConnections = await Promise.all(
+      response.map(async (flow: Flow) => {
+        const nodeIds = flow.nodes ?? [];
+
+        // Retrieve each node's device and category connection types and communication protocols
+        const connections = await Promise.all(
+          nodeIds.map(async (nodeId: number) => {
+            const node = await NodeService.getNode(nodeId);
+
+            // Get device and category data if device is present
+            if (node.device) {
+              const device = await fetchDevice(node.device);
+              if (device && device.category) {
+                const category = await CategoryService.getCategory(device.category);
+                return (category.connection_types || []).concat(category.communication_protocols || []);
+              }
+            }
+            return [];
+          })
+        );
+
+        // Flatten and deduplicate the combined list of connections for each flow
+        const combinedData = Array.from(new Set(connections.flat()));
+
+        return {
+          ...flow,
+          combinedData, // Add combined data 
+        };
+      })
+    );
+
+    flows.value = flowsWithConnections;
   } catch (error) {
-    console.error('Error fetching flows:', error)
-    flows.value = []
+    console.error('Error fetching flows:', error);
+    flows.value = [];
   }
-}
+};
+
 
 // Computed property to filter flows based on search query
 const filteredFlows = computed(() => {
@@ -52,7 +89,7 @@ const addNewFlow = async () => {
     id: '', // backend generates ID
     name: newFlowName.value,
     status: newFlowStatus,
-    connectionTypes: [],
+    combinedData: [],
     nodes: [],
     edges: []
   }
@@ -109,6 +146,7 @@ const addNewFlow = async () => {
         :key="flow.id"
         :flow="flow"
         @flowUpdated="fetchFlows"
+        :connection-types="flow.combinedData || []"
       />
     </ul>
   </main>

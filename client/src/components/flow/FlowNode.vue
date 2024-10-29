@@ -14,22 +14,24 @@ const nodeTestState = ref(props.data.testState)
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
-const pickColour = (connectionType: string) => {
-  switch (connectionType) {
-    case 'BLE':
-      return blue[Math.floor(Math.random() * blue.length)]
-    case 'LTE':
-      return green[Math.floor(Math.random() * green.length)]
-    case 'WiFi':
-      return pink[Math.floor(Math.random() * pink.length)]
-    case 'ADE':
-      return purple[Math.floor(Math.random() * purple.length)]
-    default:
-      break
+const pickColour = (protocols: string[]) => {
+  console.log("protocols", protocols)
+  console.log("data", props.data)
+  if (protocols.includes('BLE')) {
+    return blue[Math.floor(Math.random() * blue.length)];
+  } else if (protocols.includes('wifi')) {
+    return green[Math.floor(Math.random() * green.length)];
+  } else if (protocols.includes('uart')) {
+    return pink[Math.floor(Math.random() * pink.length)];
+  } else if (protocols.includes('adb')) {
+    return purple[Math.floor(Math.random() * purple.length)];
   }
-}
+  return 'grey';
+};
 
-const colour = pickColour(props!.data.connection!)
+
+const colour = pickColour(props.data.communicationProtocols || []);
+
 
 const editedField = () => {
   edited.value = true

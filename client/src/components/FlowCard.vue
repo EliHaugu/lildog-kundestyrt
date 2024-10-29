@@ -3,13 +3,16 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseInputField from './BaseInputField.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
+import DeleteIcon from '@/icons/DeleteIcon.vue'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
+import FlowView from '@/views/FlowView.vue'
 
 const props = defineProps<{
   flow: Flow
+  connectionTypes: string[]
 }>()
 const emit = defineEmits(['flowUpdated'])
 
@@ -28,6 +31,23 @@ const editFlow = (flow: Flow) => {
   editFlowType.value = { ...flow }
   showEditFlowForm.value = true
 }
+
+const deleteFlow = async (id: string) => {
+  const userConfirmed = confirm("Are you sure you want to delete this flow?");
+  
+  if (userConfirmed) {
+    try {
+      await flowService.deleteFlow(id);
+      console.log("Flow deleted successfully");
+      emit('flowUpdated')
+    } catch (error) {
+      console.error("Error deleting flow:", error);
+    }
+  } else {
+    console.log("User canceled the deletion");
+  }
+};
+
 
 const cancelEditFlow = () => {
   editFlowType.value = null
@@ -56,8 +76,15 @@ const updateFlow = async () => {
     @click="navigateToFlow(flow.id)"
     style="z-index: 1"
   >
-    <div :class="['flex items-center justify-between']">
+    <div :class="['flex items-center']">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
+      <base-button
+      @click.stop="deleteFlow(flow.id)"
+      variant="outline"
+      class="h-fit rounded-lg ml-auto border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+      >
+      <delete-icon fill="red"/>
+    </base-button>
       <base-button
         @click.stop="editFlow(flow)"
         variant="outline"
@@ -79,13 +106,13 @@ const updateFlow = async () => {
         {{ flow.status }}
       </label>
       <label
-        v-for="(connectionType, index) in flow.connectionTypes"
+        v-for="(connectionType, index) in flow.combinedData"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-ble': connectionType === 'BLE',
-          'bg-wifi': connectionType === 'WiFi',
-          'bg-ade': connectionType === 'ADE'
+          'bg-ble': connectionType === 'uart',
+          'bg-wifi': connectionType === 'wifi',
+          'bg-ade': connectionType === 'adb',
         }"
       >
         {{ connectionType }}

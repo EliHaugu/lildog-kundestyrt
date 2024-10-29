@@ -38,7 +38,7 @@ export default {
 
   // Delete a flow
   async deleteFlow(id: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/flows/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/flows/${id}/`, {
       method: 'DELETE'
     })
     if (!response.ok) {
