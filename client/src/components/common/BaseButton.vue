@@ -58,6 +58,8 @@ const handleClick = (event: Event) => {
 
 const variantClass = computed(() => {
   switch (props.variant) {
+    case 'icon':
+      return 'bg-transparent hover:bg-accent-600'
     case 'outline':
       return 'bg-primary-200 text-bg-700 transition-colours duration-200 hover:bg-accent-500 border border-accent-600'
     case 'secondary':

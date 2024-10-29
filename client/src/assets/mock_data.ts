@@ -1,4 +1,4 @@
-import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { DeviceType } from '@/types/DeviceTypes'
 import type { Flow } from '@/types/FlowType'
 import type { CustomNode } from '@/types/NodeType'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
@@ -242,7 +242,7 @@ export const mock_flows: Flow[] = [
   }
 ]
 
-export const mock_devices: Device[] = [
+export const mock_devices = [
   {
     id: 1,
     name: 'Device 1',
@@ -303,22 +303,22 @@ export const mock_devices: Device[] = [
 export const mock_device_types: DeviceType[] = [
   {
     name: 'Halsbånd',
-    connectionType: 'BLE',
-    devices: mock_devices.filter((device) => device.deviceType === 'Halsbånd')
+    connectionType: 'BLE'
+    //devices: mock_devices.filter((device) => device.deviceType === 'Halsbånd')
   },
   {
     name: 'HundeChip',
-    connectionType: 'ADE',
-    devices: mock_devices.filter((device) => device.deviceType === 'HundeChip')
+    connectionType: 'ADE'
+    //devices: mock_devices.filter((device) => device.deviceType === 'HundeChip')
   },
   {
     name: 'GPS-tracker',
-    connectionType: 'WiFi',
-    devices: mock_devices.filter((device) => device.deviceType === 'GPS-tracker')
+    connectionType: 'WiFi'
+    //devices: mock_devices.filter((device) => device.deviceType === 'GPS-tracker')
   },
   {
     name: 'Lyspære',
-    connectionType: 'BLE',
-    devices: mock_devices.filter((device) => device.deviceType === 'Lys')
+    connectionType: 'BLE'
+    //devices: mock_devices.filter((device) => device.deviceType === 'Lys')
   }
 ]
