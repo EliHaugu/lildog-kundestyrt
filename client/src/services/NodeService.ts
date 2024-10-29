@@ -61,30 +61,28 @@ export default {
       throw new Error('Error fetching node')
     }
     const nodeData = await response.json()
-  
+
     // Fetch the device associated with this node
     const deviceResponse = await fetch(`${API_BASE_URL}/devices/${nodeData.device}/`) // Assuming nodeData.device gives you the device ID
     if (!deviceResponse.ok) {
       throw new Error('Error fetching device')
     }
     const deviceData = await deviceResponse.json()
-  
+
     // Fetch the category associated with this device
     const categoryResponse = await fetch(`${API_BASE_URL}/categories/${deviceData.category}/`) // Assuming deviceData.category gives you the category ID
     if (!categoryResponse.ok) {
       throw new Error('Error fetching category')
     }
     const categoryData = await categoryResponse.json()
-  
+
     return {
       id: nodeData.id,
       label: nodeData.label,
       node_type: nodeData.node_type,
       x_pos: nodeData.x_pos,
       y_pos: nodeData.y_pos,
-      communication_protocols: categoryData.communication_protocols || [],
+      communication_protocols: categoryData.communication_protocols || []
     }
   }
-  
-
 }

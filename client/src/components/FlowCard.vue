@@ -5,12 +5,11 @@ import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits, computed } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
-import FlowView from '@/views/FlowView.vue'
 
-const props = defineProps<{
+defineProps<{
   flow: Flow
   connectionTypes: string[]
 }>()
@@ -33,21 +32,20 @@ const editFlow = (flow: Flow) => {
 }
 
 const deleteFlow = async (id: string) => {
-  const userConfirmed = confirm("Are you sure you want to delete this flow?");
-  
+  const userConfirmed = confirm('Are you sure you want to delete this flow?')
+
   if (userConfirmed) {
     try {
-      await flowService.deleteFlow(id);
-      console.log("Flow deleted successfully");
+      await flowService.deleteFlow(id)
+      console.log('Flow deleted successfully')
       emit('flowUpdated')
     } catch (error) {
-      console.error("Error deleting flow:", error);
+      console.error('Error deleting flow:', error)
     }
   } else {
-    console.log("User canceled the deletion");
+    console.log('User canceled the deletion')
   }
-};
-
+}
 
 const cancelEditFlow = () => {
   editFlowType.value = null
@@ -79,12 +77,12 @@ const updateFlow = async () => {
     <div :class="['flex items-center']">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
       <base-button
-      @click.stop="deleteFlow(flow.id)"
-      variant="outline"
-      class="h-fit rounded-lg ml-auto border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+        @click.stop="deleteFlow(flow.id)"
+        variant="outline"
+        class="ml-auto h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
       >
-      <delete-icon fill="red"/>
-    </base-button>
+        <delete-icon fill="red" />
+      </base-button>
       <base-button
         @click.stop="editFlow(flow)"
         variant="outline"
@@ -112,7 +110,7 @@ const updateFlow = async () => {
         :class="{
           'bg-ble': connectionType === 'uart',
           'bg-wifi': connectionType === 'wifi',
-          'bg-ade': connectionType === 'adb',
+          'bg-ade': connectionType === 'adb'
         }"
       >
         {{ connectionType }}

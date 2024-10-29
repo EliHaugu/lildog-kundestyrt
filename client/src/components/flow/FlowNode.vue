@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { CustomData } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import type { NodeProps } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
@@ -15,23 +14,21 @@ const nodeExpanded = ref(false)
 const edited = ref(false)
 
 const pickColour = (protocols: string[]) => {
-  console.log("protocols", protocols)
-  console.log("data", props.data)
+  console.log('protocols', protocols)
+  console.log('data', props.data)
   if (protocols.includes('BLE')) {
-    return blue[Math.floor(Math.random() * blue.length)];
+    return blue[Math.floor(Math.random() * blue.length)]
   } else if (protocols.includes('wifi')) {
-    return green[Math.floor(Math.random() * green.length)];
+    return green[Math.floor(Math.random() * green.length)]
   } else if (protocols.includes('uart')) {
-    return pink[Math.floor(Math.random() * pink.length)];
+    return pink[Math.floor(Math.random() * pink.length)]
   } else if (protocols.includes('adb')) {
-    return purple[Math.floor(Math.random() * purple.length)];
+    return purple[Math.floor(Math.random() * purple.length)]
   }
-  return 'grey';
-};
+  return 'grey'
+}
 
-
-const colour = pickColour(props.data.communicationProtocols || []);
-
+const colour = pickColour(props.data.communicationProtocols || [])
 
 const editedField = () => {
   edited.value = true

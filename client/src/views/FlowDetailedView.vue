@@ -11,7 +11,7 @@ import type { CustomNode } from '@/types/NodeType'
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { Flow } from '@/types/FlowType'
 
 import { useRoute } from 'vue-router'
@@ -45,9 +45,9 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 
 const displayLog = ref(false)
 
-const toggleLog = () => {
-  displayLog.value = !displayLog.value
-}
+// const toggleLog = () => {
+//   displayLog.value = !displayLog.value
+// }
 
 const updateNodePosition = async (nodeId: string, position: { x: number; y: number }) => {
   try {
@@ -84,8 +84,11 @@ const fetchFlow = async () => {
       style: stripNodeStyles,
       id: node.id.toString(),
       position: { x: node.x_pos, y: node.y_pos },
-      data: { label: node.label, type: node.node_type, communicationProtocols: node.communication_protocols }
-
+      data: {
+        label: node.label,
+        type: node.node_type,
+        communicationProtocols: node.communication_protocols
+      }
     }))
 
     // Step 3: Fetch detailed edge data by IDs, handling undefined `edges`
@@ -149,7 +152,7 @@ onMounted(fetchFlow)
         <!--  MiniMap element only available if auto sized elements are not used -->
         <!--  <MiniMap class="rounded-lg" pannable zoomable /> -->
         <template #node-default="customNodeProps">
-          <flow-node v-bind="customNodeProps"  />
+          <flow-node v-bind="customNodeProps" />
         </template>
         <template #edge-default="edgeProps">
           <flow-edge v-bind="edgeProps" />
