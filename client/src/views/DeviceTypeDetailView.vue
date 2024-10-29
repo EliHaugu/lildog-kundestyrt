@@ -46,8 +46,8 @@ const deleteDevice = (id: number) => {
 
 <template>
   <main class="pb-8 pr-4">
-    <div class="h-full flex flex-col gap-2">
-      <div class="grow-0 flex items-center gap-2">
+    <div class="flex h-full flex-col gap-2">
+      <div class="flex grow-0 items-center gap-2">
         <router-link
           to="/devices"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
@@ -57,7 +57,7 @@ const deleteDevice = (id: number) => {
         <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
       </div>
 
-      <div class="grow-0 z-20 flex justify-start gap-6">
+      <div class="z-20 flex grow-0 justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Connection type:</p>
           <label
@@ -80,8 +80,8 @@ const deleteDevice = (id: number) => {
           </p>
         </div>
       </div>
-      <div class="grow overflow-y-auto flex flex-col gap-2">
-        <div class="grow-0 flex items-center justify-between gap-6">
+      <div class="flex grow flex-col gap-2 overflow-y-auto">
+        <div class="flex grow-0 items-center justify-between gap-6">
           <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
             <h2 class="w-12">ID</h2>
             <h2 class="w-64">Device instance name</h2>
@@ -102,7 +102,7 @@ const deleteDevice = (id: number) => {
             Add device <plus-icon />
           </base-button>
         </div>
-        <div class="grow overflow-y-auto flex flex-col gap-2">
+        <div class="flex grow flex-col gap-2 overflow-y-auto">
           <device-instance
             v-for="device in devices"
             :key="device.id"

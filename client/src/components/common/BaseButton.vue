@@ -11,7 +11,7 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <slot></slot>
+    <slot />
   </button>
 </template>
 

@@ -5,6 +5,6 @@ import Navigation from '@/components/PageNavigation.vue'
 <template>
   <div class="flex h-screen overflow-hidden bg-accent-800">
     <navigation />
-    <slot></slot>
+    <slot />
   </div>
 </template>
