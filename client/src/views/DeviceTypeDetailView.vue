@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { Device } from '@/types/DeviceTypes'
-import { onMounted, ref } from 'vue'
+import type { Device, DeviceType } from '@/types/DeviceTypes'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { useRoute } from 'vue-router'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import PlusIcon from '@/icons/PlusIcon.vue'
@@ -13,6 +14,12 @@ import {
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
 const devices = ref<Device[]>([])
+// Inject the device types, and find the device type that matches the current route
+const route = useRoute()
+const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
+const deviceType = computed(() => {
+  return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
+})
 
 onMounted(() => {
   fetchDevices().then((res) => {
@@ -39,30 +46,30 @@ const deleteDevice = (id: number) => {
 
 <template>
   <main class="pb-8 pr-4">
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center gap-2">
+    <div class="h-full flex flex-col gap-2">
+      <div class="grow-0 flex items-center gap-2">
         <router-link
           to="/devices"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
           >Device Types</router-link
         >
         <chevron-right-icon />
-        <h1 class="text-xl font-semibold">{{ $route.fullPath }}</h1>
+        <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
       </div>
 
-      <div class="z-20 flex justify-start gap-6">
+      <div class="grow-0 z-20 flex justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Connection type:</p>
-          <!--  <p
-            class="m-2 flex w-10 content-start justify-center rounded-lg text-white-100"
+          <label
+            class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
             :class="{
-              'bg-ble': deviceType.connectionType === 'BLE',
-              'bg-wifi': deviceType.connectionType === 'WiFi',
-              'bg-ade': deviceType.connectionType === 'ADE'
+              'bg-ble': deviceType?.connectionType === 'BLE',
+              'bg-wifi': deviceType?.connectionType === 'WiFi',
+              'bg-ade': deviceType?.connectionType === 'ADE'
             }"
           >
-            {{ deviceType.connectionType }}
-        </p> -->
+            {{ deviceType?.connectionType }}
+          </label>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
@@ -73,8 +80,8 @@ const deleteDevice = (id: number) => {
           </p>
         </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <div class="flex items-center justify-between gap-6">
+      <div class="grow overflow-y-auto flex flex-col gap-2">
+        <div class="grow-0 flex items-center justify-between gap-6">
           <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
             <h2 class="w-12">ID</h2>
             <h2 class="w-64">Device instance name</h2>
@@ -95,7 +102,7 @@ const deleteDevice = (id: number) => {
             Add device <plus-icon />
           </base-button>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="grow overflow-y-auto flex flex-col gap-2">
           <device-instance
             v-for="device in devices"
             :key="device.id"

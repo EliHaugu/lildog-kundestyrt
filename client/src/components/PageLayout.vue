@@ -3,7 +3,7 @@ import Navigation from '@/components/PageNavigation.vue'
 </script>
 
 <template>
-  <div class="flex h-full bg-accent-800">
+  <div class="flex h-screen overflow-hidden bg-accent-800">
     <navigation />
     <slot></slot>
   </div>
