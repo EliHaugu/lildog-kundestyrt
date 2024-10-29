@@ -1,25 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { Device } from '@/types/DeviceTypes'
 import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 
-const props = defineProps<{
+import BaseButton from '../BaseButton.vue'
+
+defineEmits(['edit-device', 'delete-device'])
+defineProps<{
   device: Device
 }>()
-
-const device = ref(props.device)
-
-const emit = defineEmits(['edit-device', 'delete-device'])
-
-const editDevice = () => {
-  emit('edit-device', device)
-}
-
-const deleteDevice = () => {
-  emit('delete-device', device)
-}
 </script>
 
 <template>
@@ -28,18 +18,18 @@ const deleteDevice = () => {
   >
     <div class="flex items-center justify-start gap-3">
       <p class="w-12">{{ device.id }}</p>
-      <p class="w-64">{{ device.name }}</p>
+      <p class="w-64">{{ device.device_id }}</p>
       <div class="w-fit rounded-full bg-success p-1">
         <check-icon />
       </div>
     </div>
     <div class="flex items-center justify-start gap-3">
-      <button class="w-fit rounded-lg p-1 hover:bg-accent-500" @click="editDevice">
-        <edit-pen />
-      </button>
-      <button class="w-fit rounded-lg p-1 text-error hover:bg-accent-500" @click="deleteDevice">
-        <delete-icon />
-      </button>
+      <base-button variant="icon" class="rounded-md" @click="$emit('edit-device')">
+        <edit-pen class="dark:fill-white-100" />
+      </base-button>
+      <base-button variant="icon" class="rounded-md" @click="$emit('delete-device')">
+        <delete-icon class="fill-error" />
+      </base-button>
     </div>
   </div>
 </template>

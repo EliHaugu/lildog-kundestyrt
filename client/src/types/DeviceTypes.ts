@@ -1,13 +1,7 @@
 type Device = {
   id: number
-  name: string
-  deviceType: string
-  connectionType: string
-  connectionId: string
-  fields: {
-    key: string
-    value: string
-  }
+  device_id: string
+  category: number
 }
 
 type DeviceType = {

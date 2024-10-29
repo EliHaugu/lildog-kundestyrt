@@ -1,6 +1,6 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
-import type { CustomNode } from '@/types/nodeType'
+import type { CustomNode } from '@/types/NodeType'
 
 let draggedNode: CustomNode
 let uniqueId = 0
