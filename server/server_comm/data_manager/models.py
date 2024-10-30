@@ -1,4 +1,4 @@
-from consts import conn_type_id_mapping
+from consts import conn_type_id_mapping, comm_protocol_id_mapping
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -89,6 +89,7 @@ class Device(models.Model):
         Category, on_delete=models.CASCADE
     )
     connection_ids: models.JSONField = models.JSONField(default=dict)
+    communication_ids: models.JSONField = models.JSONField(default=dict)
 
     def clean(self):
         for conn_type, conn_id in conn_type_id_mapping:
@@ -99,6 +100,16 @@ class Device(models.Model):
             ):
                 raise ValidationError(
                     f"All {conn_type} devices must have a {conn_id} field."
+                )
+        
+        for comm_protocol, comm_id in conn_type_id_mapping:
+            if (
+                comm_protocol in self.category.communication_protocols
+                and comm_id not in self.category.communication_protocols
+                and not self.communication_ids.get(comm_id)
+            ):
+                raise ValidationError(
+                    f"All {comm_protocol} devices must have a {comm_id} field."
                 )
 
     def save(self, *args, **kwargs):
@@ -126,8 +137,8 @@ class Node(models.Model):
         Device, on_delete=models.CASCADE
     )
     function: models.TextField = models.TextField()
-    x_pos: models.IntegerField = models.IntegerField()
-    y_pos: models.IntegerField = models.IntegerField()
+    x_pos: models.IntegerField = models.IntegerField(blank=True)
+    y_pos: models.IntegerField = models.IntegerField(blank=True)
 
     def clean(self):
         if self.node_type not in dict(self.NODE_TYPE_CHOICES).keys():
@@ -158,8 +169,8 @@ class Edge(models.Model):
 
 class Flow(models.Model):
     name: models.CharField = models.CharField(max_length=255)
-    nodes: models.ManyToManyField = models.ManyToManyField(Node)
-    edges: models.ManyToManyField = models.ManyToManyField(Edge)
+    nodes: models.ManyToManyField = models.ManyToManyField(Node, blank=True)
+    edges: models.ManyToManyField = models.ManyToManyField(Edge, blank=True)
 
     def __str__(self):
         return self.name
