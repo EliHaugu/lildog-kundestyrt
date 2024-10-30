@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
 from .models import Category, Device, Edge, Flow, Node
@@ -23,6 +24,8 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class DeviceListCreateView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["category"]
 
 
 class DeviceDetailView(generics.RetrieveUpdateDestroyAPIView):

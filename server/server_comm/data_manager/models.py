@@ -1,4 +1,4 @@
-from consts import conn_type_id_mapping, comm_protocol_id_mapping
+from consts import comm_protocol_id_mapping, conn_type_id_mapping
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -92,7 +92,7 @@ class Device(models.Model):
     communication_ids: models.JSONField = models.JSONField(default=dict)
 
     def clean(self):
-        for conn_type, conn_id in conn_type_id_mapping:
+        for conn_type, conn_id in conn_type_id_mapping.items():
             if (
                 conn_type in self.category.connection_types
                 and conn_id not in self.category.connection_types
@@ -101,8 +101,8 @@ class Device(models.Model):
                 raise ValidationError(
                     f"All {conn_type} devices must have a {conn_id} field."
                 )
-        
-        for comm_protocol, comm_id in conn_type_id_mapping:
+
+        for comm_protocol, comm_id in comm_protocol_id_mapping.items():
             if (
                 comm_protocol in self.category.communication_protocols
                 and comm_id not in self.category.communication_protocols
