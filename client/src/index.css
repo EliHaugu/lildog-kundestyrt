@@ -50,31 +50,6 @@ body {
   box-shadow: var(--primary-200) 1rem -1rem 0 1rem;
 }
 
-/* rounding between top/bottom and the navigation sidebar */
-#rounded-bottom::before {
-  content: '';
-  position: absolute;
-  height: 1rem;
-  width: 1rem;
-  background-color: var(--primary-200);
-  left: 0;
-  top: -1rem;
-  border-bottom-left-radius: 1rem;
-  box-shadow: #00312f -1rem 1rem 0 1rem;
-}
-
-#rounded-top::before {
-  content: '';
-  position: absolute;
-  height: 1rem;
-  width: 1rem;
-  background-color: var(--primary-200);
-  left: 0;
-  top: 1rem;
-  border-top-left-radius: 1rem;
-  box-shadow: #00312f -1rem -1rem 0 1rem;
-}
-
 /* Style for all scrollbars */
 ::-webkit-scrollbar {
   width: 0.75rem; /* width of the entire scrollbar */

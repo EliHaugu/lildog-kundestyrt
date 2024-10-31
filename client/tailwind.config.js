@@ -25,6 +25,10 @@ export default {
         100: '#ffffff',
         200: '#fbfbfb'
       },
+      black: {
+        100: '#000000',
+        200: '#1A1A1A'
+      },
       error: '#FF5B49',
       warning: '#FAFA00',
       success: '#00AA00',

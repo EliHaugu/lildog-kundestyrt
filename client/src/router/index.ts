@@ -4,7 +4,6 @@ import FlowView from '@/views/FlowView.vue'
 import LogView from '@/components/flow/FlowLog.vue'
 import DevicesView from '@/views/DevicesView.vue'
 import DeviceTypeDetailView from '@/views/DeviceTypeDetailView.vue'
-import NewDeviceView from '@/views/NewDeviceView.vue'
 import FlowDetailedView from '@/views/FlowDetailedView.vue'
 
 const routes = [
@@ -28,11 +27,6 @@ const routes = [
     name: 'log',
     component: LogView,
     props: true
-  },
-  {
-    path: '/new',
-    name: 'new',
-    component: NewDeviceView
   },
   {
     path: '/devices',

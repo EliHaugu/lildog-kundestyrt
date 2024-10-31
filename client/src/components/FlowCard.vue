@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import BaseButton from '@/components/BaseButton.vue'
-import BaseInputField from './BaseInputField.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from './common/BaseInputField.vue'
+import Modal from './common/Modal.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import { router } from '@/router'
@@ -102,24 +103,15 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
       Run Flow <play-icon fill="white" />
     </base-button>
   </div>
-  <!-- flow editor -->
-  <form
-    class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
+
+  <modal
     v-if="showEditFlowForm && editFlowType"
+    :showModal="showEditFlowForm"
+    submitButtonText="Update"
+    title="Edit Flow"
+    @submit="updateFlow"
+    @close="cancelEditFlow"
   >
-    <h2 class="text-lg font-semibold">Edit - Flow</h2>
-    <div class="flex flex-col gap-1">
-      <label for="name" class="text-md">Device flow name</label>
-      <base-input-field v-model="editFlowType.name" label="Name" name="name" placeholder="" />
-    </div>
-    <div class="mt-6 flex justify-between gap-6">
-      <base-button variant="outline" @click="cancelEditFlow">Cancel</base-button>
-      <base-button @click="updateFlow">Update</base-button>
-    </div>
-  </form>
-  <div
-    v-if="showEditFlowForm"
-    class="fixed inset-0 bg-[#000000] opacity-30"
-    style="z-index: 2"
-  ></div>
+    <base-input-field v-model="editFlowType.name" label="Name" name="name" placeholder="" />
+  </modal>
 </template>

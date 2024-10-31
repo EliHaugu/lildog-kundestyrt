@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { inject, ref, type Ref } from 'vue'
-import BaseButton from '../components/BaseButton.vue'
-import BaseInputField from '@/components/BaseInputField.vue'
+import { computed, inject, ref, type Ref } from 'vue'
+import BaseButton from '../common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
+import Modal from '../common/Modal.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
 import RightArrow from '@/icons/RightArrow.vue'
-import type { DeviceType } from '../types/DeviceTypes'
+import type { DeviceType } from '../../types/DeviceTypes'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
@@ -14,12 +15,6 @@ const props = defineProps<{
 
 const router = useRouter()
 
-// const showDevices = ref(false)
-
-// const toggleDevices = () => {
-//   showDevices.value = !showDevices.value
-// }
-
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
 const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(
   'updateDeviceTypes',
@@ -27,6 +22,10 @@ const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(
 )
 
 const editDeviceType = ref<DeviceType | null>(null)
+
+const connectionTypes = computed(() => {
+  return [...new Set(deviceTypes.value.map((deviceType) => deviceType.connectionType))]
+})
 
 const editDeviceClass = (deviceType: DeviceType) => {
   editDeviceType.value = { ...deviceType }
@@ -61,8 +60,7 @@ const showEditDeviceTypeForm = ref(false)
 </script>
 
 <template>
-  <div class="h-40 w-[25rem] rounded-md bg-secondary-50 p-3 dark:bg-accent-700" style="z-index: 1">
-    <!-- usikker på om jeg trenger z-indeks her -->
+  <div class="h-40 w-[25rem] rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div :class="['flex items-center justify-between']">
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
       <base-button
@@ -102,36 +100,23 @@ const showEditDeviceTypeForm = ref(false)
       See devices <right-arrow />
     </base-button>
   </div>
-  <form
-    class="absolute left-[50%] top-[50%] z-10 flex w-96 translate-x-[-50%] translate-y-[-50%] transform flex-col gap-6 rounded-xl bg-white-100 p-4 pt-6 shadow-md"
+
+  <modal
     v-if="showEditDeviceTypeForm && editDeviceType"
+    :showModal="showEditDeviceTypeForm"
+    submitButtonText="Update"
+    title="Edit Device Type"
+    @submit="updateDeviceType"
+    @close="cancelEditDeviceType"
   >
-    <h2 class="text-lg font-semibold">Edit - Device Type</h2>
-    <div class="flex flex-col gap-1">
-      <label for="name" class="text-md">Device type name</label>
-      <base-input-field v-model="editDeviceType.name" label="Name" name="name" placeholder="" />
-    </div>
-    <div class="flex flex-col gap-1">
-      <label for="connection-type" class="text-md">Connection type</label>
-      <select
-        name="connection-type"
-        class="rounded-lg border border-accent-600 bg-primary-200 p-2"
-        v-model="editDeviceType.connectionType"
-      >
-        <option value="" disabled>Select connection type</option>
-        <option value="BLE">BLE</option>
-        <option value="WiFi">WiFi</option>
-        <option value="ADE">ADE</option>
-      </select>
-    </div>
-    <div class="mt-6 flex justify-between gap-6">
-      <base-button variant="outline" @click="cancelEditDeviceType">Cancel</base-button>
-      <base-button @click="updateDeviceType">Update</base-button>
-    </div>
-  </form>
-  <div
-    v-if="showEditDeviceTypeForm"
-    class="fixed inset-0 bg-[#000000] opacity-30"
-    style="z-index: 2"
-  ></div>
+    <base-input-field v-model="editDeviceType.name" label="Name" name="name" placeholder="" />
+    <base-input-field
+      v-model="editDeviceType.connectionType"
+      label="Connection type"
+      name="connection-type"
+      placeholder=""
+      type="select"
+      :options="connectionTypes"
+    />
+  </modal>
 </template>
