@@ -4,7 +4,7 @@ import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 
-import BaseButton from '../BaseButton.vue'
+import BaseButton from '../common/BaseButton.vue'
 
 defineEmits(['edit-device', 'delete-device'])
 defineProps<{

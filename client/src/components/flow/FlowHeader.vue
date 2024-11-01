@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineEmits, defineProps } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
 import FlowDevices from '@/components/flow/FlowDevices.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
