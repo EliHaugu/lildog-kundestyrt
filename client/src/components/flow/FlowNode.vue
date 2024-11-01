@@ -16,7 +16,7 @@ const edited = ref(false)
 const pickColour = (protocols: string[]) => {
   console.log('protocols', protocols)
   console.log('data', props.data)
-  if (protocols.includes('BLE')) {
+  if (protocols.includes('ble')) {
     return blue[Math.floor(Math.random() * blue.length)]
   } else if (protocols.includes('wifi')) {
     return green[Math.floor(Math.random() * green.length)]

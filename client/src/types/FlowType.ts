@@ -2,7 +2,8 @@ type Flow = {
   id: string
   name: string
   status?: string
-  combinedData?: string[]
+  connectionType?: string[]
+  conmmunicationProtocol?: string[]
   nodes?: number[]
   edges?: number[]
 }

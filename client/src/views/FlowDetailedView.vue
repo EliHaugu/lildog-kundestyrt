@@ -15,7 +15,7 @@ import { onMounted, ref } from 'vue'
 import type { Flow } from '@/types/FlowType'
 
 import { useRoute } from 'vue-router'
-import flowService from '@/services/FlowService'
+import FlowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import EdgeService from '@/services/EdgeService'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
@@ -45,9 +45,9 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 
 const displayLog = ref(false)
 
-// const toggleLog = () => {
-//   displayLog.value = !displayLog.value
-// }
+const toggleLog = () => {
+  displayLog.value = !displayLog.value
+}
 
 const updateNodePosition = async (nodeId: string, position: { x: number; y: number }) => {
   try {
@@ -69,7 +69,7 @@ const onNodeDragStop = (nodeDragEvent: NodeDragEvent) => {
 const fetchFlow = async () => {
   try {
     // Step 1: Fetch the main flow data
-    const response = await flowService.getFlow(flowId)
+    const response = await FlowService.getFlow(flowId)
     flow.value = response
     console.log('Fetching flow data:', response)
 
@@ -115,7 +115,7 @@ const onConnect = async (connection: { source: string; target: string }) => {
 
     if (flow.value) {
       flow.value.edges = [...(flow.value.edges ?? []), savedEdge.id]
-      await flowService.updateFlow(flowId, { edges: flow.value.edges })
+      await FlowService.updateFlow(flowId, { edges: flow.value.edges })
     }
   } catch (error) {
     console.error('Error creating edge:', error)
@@ -131,7 +131,7 @@ onMounted(fetchFlow)
       :display-log="displayLog"
       :nodes="nodes"
       :flow="flow ?? {}"
-      pdate:display-log="toggleLog"
+      @update:display-log="toggleLog"
     />
     <flow-log :show="displayLog" />
     <div

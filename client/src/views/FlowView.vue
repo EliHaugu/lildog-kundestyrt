@@ -91,7 +91,8 @@ const addNewFlow = async () => {
     id: '', // backend generates ID
     name: newFlowName.value,
     status: newFlowStatus,
-    combinedData: [],
+    connectionType: [],
+    conmmunicationProtocol: [],
     nodes: [],
     edges: []
   }
@@ -145,7 +146,7 @@ const addNewFlow = async () => {
         :key="flow.id"
         :flow="flow"
         @flowUpdated="fetchFlows"
-        :connection-types="flow.combinedData || []"
+        :connection-types="flow.connectionType || []"
       />
     </ul>
   </main>
