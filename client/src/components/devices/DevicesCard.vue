@@ -57,7 +57,7 @@ const showEditDeviceTypeForm = ref(false)
 </script>
 
 <template>
-  <div class="h-40 w-[25rem] rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
+  <div class="h-40 rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div :class="['flex items-center justify-between']">
       <h2 class="px-2 text-xl font-semibold">{{ deviceType.name }}</h2>
       <base-button

@@ -1,27 +1,26 @@
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
-      <form action="" class="ml-auto flex-grow">
+      <h1 class="p-2 pt-1 text-2xl font-semibold flex-shrink-0">Configure devices</h1>
+      <form action="" class="ml-auto flex-grow ">
         <base-input-field
           v-model="searchQuery"
           placeholder="Search device types"
-          class="rounded-lg"
+          class="rounded-lg flex-shrink min-w-0"
         />
       </form>
-      <base-button @click="toggleModal" class="flex w-48 items-center gap-2">
+      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
         New device type
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </section>
-    <ul class="mr-4 flex flex-wrap gap-2">
+    <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
       <devices-card
         v-for="deviceType in filteredDeviceTypes"
         :key="deviceType.name"
         :deviceType="deviceType"
       />
     </ul>
-    <!-- page for making new device type -->
     <base-modal
       id="newDeviceTypeModal"
       title="Create Device Type"
@@ -50,7 +49,7 @@ import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseModal from '../components/common/BaseModal.vue'
 import type { DeviceType } from '@/types/DeviceTypes'
 
-const toggleModal = () => {
+const openModal = () => {
   ;(document.getElementById('newDeviceTypeModal') as HTMLDialogElement).showModal()
 }
 

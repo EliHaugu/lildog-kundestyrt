@@ -3,7 +3,7 @@
     <dialog
       :aria-label="title"
       :id="id"
-      class="absolute dark:text-white-100 top-1/2 z-50 -translate-y-1/2 rounded-xl bg-primary-100 p-4 shadow-md"
+      class="absolute top-1/2 z-50 -translate-y-1/2 rounded-xl bg-primary-100 p-4 shadow-md dark:text-white-100"
     >
       <form method="dialog" @submit.prevent="submit" class="flex w-96 flex-col gap-2">
         <h3 v-if="title" class="text-xl font-semibold">{{ title }}</h3>

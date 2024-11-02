@@ -38,6 +38,10 @@ export async function createNode(node: Partial<ImportNode>): Promise<Boolean> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       node,
+      /* label: node.label,
+      device: node.device,
+      node_type: node.node_type,
+      function: node.function, */
       x_pos: 0,
       y_pos: 0
     })

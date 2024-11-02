@@ -20,7 +20,7 @@
         name="node-type"
         placeholder=""
         type="select"
-        :options="['Assertion', 'Action']"
+        :options="['Assert', 'Action']"
       />
       <base-input-field
         v-model="editNodeModel.device"

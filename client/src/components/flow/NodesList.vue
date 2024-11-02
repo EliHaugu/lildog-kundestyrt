@@ -49,7 +49,7 @@
         name="node-type"
         placeholder=""
         type="select"
-        :options="['Assertion', 'Action']"
+        :options="['Assert', 'Action']"
       />
       <base-input-field
         v-model="newNodeModel.device"
@@ -102,15 +102,18 @@ const openModal = () => {
 }
 
 watch(selectedTab, () => {
-  nodes.value = resNodes.value!.filter(
-    (node) => node.data.node_type === (selectedTab.value === 0 ? 'Assertion' : 'Action')
-  )
+  filterNodes(selectedTab.value)
 })
+
+const filterNodes = (tab: number) => {
+  nodes.value = resNodes.value!.filter((node) => node.data.node_type === (tab === 0 ? 'Assert' : 'Action'))
+}
 
 const getNodes = async () => {
   fetchNodes().then((data) => {
     resNodes.value = data
-    selectedTab.value = 0
+  }).finally(() => {
+    filterNodes(selectedTab.value)
   })
 }
 

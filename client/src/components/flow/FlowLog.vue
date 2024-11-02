@@ -46,7 +46,7 @@ const modifyCurrentDevices = (id: number) => {
       </ul>
     </nav>
     <div
-      class="mr-4 grid h-[calc(100vh-9.75rem)] grid-cols-2 gap-2"
+      class="grid h-[calc(100vh-9.75rem)] grid-cols-2 gap-2"
       :class="{ 'grid-cols-1': currentDevices.length === 1 }"
     >
       <web-socket-provider>

@@ -9,8 +9,6 @@ import PlusIcon from '@/icons/PlusIcon.vue'
 import {
   createDevice,
   fetchDevices,
-  updateDevice,
-  deleteDevice as removeDevice
 } from '@/services/DevicesService'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
@@ -40,29 +38,25 @@ onMounted(() => {
 
 const newDevice = () => {
   const device = {
-    id: 100,
+    id: devices.value.length + 1,
     device_id: newDeviceModel.value.name,
     category: parseInt(newDeviceModel.value.category)
   }
   createDevice(device).then((res: Boolean) => {
     if (res) {
-      devices.value.push(device)
+      update()
     } else {
       console.error('Failed to create device')
     }
   })
 }
 
-const editDevice = (id: number, device: Device) => {
-  const index = devices.value.findIndex((d) => d.id === id)
-  devices.value[index] = device
-  updateDevice(id, device)
+const update = () => {
+  fetchDevices().then((res) => {
+    devices.value = res as unknown as Device[]
+  })
 }
 
-const deleteDevice = (id: number) => {
-  devices.value = devices.value.filter((device) => device.id !== id)
-  removeDevice(id)
-}
 </script>
 
 <template>
@@ -108,22 +102,21 @@ const deleteDevice = (id: number) => {
             <h2 class="w-64">Device instance name</h2>
             <h2 class="w-12">Status</h2>
           </div>
-          <base-button class="w-40 justify-between rounded-md" @click="openModal">
+          <base-button class="text-nowrap justify-between rounded-md" @click="openModal">
             Add device <plus-icon />
           </base-button>
         </div>
         <div class="flex grow flex-col gap-2 overflow-y-auto">
           <device-instance
+          @update="update"
             v-for="device in devices"
             :key="device.id"
             :device="device"
-            @edit-device="editDevice(device.id, device)"
-            @delete-device="deleteDevice(device.id)"
           />
         </div>
       </div>
     </div>
-    <base-modal id="newDeviceModal" title="Add Device" submitButtonText="Add" @submit="newDevice">
+    <base-modal id="newDeviceModal" title="Edit Device" submitButtonText="Save" @submit="newDevice">
       <base-input-field v-model="newDeviceModel.name" label="Name" name="name" placeholder="" />
       <base-input-field
         v-model="newDeviceModel.category"
@@ -133,5 +126,6 @@ const deleteDevice = (id: number) => {
         type="number"
       />
     </base-modal>
+
   </main>
 </template>
