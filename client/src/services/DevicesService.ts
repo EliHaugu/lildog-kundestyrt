@@ -29,7 +29,13 @@ export async function createDevice(device: Device): Promise<Boolean> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       device_id: device.device_id,
-      category: device.category
+      category: device.category,
+      connection_ids: {
+        adb_device_id: 'adb-001'
+      },
+      communication_ids: {
+        mac_address: 'A1:B2:C3:D4:E5:F6'
+      }
     })
   }
   return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok

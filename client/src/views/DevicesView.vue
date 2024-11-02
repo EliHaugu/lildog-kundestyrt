@@ -1,33 +1,31 @@
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
-      <form action="" class="ml-auto flex flex-grow gap-4">
+      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
+      <form action="" class="ml-auto flex-grow">
         <base-input-field
           v-model="searchQuery"
           placeholder="Search device types"
-          class="rounded-lg"
+          class="flex-shrink rounded-lg"
         />
       </form>
-      <base-button @click="toggleModal" class="flex items-center gap-2">
+      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
         New device type
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </section>
-    <ul class="mr-4 flex flex-wrap gap-4">
+    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       <devices-card
         v-for="deviceType in filteredDeviceTypes"
         :key="deviceType.name"
         :deviceType="deviceType"
       />
     </ul>
-    <!-- page for making new device type -->
-    <modal
-      :showModal="isNewDeviceTypeFormVisible"
-      :title="'Create Device Type'"
-      :submit-button-text="'Create'"
+    <base-modal
+      id="newDeviceTypeModal"
+      title="Create Device Type"
+      submit-button-text="Create"
       @submit="addNewDeviceType"
-      @close="toggleModal"
     >
       <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
       <base-input-field
@@ -38,7 +36,7 @@
         type="select"
         :options="connectionTypes"
       />
-    </modal>
+    </base-modal>
   </main>
 </template>
 
@@ -48,13 +46,11 @@ import type { Ref } from 'vue'
 import DevicesCard from '@/components/devices/DevicesCard.vue'
 import BaseButton from '../components/common/BaseButton.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
-import Modal from '../components/common/Modal.vue'
+import BaseModal from '../components/common/BaseModal.vue'
 import type { DeviceType } from '@/types/DeviceTypes'
 
-const isNewDeviceTypeFormVisible = ref<boolean>(false)
-
-const toggleModal = () => {
-  isNewDeviceTypeFormVisible.value = !isNewDeviceTypeFormVisible.value
+const openModal = () => {
+  ;(document.getElementById('newDeviceTypeModal') as HTMLDialogElement).showModal()
 }
 
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))

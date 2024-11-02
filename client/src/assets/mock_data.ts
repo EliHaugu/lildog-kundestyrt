@@ -89,105 +89,6 @@ export const logItems = [
   }
 ]
 
-export const devices: CustomNode[] = [
-  {
-    id: '1',
-    data: { label: 'Button Press', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '2',
-    data: { label: 'Backend Updated', connection: 'ADE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '3',
-    data: { label: 'Driver Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '4',
-    data: { label: 'Light Turned On', connection: 'WiFi' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '5',
-    data: { label: 'Button Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '1',
-    data: { label: 'Button Press', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '2',
-    data: { label: 'Backend Updated', connection: 'ADE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '3',
-    data: { label: 'Driver Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '4',
-    data: { label: 'Light Turned On', connection: 'WiFi' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '5',
-    data: { label: 'Button Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '1',
-    data: { label: 'Button Press', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '2',
-    data: { label: 'Backend Updated', connection: 'ADE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '3',
-    data: { label: 'Driver Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '4',
-    data: { label: 'Light Turned On', connection: 'WiFi' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '5',
-    data: { label: 'Button Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  },
-  {
-    id: '5',
-    data: { label: 'Button Signal', connection: 'BLE' },
-    position: { x: 0, y: 0 },
-    style: stripNodeStyles
-  }
-]
-
 export const mock_flows: Flow[] = [
   {
     id: '1',
@@ -197,48 +98,38 @@ export const mock_flows: Flow[] = [
     nodes: [
       {
         id: '1',
-        data: { label: 'Button Press', connection: 'BLE' },
         position: { x: 0, y: 0 },
-        style: stripNodeStyles
+        style: stripNodeStyles,
+        data: {
+          type: 'action',
+          label: 'Node 1',
+          device: 1,
+          function: 'Sample function'
+        }
       },
       {
         id: '2',
-        data: { label: 'Backend Updated', connection: 'ADE' },
+        label: 'Node 2',
+        nodeType: 'Action',
+        device: 2,
+        function: 'Sample function',
         position: { x: 150, y: 100 },
         style: stripNodeStyles
       },
       {
         id: '3',
-        data: { label: 'Driver Signal', connection: 'BLE' },
+        label: 'Node 3',
+        nodeType: 'Assertion',
+        device: 2,
+        function: 'Sample function',
         position: { x: 300, y: 200 },
         style: stripNodeStyles
       }
-    ] as CustomNode[],
+    ] as unknown as CustomNode[],
     edges: [
       { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
       { id: 'e2-3', source: '2', target: '3', type: 'smoothstep', updatable: true }
     ] as Edge[]
-  },
-  {
-    id: '2',
-    name: 'Second Flow',
-    status: 'Failed',
-    connectionTypes: ['BLE', 'WiFi'],
-    nodes: [
-      {
-        id: '1',
-        data: { label: 'Button Signal', connection: 'BLE' },
-        position: { x: 0, y: 0 },
-        style: stripNodeStyles
-      },
-      {
-        id: '2',
-        data: { label: 'Light Turned On', connection: 'WiFi' },
-        position: { x: 150, y: 150 },
-        style: stripNodeStyles
-      }
-    ] as CustomNode[],
-    edges: [{ id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true }] as Edge[]
   }
 ]
 
