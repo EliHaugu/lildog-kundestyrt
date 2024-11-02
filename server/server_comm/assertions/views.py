@@ -1,7 +1,8 @@
-from . import logic
 from data_manager.models import Node
 from django.forms import ValidationError
 from django.http import HttpResponseBadRequest, JsonResponse
+
+from . import logic
 
 
 async def check_assertion_view(request, node_id):

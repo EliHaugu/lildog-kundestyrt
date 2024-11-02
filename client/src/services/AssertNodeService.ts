@@ -7,7 +7,7 @@ export function createApiAssertNode(
   label: string,
   apiUrl: string,
   expectedApiResponse: string,
-  apiAction?: string
+  apiPayload: string
 ): CustomAssertNode {
   return {
     id: generateUniqueId(),
@@ -16,7 +16,7 @@ export function createApiAssertNode(
       assertionMethod: 'API',
       apiUrl,
       expectedApiResponse,
-      apiAction
+      apiPayload
     },
     position: { x: 0, y: 0 }
   }
@@ -84,8 +84,8 @@ function generateUniqueId(): string {
 async function submitApiCheck(
   nodeId: number | string,
   apiUrl: string,
-  apiPayload: object,
-  expectedResponse: object
+  apiPayload: string,
+  expectedResponse: string
 ) {
   try {
     const response = await fetch(`/check_assertion/${nodeId}/`, {
