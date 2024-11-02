@@ -1,12 +1,12 @@
 <template>
   <main class="flex flex-col gap-6">
     <section class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold flex-shrink-0">Configure devices</h1>
-      <form action="" class="ml-auto flex-grow ">
+      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
+      <form action="" class="ml-auto flex-grow">
         <base-input-field
           v-model="searchQuery"
           placeholder="Search device types"
-          class="rounded-lg flex-shrink min-w-0"
+          class="flex-shrink rounded-lg"
         />
       </form>
       <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
@@ -14,7 +14,7 @@
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </section>
-    <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       <devices-card
         v-for="deviceType in filteredDeviceTypes"
         :key="deviceType.name"

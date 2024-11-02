@@ -8,10 +8,7 @@ import BaseButton from '../common/BaseButton.vue'
 import BaseInputField from '../common/BaseInputField.vue'
 import BaseModal from '../common/BaseModal.vue'
 
-import {
-  updateDevice,
-  deleteDevice as removeDevice
-} from '@/services/DevicesService'
+import { updateDevice, deleteDevice as removeDevice } from '@/services/DevicesService'
 import { ref } from 'vue'
 
 const emit = defineEmits(['update'])
@@ -20,7 +17,7 @@ const props = defineProps<{
 }>()
 
 const openModal = () => {
-  ;(document.getElementById('editDeviceModal'+props.device.id) as HTMLDialogElement).showModal()
+  ;(document.getElementById('editDeviceModal' + props.device.id) as HTMLDialogElement).showModal()
 }
 
 const editDeviceModel = ref({
@@ -65,7 +62,12 @@ const deleteDevice = () => {
         <delete-icon class="fill-error" />
       </base-button>
     </div>
-    <base-modal :id="'editDeviceModal'+device.id" title="Edit Device" submitButtonText="Add" @submit="editDevice">
+    <base-modal
+      :id="'editDeviceModal' + device.id"
+      title="Edit Device"
+      submitButtonText="Add"
+      @submit="editDevice"
+    >
       <base-input-field v-model="editDeviceModel.name" label="Name" name="name" placeholder="" />
       <base-input-field
         v-model="editDeviceModel.category"

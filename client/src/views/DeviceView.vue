@@ -6,10 +6,7 @@ import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import PlusIcon from '@/icons/PlusIcon.vue'
-import {
-  createDevice,
-  fetchDevices,
-} from '@/services/DevicesService'
+import { createDevice, fetchDevices } from '@/services/DevicesService'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 
@@ -56,7 +53,6 @@ const update = () => {
     devices.value = res as unknown as Device[]
   })
 }
-
 </script>
 
 <template>
@@ -102,13 +98,13 @@ const update = () => {
             <h2 class="w-64">Device instance name</h2>
             <h2 class="w-12">Status</h2>
           </div>
-          <base-button class="text-nowrap justify-between rounded-md" @click="openModal">
+          <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
             Add device <plus-icon />
           </base-button>
         </div>
         <div class="flex grow flex-col gap-2 overflow-y-auto">
           <device-instance
-          @update="update"
+            @update="update"
             v-for="device in devices"
             :key="device.id"
             :device="device"
@@ -126,6 +122,5 @@ const update = () => {
         type="number"
       />
     </base-modal>
-
   </main>
 </template>

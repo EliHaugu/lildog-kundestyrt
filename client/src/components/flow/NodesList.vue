@@ -106,15 +106,19 @@ watch(selectedTab, () => {
 })
 
 const filterNodes = (tab: number) => {
-  nodes.value = resNodes.value!.filter((node) => node.data.node_type === (tab === 0 ? 'Assert' : 'Action'))
+  nodes.value = resNodes.value!.filter(
+    (node) => node.data.node_type === (tab === 0 ? 'Assert' : 'Action')
+  )
 }
 
 const getNodes = async () => {
-  fetchNodes().then((data) => {
-    resNodes.value = data
-  }).finally(() => {
-    filterNodes(selectedTab.value)
-  })
+  fetchNodes()
+    .then((data) => {
+      resNodes.value = data
+    })
+    .finally(() => {
+      filterNodes(selectedTab.value)
+    })
 }
 
 onMounted(() => {
