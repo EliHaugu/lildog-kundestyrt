@@ -9,19 +9,20 @@ export type CustomData = {
   fields?: { uuid?: string; action?: string; assertion?: string }
 }
 
-export type CustomAssertData = CustomData & (
-  | {
-      assertionMethod: 'API'
-      apiUrl: string             
-      apiPayload: string              
-      expectedApiResponse: string            
-    }
-  | {
-      assertionMethod: 'UART'
-      expectedUARTLog: string    
-      timeout: number            
-    }
-)
+export type CustomAssertData = CustomData &
+  (
+    | {
+        assertionMethod: 'API'
+        apiUrl: string
+        apiPayload: string
+        expectedApiResponse: string
+      }
+    | {
+        assertionMethod: 'UART'
+        expectedUARTLog: string
+        timeout: number
+      }
+  )
 
 export type CustomNode = Node<CustomData>
 
