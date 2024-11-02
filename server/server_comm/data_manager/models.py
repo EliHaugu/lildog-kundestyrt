@@ -129,6 +129,14 @@ class Node(models.Model):
         (ASSERT, "Assert"),
     ]
 
+    API = "api"
+    UART = "uart"
+
+    ASSERTION_METHOD_CHOICES = [
+        (API, "API"),
+        (UART, "UART"),
+    ]
+
     label: models.CharField = models.CharField(max_length=255)
     node_type: models.CharField = models.CharField(
         max_length=50, choices=NODE_TYPE_CHOICES, default=ACTION
@@ -140,12 +148,49 @@ class Node(models.Model):
     x_pos: models.IntegerField = models.IntegerField(blank=True)
     y_pos: models.IntegerField = models.IntegerField(blank=True)
 
+    assertion_method: models.CharField = models.CharField(
+        max_length=50, choices=ASSERTION_METHOD_CHOICES, blank=True, null=True
+    )
+
+    api_url: models.URLField = models.URLField(blank=True, null=True)
+    api_payload = models.JSONField(blank=True, null=True)
+    expected_response = models.JSONField(blank=True, null=True)
+
+    expected_uart_log: models.TextField = models.TextField(
+        blank=True, null=True
+    )
+    timeout: models.PositiveIntegerField = models.PositiveIntegerField(
+        default=5
+    )
+
     def clean(self):
         if self.node_type not in dict(self.NODE_TYPE_CHOICES).keys():
             raise ValidationError(
                 f"""Invalid node type: {self.node_type}.
                  Must be one of {self.NODE_TYPE_CHOICES}."""
             )
+        if self.node_type == self.ASSERT and self.assertion_method == self.API:
+            if not self.api_url:
+                raise ValidationError(
+                    "API URL must be provided for API assertions."
+                )
+            if not self.expected_response:
+                raise ValidationError(
+                    "Expected response must be provided for API assertions."
+                )
+
+        if (
+            self.node_type == self.ASSERT
+            and self.assertion_method == self.UART
+        ):
+            if not self.expected_uart_log:
+                raise ValidationError(
+                    "Expected UART log must be provided for UART assert nodes."
+                )
+            if self.timeout <= 0:
+                raise ValidationError(
+                    "Timeout must be a positive integer for UART assert nodes."
+                )
 
     def save(self, *args, **kwargs):
         self.full_clean()

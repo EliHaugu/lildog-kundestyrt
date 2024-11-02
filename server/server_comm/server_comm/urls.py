@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("data_manager/", include("data_manager.urls")),
     path("device_connection/", include("device_connection.urls")),
+    path("assertions/", include("assertions.urls")),
 ]
