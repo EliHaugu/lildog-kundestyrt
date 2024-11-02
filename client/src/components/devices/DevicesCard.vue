@@ -2,7 +2,7 @@
 import { computed, inject, ref, type Ref } from 'vue'
 import BaseButton from '../common/BaseButton.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
-import Modal from '../common/Modal.vue'
+import BaseModal from '../common/BaseModal.vue'
 import '@mdi/font/css/materialdesignicons.css'
 import EditPen from '@/icons/EditPen.vue'
 import RightArrow from '@/icons/RightArrow.vue'
@@ -29,12 +29,9 @@ const connectionTypes = computed(() => {
 
 const editDeviceClass = (deviceType: DeviceType) => {
   editDeviceType.value = { ...deviceType }
-  showEditDeviceTypeForm.value = true
-}
-
-const cancelEditDeviceType = () => {
-  editDeviceType.value = null
-  showEditDeviceTypeForm.value = false
+  ;(
+    document.getElementById(`editDeviceTypeForm${deviceType.name}`) as HTMLDialogElement
+  ).showModal()
 }
 
 const updateDeviceType = () => {
@@ -101,22 +98,19 @@ const showEditDeviceTypeForm = ref(false)
     </base-button>
   </div>
 
-  <modal
-    v-if="showEditDeviceTypeForm && editDeviceType"
-    :showModal="showEditDeviceTypeForm"
+  <base-modal
+    :id="'editDeviceTypeForm' + deviceType.name"
     submitButtonText="Update"
     title="Edit Device Type"
     @submit="updateDeviceType"
-    @close="cancelEditDeviceType"
   >
-    <base-input-field v-model="editDeviceType.name" label="Name" name="name" placeholder="" />
+    <base-input-field label="Name" name="name" placeholder="" />
     <base-input-field
-      v-model="editDeviceType.connectionType"
       label="Connection type"
       name="connection-type"
       placeholder=""
       type="select"
       :options="connectionTypes"
     />
-  </modal>
+  </base-modal>
 </template>

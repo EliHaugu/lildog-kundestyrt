@@ -3,7 +3,7 @@
     :type="type"
     class="rounded-md transition-colors duration-200"
     :class="[
-      'flex px-4 py-2 shadow-md',
+      'inline-flex justify-center px-4 py-2 shadow-md',
       variantClass,
       sizeClass,
       { 'hover:bg-opacity-80': hoverEffect, 'cursor-not-allowed opacity-50': disabled }
@@ -59,7 +59,7 @@ const handleClick = (event: Event) => {
 const variantClass = computed(() => {
   switch (props.variant) {
     case 'icon':
-      return 'bg-transparent hover:bg-accent-600'
+      return 'bg-transparent hover:bg-accent-600 shadow-none'
     case 'outline':
       return 'bg-primary-200 text-bg-700 transition-colours duration-200 hover:bg-accent-500 border border-accent-600'
     case 'secondary':

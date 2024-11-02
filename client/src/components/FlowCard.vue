@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInputField from './common/BaseInputField.vue'
-import Modal from './common/Modal.vue'
+import BaseModal from './common/BaseModal.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import { router } from '@/router'
@@ -26,12 +26,7 @@ const editFlowType = ref<Flow | null>(null)
 
 const editFlow = (flow: Flow) => {
   editFlowType.value = { ...flow }
-  showEditFlowForm.value = true
-}
-
-const cancelEditFlow = () => {
-  editFlowType.value = null
-  showEditFlowForm.value = false
+  ;(document.getElementById(`editFlowForm${flow.id}`) as HTMLDialogElement).showModal()
 }
 
 const updateFlow = () => {
@@ -104,14 +99,12 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     </base-button>
   </div>
 
-  <modal
-    v-if="showEditFlowForm && editFlowType"
-    :showModal="showEditFlowForm"
+  <base-modal
+    :id="'editFlowForm' + flow.id"
     submitButtonText="Update"
     title="Edit Flow"
     @submit="updateFlow"
-    @close="cancelEditFlow"
   >
-    <base-input-field v-model="editFlowType.name" label="Name" name="name" placeholder="" />
-  </modal>
+    <base-input-field label="Name" name="name" placeholder="" />
+  </base-modal>
 </template>
