@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavButton from './navigation/NavButton.vue'
+import NavButton from './PageNavigationButton.vue'
 import DevicesIcon from '@/icons/DevicesIcon.vue'
 import FlowsIcon from '@/icons/FlowsIcon.vue'
 import ThemeIcon from '@/icons/ThemeIcon.vue'
