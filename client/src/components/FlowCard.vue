@@ -2,27 +2,26 @@
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInputField from './common/BaseInputField.vue'
 import BaseModal from './common/BaseModal.vue'
-import type { Flow } from '@/types/FlowType'
-import EditPen from '@/icons/EditPen.vue'
-import { router } from '@/router'
+
 import PlayIcon from '@/icons/RightArrow.vue'
+import EditPen from '@/icons/EditPen.vue'
+
+import type { Flow } from '@/types/FlowType'
 import { inject, ref, type Ref } from 'vue'
+import { router } from '@/router'
 
 const props = defineProps<{
   flow: Flow
 }>()
 
+const showEditFlowForm = ref(false)
+const editFlowType = ref<Flow | null>(null)
 const flows = inject<Ref<Flow[]>>('flows', ref([]))
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
   router.push(`${currentPath}/${id}`)
 }
-
-// Flow editor
-const showEditFlowForm = ref(false)
-
-const editFlowType = ref<Flow | null>(null)
 
 const editFlow = (flow: Flow) => {
   editFlowType.value = { ...flow }

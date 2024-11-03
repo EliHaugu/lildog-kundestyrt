@@ -1,16 +1,17 @@
 <script setup lang="ts">
-defineEmits(['update:displayLog'])
-defineProps({
-  displayLog: Boolean,
-  nodes: Array
-})
-
 import { listItems } from '@/assets/mock_data'
 import BaseButton from '@/components/common/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
 import NodesList from '@/components/flow/NodesList.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
+
+defineEmits(['update:displayLog'])
+defineProps({
+  displayLog: Boolean,
+  nodes: Array
+})
 </script>
+
 <template>
   <header
     class="relative flex items-center gap-2 rounded-xl bg-white-100 p-2 shadow-md dark:bg-accent-800"
