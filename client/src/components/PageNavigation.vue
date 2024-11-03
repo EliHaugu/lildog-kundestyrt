@@ -34,7 +34,7 @@ onMounted(() => {
   <div class="flex h-screen min-w-max flex-col gap-12 bg-accent-800 py-5 pl-5">
     <h1 class="text-3xl font-light text-accent-400">liltest</h1>
     <nav class="flex flex-col gap-4">
-      <nav-button to="/devices">
+      <nav-button to="/categories">
         <devices-icon class="w-12" />
         Configure Devices
       </nav-button>

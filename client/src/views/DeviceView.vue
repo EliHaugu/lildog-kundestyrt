@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { Device, DeviceModel, DeviceType } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import BaseButton from '@/components/common/BaseButton.vue'
-import BaseInputField from '@/components/common/BaseInputField.vue'
-import DeviceInstance from '@/components/devices/DeviceInstance.vue'
-import PlusIcon from '@/icons/PlusIcon.vue'
+
 import { createDevice, fetchDevices } from '@/services/DevicesService'
+import DeviceInstance from '@/components/devices/DeviceInstance.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+
+import PlusIcon from '@/icons/PlusIcon.vue'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
-import BaseModal from '@/components/common/BaseModal.vue'
 
 const devices = ref<Device[]>([])
 // Inject the device types, and find the device type that matches the current route
@@ -16,11 +17,6 @@ const route = useRoute()
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
 const deviceType = computed(() => {
   return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
-})
-
-const newDeviceModel = ref({
-  name: '',
-  category: ''
 })
 
 const openModal = () => {
@@ -33,12 +29,20 @@ onMounted(() => {
   })
 })
 
-const newDevice = () => {
+const newDevice = (newDeviceModel: DeviceModel) => {
   const device = {
     id: devices.value.length + 1,
-    device_id: newDeviceModel.value.name,
-    category: parseInt(newDeviceModel.value.category)
+    device_id: newDeviceModel.device_id,
+    category: parseInt(newDeviceModel.category),
+    connection_ids: {
+      adb_device_id: newDeviceModel.connection_ids.adb_device_id,
+      serial_number: newDeviceModel.connection_ids.serial_number
+    },
+    communication_ids: {
+      mac_address: newDeviceModel.communication_ids.mac_address
+    }
   }
+
   createDevice(device).then((res: Boolean) => {
     if (res) {
       update()
@@ -60,9 +64,9 @@ const update = () => {
     <div class="flex h-full flex-col gap-2">
       <div class="flex grow-0 items-center gap-2">
         <router-link
-          to="/devices"
+          to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
-          >Device Types</router-link
+          >Device categories</router-link
         >
         <chevron-right-icon />
         <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
@@ -112,15 +116,6 @@ const update = () => {
         </div>
       </div>
     </div>
-    <base-modal id="newDeviceModal" title="Edit Device" submitButtonText="Save" @submit="newDevice">
-      <base-input-field v-model="newDeviceModel.name" label="Name" name="name" placeholder="" />
-      <base-input-field
-        v-model="newDeviceModel.category"
-        label="Category"
-        name="category"
-        placeholder=""
-        type="number"
-      />
-    </base-modal>
+    <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
   </main>
 </template>

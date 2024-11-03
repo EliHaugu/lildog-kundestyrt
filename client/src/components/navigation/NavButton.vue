@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { defineProps } from 'vue'
+
+defineProps<{
+  to: string
+}>()
+</script>
+
 <template>
   <router-link
     :to="to"
@@ -7,11 +15,3 @@
     <slot />
   </router-link>
 </template>
-
-<script setup lang="ts">
-import { defineProps } from 'vue'
-
-defineProps<{
-  to: string
-}>()
-</script>

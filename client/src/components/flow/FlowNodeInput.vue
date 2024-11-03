@@ -1,11 +1,10 @@
 <script setup lang="ts">
+defineEmits(['edit'])
 defineProps({
   colour: String,
   label: String,
   value: String
 })
-
-defineEmits(['edit'])
 </script>
 
 <template>

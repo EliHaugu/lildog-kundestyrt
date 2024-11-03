@@ -1,27 +1,26 @@
 <script setup lang="ts">
 import { computed, inject, ref, type Ref } from 'vue'
-import BaseButton from '../common/BaseButton.vue'
-import BaseInputField from '@/components/common/BaseInputField.vue'
-import BaseModal from '../common/BaseModal.vue'
-import '@mdi/font/css/materialdesignicons.css'
-import EditPen from '@/icons/EditPen.vue'
-import RightArrow from '@/icons/RightArrow.vue'
 import type { DeviceType } from '../../types/DeviceTypes'
 import { useRouter } from 'vue-router'
 
+import BaseButton from '../common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
+import BaseModal from '../common/BaseModal.vue'
+
+import EditPen from '@/icons/EditPen.vue'
+import RightArrow from '@/icons/RightArrow.vue'
+
+const router = useRouter()
 const props = defineProps<{
   deviceType: DeviceType
 }>()
 
-const router = useRouter()
-
+const editDeviceType = ref<DeviceType | null>(null)
 const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
 const updateDeviceTypes = inject<(newDeviceTypes: DeviceType[]) => void>(
   'updateDeviceTypes',
   () => {}
 )
-
-const editDeviceType = ref<DeviceType | null>(null)
 
 const connectionTypes = computed(() => {
   return [...new Set(deviceTypes.value.map((deviceType) => deviceType.connectionType))]

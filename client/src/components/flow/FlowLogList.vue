@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import type { Log } from '@/types/WebSocketServiceTypes'
+import type { IWebSocketService } from '@/interfaces/IWebSocketService'
+import { reactive, onMounted, onUnmounted, inject, watch } from 'vue'
+import { logItems } from '@/assets/mock_data'
+
 const props = defineProps<{
   deviceId: number
   devices: { key: number; item: number }[]
 }>()
-
-import { reactive, onMounted, onUnmounted, inject, watch } from 'vue'
-import type { Log } from '@/types/WebSocketServiceTypes'
-import type { IWebSocketService } from '@/interfaces/IWebSocketService'
-import { logItems } from '@/assets/mock_data'
 
 const webSocketService = inject<IWebSocketService>('webSocketService')
 
@@ -58,6 +58,7 @@ watch(
   }
 )
 </script>
+
 <template>
   <section
     :id="`log-${deviceId}`"
