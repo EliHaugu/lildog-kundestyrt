@@ -88,8 +88,12 @@ class Device(models.Model):
     category: models.ForeignKey = models.ForeignKey(
         Category, on_delete=models.CASCADE
     )
-    connection_ids: models.JSONField = models.JSONField(default=dict)
-    communication_ids: models.JSONField = models.JSONField(default=dict)
+    connection_ids: models.JSONField = models.JSONField(
+        default=dict, blank=True, null=True
+    )
+    communication_ids: models.JSONField = models.JSONField(
+        default=dict, blank=True, null=True
+    )
 
     def clean(self):
         for conn_type, conn_id in conn_type_id_mapping.items():
@@ -111,6 +115,30 @@ class Device(models.Model):
                 raise ValidationError(
                     f"All {comm_protocol} devices must have a {comm_id} field."
                 )
+
+        invalid_connection_keys = [
+            key
+            for key in self.connection_ids.keys()
+            if key not in conn_type_id_mapping.values()
+        ]
+        if invalid_connection_keys:
+            raise ValidationError(
+                f"""Invalid connection_ids keys:
+                 {', '.join(invalid_connection_keys)}.
+                 Must be one of {list(conn_type_id_mapping.values())}."""
+            )
+
+        invalid_communication_keys = [
+            key
+            for key in self.communication_ids.keys()
+            if key not in comm_protocol_id_mapping.values()
+        ]
+        if invalid_communication_keys:
+            raise ValidationError(
+                f"""Invalid communication_ids keys:
+                 {', '.join(invalid_communication_keys)}.
+                 Must be one of {list(comm_protocol_id_mapping.values())}."""
+            )
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -137,8 +165,8 @@ class Node(models.Model):
         Device, on_delete=models.CASCADE
     )
     function: models.TextField = models.TextField()
-    x_pos: models.IntegerField = models.IntegerField(blank=True)
-    y_pos: models.IntegerField = models.IntegerField(blank=True)
+    x_pos: models.IntegerField = models.IntegerField(blank=True, null=True)
+    y_pos: models.IntegerField = models.IntegerField(blank=True, null=True)
 
     def clean(self):
         if self.node_type not in dict(self.NODE_TYPE_CHOICES).keys():
