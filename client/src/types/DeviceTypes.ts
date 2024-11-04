@@ -14,6 +14,7 @@ type Device = {
 type DeviceType = {
   name: string
   connectionType: string
+  communicationProtocols: string[]
   devices?: Device[]
 }
 
