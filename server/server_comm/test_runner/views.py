@@ -110,10 +110,10 @@ class RunTestFlow(APIView):
             result = None
             if node.node_type == Node.ASSERT:
                 # TODO add code from LIL-91
-                result = 1
+                result = True
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
-                result = 2
+                result = True
             else:
                 raise ValueError(f"Invalid node type: {node.node_type}")
             return {
