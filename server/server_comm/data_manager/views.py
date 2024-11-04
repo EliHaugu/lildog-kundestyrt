@@ -24,12 +24,16 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class DeviceFilter(FilterSet):
-    category_name = CharFilter(field_name='category__category_name', lookup_expr='exact')
+    category_name = CharFilter(
+        field_name='category__category_name', lookup_expr='exact'
+    )
 
     class Meta:
         model = Device
         fields = ['category', 'category_name']
+
 
 class DeviceListCreateView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
