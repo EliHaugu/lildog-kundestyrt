@@ -1,4 +1,4 @@
-import type { Device } from '@/types/DeviceTypes';
+import type { Device } from '@/types/DeviceTypes'
 
 /**
  * Fetch all devices.
@@ -6,20 +6,17 @@ import type { Device } from '@/types/DeviceTypes';
  */
 export async function fetchDevices(): Promise<Device[]> {
   const requestOptions = {
-    method: 'GET',
-  };
-
-  const response = await fetch(
-    `http://127.0.0.1:8000/data_manager/api/devices/`,
-    requestOptions
-  );
-
-  if (!response.ok) {
-    console.error('Failed to fetch devices');
-    return [];
+    method: 'GET'
   }
 
-  return await response.json();
+  const response = await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)
+
+  if (!response.ok) {
+    console.error('Failed to fetch devices')
+    return []
+  }
+
+  return await response.json()
 }
 
 /**
@@ -29,21 +26,21 @@ export async function fetchDevices(): Promise<Device[]> {
  */
 export async function fetchDevicesByCategory(categoryName: string): Promise<Device[]> {
   const requestOptions = {
-    method: 'GET',
-  };
+    method: 'GET'
+  }
 
   const url = `http://127.0.0.1:8000/data_manager/api/devices/?category_name=${encodeURIComponent(
     categoryName
-  )}`;
+  )}`
 
-  const response = await fetch(url, requestOptions);
+  const response = await fetch(url, requestOptions)
 
   if (!response.ok) {
-    console.error(`Failed to fetch devices for category: ${categoryName}`);
-    return [];
+    console.error(`Failed to fetch devices for category: ${categoryName}`)
+    return []
   }
 
-  return await response.json();
+  return await response.json()
 }
 
 /**
@@ -52,13 +49,13 @@ export async function fetchDevicesByCategory(categoryName: string): Promise<Devi
  */
 export async function createDevice(device: Device): Promise<Boolean> {
   if (device.connection_ids.adb_device_id === '') {
-    delete device.connection_ids.adb_device_id;
+    delete device.connection_ids.adb_device_id
   }
   if (device.connection_ids.serial_number === '') {
-    delete device.connection_ids.serial_number;
+    delete device.connection_ids.serial_number
   }
   if (device.communication_ids.mac_address === '') {
-    delete device.communication_ids.mac_address;
+    delete device.communication_ids.mac_address
   }
 
   const requestOptions = {
@@ -68,14 +65,11 @@ export async function createDevice(device: Device): Promise<Boolean> {
       device_id: device.device_id,
       category: device.category, // Should be the category ID
       connection_ids: device.connection_ids,
-      communication_ids: device.communication_ids,
-    }),
-  };
-  return (
-    await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)
-  ).ok;
+      communication_ids: device.communication_ids
+    })
+  }
+  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok
 }
-
 
 /**
  * @param device device to delete,

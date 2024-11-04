@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes';
-import { computed, inject, onMounted, ref, type Ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
+import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService';
-import { deleteCategory } from '@/services/CategoryService';
+import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
+import { deleteCategory } from '@/services/CategoryService'
 
-import DeviceInstance from '@/components/devices/DeviceInstance.vue';
-import BaseButton from '@/components/common/BaseButton.vue';
-import DeviceModal from '@/components/devices/DeviceModal.vue';
+import DeviceInstance from '@/components/devices/DeviceInstance.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
 
-import PlusIcon from '@/icons/PlusIcon.vue';
-import ChevronRightIcon from '@/icons/ChevronRightIcon.vue';
+import PlusIcon from '@/icons/PlusIcon.vue'
+import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
-const devices = ref<Device[]>([]);
-const router = useRouter();
-const route = useRoute();
+const devices = ref<Device[]>([])
+const router = useRouter()
+const route = useRoute()
 
-const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]));
-const categoryId: number = parseInt(route.params.id as string);
+const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
+const categoryId: number = parseInt(route.params.id as string)
 
 const deviceCategory = computed(() => {
-  return deviceCategories.value.find((category) => category.id === categoryId);
-});
+  return deviceCategories.value.find((category) => category.id === categoryId)
+})
 
 onMounted(async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '');
-});
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '')
+})
 
 const openModal = () => {
-  (document.getElementById('newDeviceModal') as HTMLDialogElement).showModal();
-};
+  ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
+}
 
 const newDevice = async (newDeviceModel: DeviceModel) => {
   const device = {
@@ -39,37 +39,37 @@ const newDevice = async (newDeviceModel: DeviceModel) => {
     category: deviceCategory.value?.id || 0,
     connection_ids: {
       adb_device_id: newDeviceModel.connection_ids.adb_device_id,
-      serial_number: newDeviceModel.connection_ids.serial_number,
+      serial_number: newDeviceModel.connection_ids.serial_number
     },
     communication_ids: {
-      mac_address: newDeviceModel.communication_ids.mac_address,
-    },
-  };
-
-  const res = await createDevice(device);
-  if (res) {
-    update();
-  } else {
-    console.error('Failed to create device');
-  }
-};
-
-const update = async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '');
-};
-
-const deleteCategoryFunc = async () => {
-  if (!deviceCategory.value) return;
-  const confirmed = confirm(`Are you sure you want to delete ${deviceCategory.value.name}?`);
-  if (confirmed) {
-    const success = await deleteCategory(deviceCategory.value.id);
-    if (success) {
-      router.push('/categories');
-    } else {
-      console.error('Failed to delete device category');
+      mac_address: newDeviceModel.communication_ids.mac_address
     }
   }
-};
+
+  const res = await createDevice(device)
+  if (res) {
+    update()
+  } else {
+    console.error('Failed to create device')
+  }
+}
+
+const update = async () => {
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '')
+}
+
+const deleteCategoryFunc = async () => {
+  if (!deviceCategory.value) return
+  const confirmed = confirm(`Are you sure you want to delete ${deviceCategory.value.name}?`)
+  if (confirmed) {
+    const success = await deleteCategory(deviceCategory.value.id)
+    if (success) {
+      router.push('/categories')
+    } else {
+      console.error('Failed to delete device category')
+    }
+  }
+}
 </script>
 
 <template>
@@ -88,7 +88,7 @@ const deleteCategoryFunc = async () => {
       <!-- Delete Category Button -->
       <base-button
         variant="outline"
-        class="mt-3 w-fit bg-red-500 text-white"
+        class="bg-red-500 text-white mt-3 w-fit"
         @click="deleteCategoryFunc"
       >
         Delete Category

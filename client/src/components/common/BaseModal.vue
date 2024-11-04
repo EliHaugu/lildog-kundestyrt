@@ -12,7 +12,7 @@ const close = () => {
   ;(document.getElementById(props.id) as HTMLDialogElement).close()
 }
 
-const emit = defineEmits(['submit', 'close']);
+defineEmits(['submit', 'close'])
 
 const submit = () => {
   props.onSubmit()

@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import type { Device, DeviceCategory } from '@/types/DeviceTypes';
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { Device, DeviceCategory } from '@/types/DeviceTypes'
 
-import BaseButton from '@/components/common/BaseButton.vue';
-import BaseInputField from '@/components/common/BaseInputField.vue';
-import BaseModal from '@/components/common/BaseModal.vue';
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
+import BaseModal from '@/components/common/BaseModal.vue'
 
-import EditPen from '@/icons/EditPen.vue';
-import DeleteIcon from '@/icons/DeleteIcon.vue';
-import RightArrow from '@/icons/RightArrow.vue';
+import EditPen from '@/icons/EditPen.vue'
+import DeleteIcon from '@/icons/DeleteIcon.vue'
+import RightArrow from '@/icons/RightArrow.vue'
 
-import { updateCategory, deleteCategory as deleteCategoryService } from '@/services/CategoryService';
-import { fetchDevicesByCategory } from '@/services/DevicesService';
+import { updateCategory, deleteCategory as deleteCategoryService } from '@/services/CategoryService'
+import { fetchDevicesByCategory } from '@/services/DevicesService'
 
 const props = defineProps<{
-  deviceCategory: DeviceCategory;
-}>();
+  deviceCategory: DeviceCategory
+}>()
 
-const emit = defineEmits(['updated', 'deleted', 'click']);
+const emit = defineEmits(['updated', 'deleted', 'click'])
 
-const devices = ref<Device[]>([]);
-const numDevices = ref(0);
+const devices = ref<Device[]>([])
+const numDevices = ref(0)
 
 onMounted(async () => {
-  const fetchedDevices = await fetchDevicesByCategory(props.deviceCategory.name);
-  devices.value = fetchedDevices;
-  numDevices.value = fetchedDevices.length;
-});
+  const fetchedDevices = await fetchDevicesByCategory(props.deviceCategory.name)
+  devices.value = fetchedDevices
+  numDevices.value = fetchedDevices.length
+})
 
 // State for managing edit modal and edit data
-const isEditModalVisible = ref(false);
-const editedCategory = ref<DeviceCategory>({ ...props.deviceCategory });
+const isEditModalVisible = ref(false)
+const editedCategory = ref<DeviceCategory>({ ...props.deviceCategory })
 
 // Static options for dropdowns
 // const connectionTypes = ['adb', 'uart'];
@@ -39,47 +39,49 @@ const editedCategory = ref<DeviceCategory>({ ...props.deviceCategory });
 
 // Function to open the edit modal with the current category data
 const editDeviceCategory = () => {
-  editedCategory.value = { ...props.deviceCategory };
-  ;(document.getElementById(`editDeviceCategoryForm${props.deviceCategory.id}`) as HTMLDialogElement).showModal()
-};
+  editedCategory.value = { ...props.deviceCategory }
+  ;(
+    document.getElementById(`editDeviceCategoryForm${props.deviceCategory.id}`) as HTMLDialogElement
+  ).showModal()
+}
 
 // Function to update the category
 const saveCategoryChanges = async () => {
   const updatedData = {
     name: editedCategory.value.name,
     connectionTypes: editedCategory.value.connectionTypes,
-    communicationProtocols: editedCategory.value.communicationProtocols,
-  };
-
-  const success = await updateCategory(editedCategory.value.id, updatedData);
-  if (success) {
-    isEditModalVisible.value = false;
-    emit('updated', editedCategory.value);
-  } else {
-    console.error('Failed to update device category');
+    communicationProtocols: editedCategory.value.communicationProtocols
   }
-};
+
+  const success = await updateCategory(editedCategory.value.id, updatedData)
+  if (success) {
+    isEditModalVisible.value = false
+    emit('updated', editedCategory.value)
+  } else {
+    console.error('Failed to update device category')
+  }
+}
 
 // Function to delete the category
 const deleteCategory = async () => {
-  const confirmed = confirm(`Are you sure you want to delete ${props.deviceCategory.name}?`);
+  const confirmed = confirm(`Are you sure you want to delete ${props.deviceCategory.name}?`)
   if (confirmed) {
-    const success = await deleteCategoryService(props.deviceCategory.id);
+    const success = await deleteCategoryService(props.deviceCategory.id)
     if (success) {
-      emit('deleted', props.deviceCategory.id);
+      emit('deleted', props.deviceCategory.id)
     } else {
-      console.error('Failed to delete device category');
+      console.error('Failed to delete device category')
     }
   }
-};
+}
 
 // Router instance
-const router = useRouter();
+const router = useRouter()
 
 // Function to navigate to the devices path
 const navigateToDevices = () => {
-  router.push(`/categories/${props.deviceCategory.id}`);
-};
+  router.push(`/categories/${props.deviceCategory.id}`)
+}
 
 // Rest of your script
 </script>
@@ -134,9 +136,7 @@ const navigateToDevices = () => {
     </div>
 
     <div class="mt-2">
-      <span class="text-sm text-gray-700 dark:text-gray-300">
-        {{ numDevices || 0 }} devices
-      </span>
+      <span class="text-gray-700 dark:text-gray-300 text-sm"> {{ numDevices || 0 }} devices </span>
     </div>
 
     <base-button
