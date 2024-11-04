@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { DeviceType } from '@/types/DeviceTypes';
-import { ref, inject, computed, onMounted } from 'vue';
-import type { Ref } from 'vue';
+import type { DeviceCategory } from '@/types/DeviceTypes';
+import { ref, computed, onMounted } from 'vue';
 
 import DevicesCard from '@/components/devices/DevicesCard.vue';
 import BaseButton from '../components/common/BaseButton.vue';
@@ -14,7 +13,7 @@ const openModal = () => {
   (document.getElementById('newDeviceTypeModal') as HTMLDialogElement).showModal();
 };
 
-const deviceTypes = ref<DeviceType[]>([]);
+const deviceCategories = ref<DeviceCategory[]>([]);
 const newDeviceTypeName = ref('');
 const newDeviceTypeConnection = ref('');
 const newDeviceTypeCommunication = ref('');
@@ -22,26 +21,11 @@ const searchQuery = ref('');
 
 // Fetch categories on component mount
 onMounted(async () => {
-  const response = await fetchCategories();
-  deviceTypes.value = mapDeviceTypes(response);
+  deviceCategories.value = await fetchCategories();
 });
 
 const connectionTypes = ['adb', 'uart'];
 const communicationProtocols = ['wifi', 'bluetooth', 'lte'];
-
-const mapDeviceTypes = (deviceTypes: { category_name: string, connection_types: string[], communication_protocols: string[] }[]): DeviceType[] => {
-  const mappedDeviceTypes: DeviceType[] = [];
-  
-  for (const deviceType of deviceTypes) {
-    mappedDeviceTypes.push({
-      name: deviceType.category_name,
-      connectionType: deviceType.connection_types[0],
-      communicationProtocols: deviceType.communication_protocols
-    });
-  }
-
-  return mappedDeviceTypes;
-};
 
 // Add new category (DeviceType) and send to server
 const addNewDeviceType = async () => {
@@ -68,7 +52,7 @@ const addNewDeviceType = async () => {
   const created = await createCategory(newDeviceType);
   console.log('created', created);
   if (created) {
-    deviceTypes.value = mapDeviceTypes(await fetchCategories()); // Refresh the list after adding
+    deviceCategories.value = await fetchCategories(); // Refresh the list after adding
     newDeviceTypeName.value = '';
     newDeviceTypeConnection.value = '';
   } else {
@@ -77,12 +61,12 @@ const addNewDeviceType = async () => {
 };
 
 // Delete category
-const deleteDeviceType = async (deviceType: DeviceType) => {
+const deleteDeviceType = async (deviceType: DeviceCategory) => {
   const confirmed = confirm(`Are you sure you want to delete ${deviceType.name}?`);
   if (confirmed) {
     const deleted = await deleteCategory(deviceType.name);
     if (deleted) {
-      deviceTypes.value = mapDeviceTypes(await fetchCategories()); // Refresh list after deletion
+      deviceCategories.value = await fetchCategories(); // Refresh list after deletion
     } else {
       console.error('Failed to delete device type');
     }
@@ -90,10 +74,10 @@ const deleteDeviceType = async (deviceType: DeviceType) => {
 };
 
 // Update category (Example: Could be used in an edit modal)
-const updateDeviceType = async (name: string, updatedDeviceType: Partial<DeviceType>) => {
+const updateDeviceType = async (name: string, updatedDeviceType: Partial<DeviceCategory>) => {
   const updated = await updateCategory(name, updatedDeviceType);
   if (updated) {
-    deviceTypes.value = mapDeviceTypes(await fetchCategories()); // Refresh list after update
+    deviceCategories.value = await fetchCategories() // Refresh list after update
   } else {
     console.error('Failed to update device type');
   }
@@ -101,8 +85,8 @@ const updateDeviceType = async (name: string, updatedDeviceType: Partial<DeviceT
 
 // Filtered device types based on search query
 const filteredDeviceTypes = computed(() => {
-  return deviceTypes.value.filter((deviceType) =>
-    deviceType.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return deviceCategories.value.filter((category) =>
+    category.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 </script>
