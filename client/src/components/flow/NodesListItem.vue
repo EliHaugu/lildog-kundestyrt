@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import type { BaseNode as Node } from '@/types/NodeType'
+import { updateNode, deleteNode as removeNode } from '@/services/NodesService'
+import useDragAndDrop from '@/composables/useDragAndDrop'
+import { ref } from 'vue'
+
+import BaseInputField from '../common/BaseInputField.vue'
+import BaseModal from '../common/BaseModal.vue'
+import BaseButton from '../common/BaseButton.vue'
+
+import DeleteIcon from '@/icons/DeleteIcon.vue'
+import EditPen from '@/icons/EditPen.vue'
+
+const emit = defineEmits(['update'])
+const props = defineProps({
+  node: {
+    type: Object as () => Node,
+    required: true
+  }
+})
+
+const editNodeModel = ref({
+  label: props.node.data.label,
+  node_type: props.node.data.node_type,
+  device: props.node.data.device.toString(),
+  function: props.node.data.function
+})
+
+const { onDragStart } = useDragAndDrop()
+
+const editNode = () => {
+  const node = {
+    label: editNodeModel.value.label,
+    node_type: editNodeModel.value.node_type,
+    device: Number(editNodeModel.value.device),
+    function: editNodeModel.value.function
+  }
+  updateNode(parseInt(props.node.id), node).then(() => {
+    emit('update')
+  })
+}
+
+const deleteNode = () => {
+  removeNode(parseInt(props.node.id)).then(() => {
+    emit('update')
+  })
+}
+
+const openModal = () => {
+  ;(document.getElementById('editNode') as HTMLDialogElement).showModal()
+}
+</script>
+
 <template>
   <li
     :draggable="true"
@@ -39,55 +92,3 @@
     </base-modal>
   </li>
 </template>
-
-<script setup lang="ts">
-import type { BaseNode as Node } from '@/types/NodeType'
-import useDragAndDrop from '@/composables/useDragAndDrop'
-import BaseInputField from '../common/BaseInputField.vue'
-import BaseModal from '../common/BaseModal.vue'
-import BaseButton from '../common/BaseButton.vue'
-import DeleteIcon from '@/icons/DeleteIcon.vue'
-import EditPen from '@/icons/EditPen.vue'
-
-import { updateNode, deleteNode as removeNode } from '@/services/NodesService'
-import { ref } from 'vue'
-
-const emit = defineEmits(['update'])
-const props = defineProps({
-  node: {
-    type: Object as () => Node,
-    required: true
-  }
-})
-
-const editNodeModel = ref({
-  label: props.node.data.label,
-  node_type: props.node.data.node_type,
-  device: props.node.data.device.toString(),
-  function: props.node.data.function
-})
-
-const { onDragStart } = useDragAndDrop()
-
-const editNode = () => {
-  const node = {
-    label: editNodeModel.value.label,
-    node_type: editNodeModel.value.node_type,
-    device: Number(editNodeModel.value.device),
-    function: editNodeModel.value.function
-  }
-  updateNode(parseInt(props.node.id), node).then(() => {
-    emit('update')
-  })
-}
-
-const deleteNode = () => {
-  removeNode(parseInt(props.node.id)).then(() => {
-    emit('update')
-  })
-}
-
-const openModal = () => {
-  ;(document.getElementById('editNode') as HTMLDialogElement).showModal()
-}
-</script>

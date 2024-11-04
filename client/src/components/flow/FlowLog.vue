@@ -1,13 +1,13 @@
 <script setup lang="ts">
-defineProps<{
-  show: boolean
-}>()
-
 import FlowLogList from './FlowLogList.vue'
 import WebSocketProvider from '@/providers/WebSocketProvider.vue'
 
 import { logItems } from '@/assets/mock_data'
 import { ref } from 'vue'
+
+defineProps<{
+  show: boolean
+}>()
 
 const currentDevices = ref([{ key: 0, item: 0 }] as { key: number; item: number }[])
 

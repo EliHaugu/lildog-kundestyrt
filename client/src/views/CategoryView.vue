@@ -1,53 +1,12 @@
-<template>
-  <main class="flex flex-col gap-6">
-    <section class="flex h-10 gap-2">
-      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Configure devices</h1>
-      <form action="" class="ml-auto flex-grow">
-        <base-input-field
-          v-model="searchQuery"
-          placeholder="Search device types"
-          class="flex-shrink rounded-lg"
-        />
-      </form>
-      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
-        New device type
-        <i class="mdi mdi-plus p-1 text-xl"></i>
-      </base-button>
-    </section>
-    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
-      <devices-card
-        v-for="deviceType in filteredDeviceTypes"
-        :key="deviceType.name"
-        :deviceType="deviceType"
-      />
-    </ul>
-    <base-modal
-      id="newDeviceTypeModal"
-      title="Create Device Type"
-      submit-button-text="Create"
-      @submit="addNewDeviceType"
-    >
-      <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
-      <base-input-field
-        v-model="newDeviceTypeConnection"
-        label="Connection type"
-        name="connection-type"
-        placeholder=""
-        type="select"
-        :options="connectionTypes"
-      />
-    </base-modal>
-  </main>
-</template>
-
 <script setup lang="ts">
+import type { DeviceType } from '@/types/DeviceTypes'
 import { ref, inject, computed } from 'vue'
 import type { Ref } from 'vue'
+
 import DevicesCard from '@/components/devices/DevicesCard.vue'
 import BaseButton from '../components/common/BaseButton.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseModal from '../components/common/BaseModal.vue'
-import type { DeviceType } from '@/types/DeviceTypes'
 
 const openModal = () => {
   ;(document.getElementById('newDeviceTypeModal') as HTMLDialogElement).showModal()
@@ -94,3 +53,44 @@ const filteredDeviceTypes = computed(() => {
   )
 })
 </script>
+<template>
+  <main class="flex flex-col gap-6">
+    <section class="flex h-10 gap-2">
+      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Device categories</h1>
+      <form action="" class="ml-auto flex-grow">
+        <base-input-field
+          v-model="searchQuery"
+          placeholder="Search device types"
+          class="flex-shrink rounded-lg"
+        />
+      </form>
+      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
+        New category
+        <i class="mdi mdi-plus p-1 text-xl"></i>
+      </base-button>
+    </section>
+    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+      <devices-card
+        v-for="deviceType in filteredDeviceTypes"
+        :key="deviceType.name"
+        :deviceType="deviceType"
+      />
+    </ul>
+    <base-modal
+      id="newDeviceTypeModal"
+      title="Create Device Type"
+      submit-button-text="Create"
+      @submit="addNewDeviceType"
+    >
+      <base-input-field v-model="newDeviceTypeName" label="Name" name="name" placeholder="" />
+      <base-input-field
+        v-model="newDeviceTypeConnection"
+        label="Connection type"
+        name="connection-type"
+        placeholder=""
+        type="select"
+        :options="connectionTypes"
+      />
+    </base-modal>
+  </main>
+</template>

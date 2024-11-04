@@ -7,11 +7,12 @@
  * produce any runtime errors relevant to the issue.
  */
 
+import type { NodeProps } from '@vue-flow/core'
 import type { BaseNode } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
-import type { NodeProps } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
 import { ref } from 'vue'
+
 import NodeFieldInput from './FlowNodeInput.vue'
 import SuccessIcon from '@/icons/SuccessIcon.vue'
 import WarningIcon from '@/icons/WarningIcon.vue'
