@@ -98,34 +98,34 @@ const deleteCategoryFunc = async () => {
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Connection types:</p>
           <div class="my-2 flex flex-wrap">
-            <label
-              v-for="connectionType in deviceCategory?.connectionTypes || []"
+            <div
+              v-for="connectionType in deviceCategory?.connectionTypes"
               :key="connectionType"
-              class="mx-1 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
               :class="{
-                'bg-blue-500': connectionType === 'adb',
-                'bg-green-500': connectionType === 'uart'
+                'bg-ble': connectionType === 'uart',
+                'bg-ade': connectionType === 'adb'
               }"
             >
               {{ connectionType }}
-            </label>
+            </div>
           </div>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Communication protocols:</p>
           <div class="my-2 flex flex-wrap">
-            <label
-              v-for="protocol in deviceCategory?.communicationProtocols || []"
+            <div
+              v-for="protocol in deviceCategory?.communicationProtocols"
               :key="protocol"
-              class="mx-1 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
               :class="{
-                'bg-purple-500': protocol === 'wifi',
-                'bg-red-500': protocol === 'bluetooth',
-                'bg-yellow-500': protocol === 'lte'
+                'bg-ble': protocol === 'ble',
+                'bg-wifi': protocol === 'wifi',
+                'bg-ade': protocol === 'lte'
               }"
             >
               {{ protocol }}
-            </label>
+            </div>
           </div>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
