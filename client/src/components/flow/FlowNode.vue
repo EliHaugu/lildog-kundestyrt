@@ -8,7 +8,6 @@
  */
 
 import type { NodeProps } from '@vue-flow/core'
-import type { BaseNode } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
 import { ref } from 'vue'

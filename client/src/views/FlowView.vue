@@ -35,17 +35,27 @@ const fetchFlows = async () => {
               const device = await fetchDevice(node.device)
               if (device && device.category) {
                 const category = await CategoryService.getCategory(device.category)
-                return (category.connection_types || []).concat(
-                  category.communication_protocols || []
-                )
+
+                return {
+                  connectionTypes: category.connection_types || [],
+                  communicationProtocols: category.communication_protocols || []
+                }
               }
             }
-            return []
+            return { connectionTypes: [], communicationProtocols: [] }
           })
+        )
+
+        // Flatten the arrays and deduplicate connection types and protocols for each flow
+        const connectionTypes = Array.from(new Set(connections.flatMap((c) => c.connectionTypes)))
+        const communicationProtocols = Array.from(
+          new Set(connections.flatMap((c) => c.communicationProtocols))
         )
 
         return {
           ...flow,
+          connectionType: connectionTypes, // Assign to flow object
+          communicationProtocol: communicationProtocols // Assign to flow object
         }
       })
     )
@@ -114,7 +124,7 @@ const addNewFlow = async () => {
     </div>
 
     <!-- New Flow Form -->
-    
+
     <base-modal
       :showModal="showNewFlowForm"
       id="newFlowModal"

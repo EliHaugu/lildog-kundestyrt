@@ -4,16 +4,15 @@ import BaseInputField from './common/BaseInputField.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
-import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits, computed, onMounted } from 'vue'
+import { ref, defineEmits, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
 import BaseModal from './common/BaseModal.vue'
 
 defineProps<{
   flow: Flow
-  connectionTypes: string[]
-  communicationProtocols: string[]
+  connectionTypes?: string[]
+  communicationProtocols?: string[]
 }>()
 const emit = defineEmits(['flowUpdated'])
 
@@ -50,7 +49,6 @@ const deleteFlow = async (id: string) => {
     console.log('User canceled the deletion')
   }
 }
-
 
 const editFlow = (flow: Flow) => {
   editFlowType.value = { ...flow }
@@ -109,27 +107,27 @@ const updateFlow = async () => {
         {{ flow.status }}
       </label> -->
       <label
-        v-for="(connectionType, index) in flow.connectionType, flow.communicationProtocol"
+        v-for="(connectionType, index) in flow.connectionType"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': connectionType === 'uart',
-          'bg-ade': connectionType === 'adb',
+          'bg-ade': connectionType === 'adb'
         }"
       >
         {{ connectionType }}
       </label>
       <label
-      v-for="(communicationProtocol, index) in flow.communicationProtocol"
-      :key="index"
-      class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
-      :class="{
-        'bg-wifi': communicationProtocol === 'wifi',
-        'bg-ble': communicationProtocol === 'bluetooth'
-      }"
-    >
-      {{ communicationProtocol }}
-    </label>
+        v-for="(communicationProtocol, index) in flow.communicationProtocol"
+        :key="index"
+        class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
+        :class="{
+          'bg-wifi': communicationProtocol === 'wifi',
+          'bg-ble': communicationProtocol === 'bluetooth'
+        }"
+      >
+        {{ communicationProtocol }}
+      </label>
     </div>
     <!-- <base-button
       variant="light"

@@ -6,7 +6,6 @@ import useDragAndDrop from '@/composables/useDragAndDrop'
 
 import type { Connection, Edge, GraphEdge, NodeDragEvent } from '@vue-flow/core'
 import type { CustomNode } from '@/types/NodeType'
-import type { Flows } from '@/types/FlowType'
 
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
@@ -88,22 +87,21 @@ const fetchFlow = async () => {
     console.log('Fetched nodes:', fetchedNodes)
 
     // Map fetched nodes to VueFlow format
-    nodes.value = fetchedNodes.map((node: any) => ({  
-  style: stripNodeStyles,
-  id: node.id.toString(),
-  position: { x: node.x_pos, y: node.y_pos },
-  data: {
-    id: node.id, // Including `id` here as expected
-    label: node.label,
-    device: node.device, // Add any additional properties expected in the type
-    node_type: node.node_type,
-    function: node.function, // Assuming `function` might be required
-    x_pos: node.x_pos,
-    y_pos: node.y_pos,
-    communicationProtocols: node.communication_protocols
-  } as any
-}))
-
+    nodes.value = fetchedNodes.map((node: any) => ({
+      style: stripNodeStyles,
+      id: node.id.toString(),
+      position: { x: node.x_pos, y: node.y_pos },
+      data: {
+        id: node.id, // Including `id` here as expected
+        label: node.label,
+        device: node.device, // Add any additional properties expected in the type
+        node_type: node.node_type,
+        function: node.function, // Assuming `function` might be required
+        x_pos: node.x_pos,
+        y_pos: node.y_pos,
+        communicationProtocols: node.communication_protocols
+      } as any
+    }))
 
     // Step 3: Fetch detailed edge data by IDs, handling undefined `edges`
     const edgeIds = response.edges ?? [] // Use an empty array if `edges` is undefined
