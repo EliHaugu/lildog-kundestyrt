@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "data_manager",
     "device_connection",
     "corsheaders",
+    "test_runner",
 ]
 
 MIDDLEWARE = [
