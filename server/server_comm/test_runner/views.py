@@ -109,8 +109,12 @@ class RunTestFlow(APIView):
                 result = self.check_assertion(node.function)
 
             elif node.node_type == Node.ACTION:
-                # TODO add code from LIL-95
-                result = True
+                try:
+                    exec(node.function)
+                    result = True
+                except Exception as e:
+                    ex_type = type(e).__name__
+                    raise ValueError(f"Invalid Python code, {ex_type}:{e}")
             else:
                 raise ValueError(f"Invalid node type: {node.node_type}")
             return {
