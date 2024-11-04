@@ -28,16 +28,15 @@ const connectionTypes = ['adb', 'uart'];
 const communicationProtocols = ['wifi', 'bluetooth', 'lte'];
 
 // Function to open the edit modal with the current category data
-const openEditModal = () => {
-  console.log('Opening edit modal');
-  editedCategory.value = { ...props.deviceCategory }; // Deep copy to avoid direct mutation
-  isEditModalVisible.value = true;
-  console.log('Edited category:', editedCategory.value);
+const editDeviceCategory = () => {
+  editedCategory.value = { ...props.deviceCategory };
+  ;(document.getElementById(`editDeviceCategoryForm${props.deviceCategory.id}`) as HTMLDialogElement).showModal()
 };
 
 // Function to update the category
 const saveCategoryChanges = async () => {
   const updatedData = {
+    name: editedCategory.value.name,
     connectionTypes: editedCategory.value.connectionTypes,
     communicationProtocols: editedCategory.value.communicationProtocols,
   };
@@ -81,7 +80,7 @@ const navigateToDevices = () => {
       <h2 class="px-2 text-xl font-semibold">{{ deviceCategory.name }}</h2>
       <div>
         <base-button
-          @click="openEditModal"
+          @click.stop="editDeviceCategory"
           variant="outline"
           class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
         >
@@ -141,29 +140,27 @@ const navigateToDevices = () => {
 
   <!-- Edit Modal -->
   <base-modal
-    v-if="isEditModalVisible"
-    id="editDeviceCategoryForm"
+    :id="'editDeviceCategoryForm' + deviceCategory.id"
     submitButtonText="Update"
     title="Edit Device Category"
     @submit="saveCategoryChanges"
-    @close="isEditModalVisible = false"
   >
-    <base-input-field v-model="editedCategory.name" label="Name" name="name" placeholder="" disabled />
-    <base-input-field
-      v-model="editedCategory.connectionTypes[0]"
+    <base-input-field v-model="editedCategory.name" label="Name" name="name" placeholder="" />
+    <!-- <base-input-field
+      v-model="editedCategory.connectionTypes"
       label="Connection type"
       name="connection-type"
       placeholder=""
       inputType="select"
       :options="connectionTypes"
-    />
-    <base-input-field
-      v-model="editedCategory.communicationProtocols[0]"
+    /> -->
+    <!-- <base-input-field
+      v-model="editedCategory.communicationProtocols"
       label="Communication protocol"
       name="communication-protocol"
       placeholder=""
       inputType="select"
       :options="communicationProtocols"
-    />
+    /> -->
   </base-modal>
 </template>
