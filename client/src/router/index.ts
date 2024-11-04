@@ -3,8 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import FlowView from '@/views/FlowView.vue'
 import LogView from '@/components/flow/FlowLog.vue'
 import FlowDetailedView from '@/views/FlowDetailedView.vue'
-import DeviceCategoriesView from '@/views/DeviceCategoriesView.vue'
-import DeviceCategoryView from '@/views/DeviceCategoryView.vue'
+import CategoryView from '@/views/CategoryView.vue'
+import DeviceView from '@/views/DeviceView.vue'
 
 const routes = [
   {
@@ -31,12 +31,12 @@ const routes = [
   {
     path: '/categories',
     name: 'categories',
-    component: DeviceCategoriesView
+    component: CategoryView
   },
   {
     path: '/categories/:id',
     name: 'category',
-    component: DeviceCategoryView
+    component: DeviceView
   }
 ]
 
