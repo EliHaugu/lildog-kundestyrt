@@ -12,6 +12,8 @@ const close = () => {
   ;(document.getElementById(props.id) as HTMLDialogElement).close()
 }
 
+const emit = defineEmits(['submit', 'close']);
+
 const submit = () => {
   props.onSubmit()
   close()

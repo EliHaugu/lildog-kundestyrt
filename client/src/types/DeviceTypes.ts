@@ -12,6 +12,7 @@ type Device = {
 }
 
 type DeviceCategory = {
+  id: number
   name: string
   connectionTypes: string[]
   communicationProtocols: string[]

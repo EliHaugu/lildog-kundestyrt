@@ -1,4 +1,4 @@
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
 from rest_framework import generics
 
 from .models import Category, Device, Edge, Flow, Node
@@ -20,12 +20,18 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+class DeviceFilter(FilterSet):
+    category_name = CharFilter(field_name='category__category_name', lookup_expr='exact')
+
+    class Meta:
+        model = Device
+        fields = ['category', 'category_name']
 
 class DeviceListCreateView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["category"]
+    filterset_class = DeviceFilter
 
 
 class DeviceDetailView(generics.RetrieveUpdateDestroyAPIView):

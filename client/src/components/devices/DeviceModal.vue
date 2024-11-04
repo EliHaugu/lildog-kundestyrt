@@ -50,7 +50,7 @@ const deviceModel = ref({
       label="Category"
       name="category"
       placeholder=""
-      type="number"
+      inputType="number"
     />
     <base-input-field
       v-model="deviceModel.connection_ids.adb_device_id"

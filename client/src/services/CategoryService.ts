@@ -32,11 +32,13 @@ export async function createCategory(category: Partial<{ category_name: string, 
  * @param id ID of the category to delete
  * @returns true if response is 200/OK, signifying that the category was deleted successfully
  */
-export async function deleteCategory(name: string): Promise<Boolean> {
+export async function deleteCategory(id: number): Promise<Boolean> {
   const requestOptions = {
-    method: 'DELETE'
+    method: 'DELETE',
   };
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${name}/`, requestOptions)).ok;
+  return (
+    await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${id}/`, requestOptions)
+  ).ok;
 }
 
 /**
@@ -44,19 +46,38 @@ export async function deleteCategory(name: string): Promise<Boolean> {
  * @param category updated category object
  * @returns true if response is 200/OK, signifying that the category was updated successfully
  */
-export async function updateCategory(name: string, category: Partial<DeviceCategory>): Promise<Boolean> {
+export async function updateCategory(
+  id: number,
+  category: Partial<DeviceCategory>
+): Promise<Boolean> {
   const requestOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(category)
+    body: JSON.stringify(mapToBackendModel(category)),
   };
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${name}/`, requestOptions)).ok;
+  return (
+    await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${id}/`, requestOptions)
+  ).ok;
 }
 
-const mapCategory = (category: { category_name: string, connection_types: string[], communication_protocols: string[] }): DeviceCategory => {
+const mapCategory = (category: {
+  id: number;
+  category_name: string;
+  connection_types: string[];
+  communication_protocols: string[];
+}): DeviceCategory => {
   return {
+    id: category.id, // Include the ID
     name: category.category_name,
     connectionTypes: category.connection_types,
-    communicationProtocols: category.communication_protocols
+    communicationProtocols: category.communication_protocols,
   };
+};
+
+const mapToBackendModel = (category: Partial<DeviceCategory>): Partial<{ category_name: string, connection_types: string[], communication_protocols: string[] }> => {
+  return {
+    category_name: category.name,
+    connection_types: category.connectionTypes,
+    communication_protocols: category.communicationProtocols
+  }; 
 }
