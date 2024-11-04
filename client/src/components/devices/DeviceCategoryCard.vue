@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import type { DeviceCategory } from '@/types/DeviceTypes';
+import type { Device, DeviceCategory } from '@/types/DeviceTypes';
 
 import BaseButton from '@/components/common/BaseButton.vue';
 import BaseInputField from '@/components/common/BaseInputField.vue';
@@ -12,6 +12,7 @@ import DeleteIcon from '@/icons/DeleteIcon.vue';
 import RightArrow from '@/icons/RightArrow.vue';
 
 import { updateCategory, deleteCategory as deleteCategoryService } from '@/services/CategoryService';
+import { fetchDevicesByCategory } from '@/services/DevicesService';
 
 const props = defineProps<{
   deviceCategory: DeviceCategory;
@@ -19,13 +20,22 @@ const props = defineProps<{
 
 const emit = defineEmits(['updated', 'deleted', 'click']);
 
+const devices = ref<Device[]>([]);
+const numDevices = ref(0);
+
+onMounted(async () => {
+  const fetchedDevices = await fetchDevicesByCategory(props.deviceCategory.name);
+  devices.value = fetchedDevices;
+  numDevices.value = fetchedDevices.length;
+});
+
 // State for managing edit modal and edit data
 const isEditModalVisible = ref(false);
 const editedCategory = ref<DeviceCategory>({ ...props.deviceCategory });
 
 // Static options for dropdowns
-const connectionTypes = ['adb', 'uart'];
-const communicationProtocols = ['wifi', 'bluetooth', 'lte'];
+// const connectionTypes = ['adb', 'uart'];
+// const communicationProtocols = ['wifi', 'bluetooth', 'lte'];
 
 // Function to open the edit modal with the current category data
 const editDeviceCategory = () => {
@@ -96,14 +106,14 @@ const navigateToDevices = () => {
       </div>
     </div>
 
-    <div class="mt-1 flex flex-wrap">
+    <div class="mt-1 flex flex-wrap gap-2">
       <div
         v-for="connectionType in deviceCategory.connectionTypes"
         :key="connectionType"
-        class="m-1 px-2 py-1 text-xs rounded-full text-white-100"
+        class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-blue-500': connectionType === 'adb',
-          'bg-green-500': connectionType === 'uart'
+          'bg-ble': connectionType === 'uart',
+          'bg-ade': connectionType === 'adb'
         }"
       >
         {{ connectionType }}
@@ -112,11 +122,11 @@ const navigateToDevices = () => {
       <div
         v-for="protocol in deviceCategory.communicationProtocols"
         :key="protocol"
-        class="m-1 px-2 py-1 text-xs rounded-full text-white-100"
+        class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-purple-500': protocol === 'wifi',
-          'bg-red-500': protocol === 'bluetooth',
-          'bg-yellow-500': protocol === 'lte'
+          'bg-ble': protocol === 'ble',
+          'bg-wifi': protocol === 'wifi',
+          'bg-ade': protocol === 'lte'
         }"
       >
         {{ protocol }}
@@ -125,7 +135,7 @@ const navigateToDevices = () => {
 
     <div class="mt-2">
       <span class="text-sm text-gray-700 dark:text-gray-300">
-        {{ deviceCategory.devices?.length || 0 }} devices
+        {{ numDevices || 0 }} devices
       </span>
     </div>
 
