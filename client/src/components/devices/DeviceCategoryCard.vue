@@ -126,7 +126,7 @@ const navigateToDevices = () => {
         :key="protocol"
         class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-ble': protocol === 'ble',
+          'bg-ble': protocol === 'ble' || protocol === 'bluetooth',
           'bg-wifi': protocol === 'wifi',
           'bg-ade': protocol === 'lte'
         }"

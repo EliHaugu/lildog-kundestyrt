@@ -1,4 +1,8 @@
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
+from django_filters.rest_framework import (
+    CharFilter,
+    DjangoFilterBackend,
+    FilterSet,
+)
 from rest_framework import generics
 
 from .models import Category, Device, Edge, Flow, Node
