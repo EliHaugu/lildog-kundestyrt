@@ -3,6 +3,7 @@ import { defineEmits, defineProps } from 'vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
+import NodesList from './NodesList.vue'
 
 defineEmits(['toggle-log', 'toggle-web-socket'])
 defineProps({

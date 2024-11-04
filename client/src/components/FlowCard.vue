@@ -5,19 +5,30 @@ import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
+import BaseModal from './common/BaseModal.vue'
 
 defineProps<{
   flow: Flow
   connectionTypes: string[]
+  communicationProtocols: string[]
 }>()
 const emit = defineEmits(['flowUpdated'])
 
-const router = useRouter()
-const showEditFlowForm = ref(false)
 const editFlowType = ref<Flow | null>(null)
+
+const editFlowName = computed({
+  get: () => editFlowType.value?.name || '',
+  set: (newName: string) => {
+    if (editFlowType.value) {
+      editFlowType.value.name = newName
+    }
+  }
+})
+
+const router = useRouter()
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
@@ -40,11 +51,6 @@ const deleteFlow = async (id: string) => {
   }
 }
 
-const cancelEditFlow = () => {
-  editFlowType.value = null
-  showEditFlowForm.value = false
-}
-
 
 const editFlow = (flow: Flow) => {
   editFlowType.value = { ...flow }
@@ -58,7 +64,6 @@ const updateFlow = async () => {
     await flowService.updateFlow(editFlowType.value.id, editFlowType.value)
     console.log('Flow updated')
     emit('flowUpdated')
-    showEditFlowForm.value = false
   } catch (error) {
     console.error('Error updating flow:', error)
   } finally {
@@ -91,6 +96,7 @@ const updateFlow = async () => {
       </base-button>
     </div>
     <div class="mt-1 flex gap-1">
+      <!-- Has to be retrieved from the log
       <label
         class="my-2 mr-6 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
@@ -101,27 +107,37 @@ const updateFlow = async () => {
         }"
       >
         {{ flow.status }}
-      </label>
+      </label> -->
       <label
-        v-for="(connectionType, index) in flow.connectionType"
+        v-for="(connectionType, index) in flow.connectionType, flow.communicationProtocol"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-ble': connectionType === 'uart',
-          'bg-wifi': connectionType === 'wifi',
-          'bg-ade': connectionType === 'adb'
+          'bg-success': connectionType === 'uart',
+          'bg-ade': connectionType === 'adb',
         }"
       >
         {{ connectionType }}
       </label>
+      <label
+      v-for="(communicationProtocol, index) in flow.communicationProtocol"
+      :key="index"
+      class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
+      :class="{
+        'bg-wifi': communicationProtocol === 'wifi',
+        'bg-ble': communicationProtocol === 'bluetooth'
+      }"
+    >
+      {{ communicationProtocol }}
+    </label>
     </div>
-    <base-button
+    <!-- <base-button
       variant="light"
       class="ml-auto mt-7 flex h-6 items-center gap-2 rounded-xl border-0 text-white-100"
       @click.stop=""
     >
       Run Flow <play-icon fill="white" />
-    </base-button>
+    </base-button> -->
   </div>
 
   <base-modal
@@ -130,6 +146,6 @@ const updateFlow = async () => {
     title="Edit Flow"
     @submit="updateFlow"
   >
-    <base-input-field label="Name" name="name" placeholder="" />
+    <base-input-field v-model="editFlowName" label="Name" name="name" placeholder="" />
   </base-modal>
 </template>

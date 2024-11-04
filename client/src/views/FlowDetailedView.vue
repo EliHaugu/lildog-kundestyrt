@@ -154,6 +154,7 @@ const toggleWebSocket = () => {
 <template>
   <main class="flex flex-col">
     <flow-header
+      :flow="flow || {}"
       :is-running="isRunning"
       :display-log="displayLog"
       @toggle-log="toggleLog"

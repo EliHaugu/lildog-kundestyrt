@@ -3,7 +3,7 @@ type Flow = {
   name: string
   status?: string
   connectionType?: string[]
-  conmmunicationProtocol?: string[]
+  communicationProtocol?: string[]
   nodes?: number[]
   edges?: number[]
 }

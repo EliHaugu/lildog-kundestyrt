@@ -5,7 +5,6 @@ import flowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import { fetchDevice } from '@/services/DevicesService'
 import CategoryService from '@/services/CategoryService'
-import Modal from '../components/common/BaseModal.vue'
 
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
@@ -17,7 +16,6 @@ const newFlowName = ref('')
 const searchQuery = ref('')
 const flows = ref<Flow[]>([])
 
-// Function to fetch flows from the API
 // Function to fetch flows from the API
 const fetchFlows = async () => {
   try {
@@ -46,12 +44,8 @@ const fetchFlows = async () => {
           })
         )
 
-        // Flatten and deduplicate the combined list of connections for each flow
-        const combinedData = Array.from(new Set(connections.flat()))
-
         return {
           ...flow,
-          combinedData // Add combined data
         }
       })
     )
@@ -89,7 +83,7 @@ const addNewFlow = async () => {
     name: newFlowName.value,
     status: newFlowStatus,
     connectionType: [],
-    conmmunicationProtocol: [],
+    communicationProtocol: [],
     nodes: [],
     edges: []
   }
@@ -131,12 +125,6 @@ const addNewFlow = async () => {
       <base-input-field v-model="newFlowName" label="Flow name" />
     </base-modal>
 
-    <div
-      v-if="showNewFlowForm"
-      class="fixed inset-0 bg-[#000000] opacity-30"
-      style="z-index: 2"
-    ></div>
-
     <!-- Flow List Display -->
     <ul class="mr-4 flex flex-wrap gap-4">
       <flow-card
@@ -145,6 +133,7 @@ const addNewFlow = async () => {
         :flow="flow"
         @flowUpdated="fetchFlows"
         :connection-types="flow.connectionType || []"
+        :communication-protocols="flow.communicationProtocol || []"
       />
     </ul>
   </main>
