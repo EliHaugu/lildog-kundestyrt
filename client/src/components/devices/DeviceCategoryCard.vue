@@ -134,7 +134,7 @@ const navigateToDevices = () => {
         {{ protocol }}
       </div>
 
-      <p class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100">
+      <p class="m-2 w-fit rounded-xl bg-accent-600 px-2 text-white-100">
         {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
       </p>
     </div>
