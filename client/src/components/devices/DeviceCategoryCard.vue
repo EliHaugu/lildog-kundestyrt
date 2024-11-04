@@ -87,9 +87,9 @@ const navigateToDevices = () => {
 </script>
 
 <template>
-  <div class="h-fit rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
+  <div class="flex h-fit flex-col gap-0 rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div class="flex items-center justify-between">
-      <h2 class="px-2 text-xl font-semibold">{{ deviceCategory.name }}</h2>
+      <h2 class="text-xl font-semibold">{{ deviceCategory.name }}</h2>
       <div>
         <base-button
           @click.stop="editDeviceCategory"
@@ -126,17 +126,17 @@ const navigateToDevices = () => {
         :key="protocol"
         class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-ble': protocol === 'ble' || protocol === 'bluetooth',
+          'bg-ble': protocol === 'ble',
           'bg-wifi': protocol === 'wifi',
           'bg-ade': protocol === 'lte'
         }"
       >
         {{ protocol }}
       </div>
-    </div>
 
-    <div class="mt-2">
-      <span class="text-gray-700 dark:text-gray-300 text-sm"> {{ numDevices || 0 }} devices </span>
+      <p class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100">
+        {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
+      </p>
     </div>
 
     <base-button

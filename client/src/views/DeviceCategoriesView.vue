@@ -21,7 +21,7 @@ const newCategoryCommunication = ref('')
 const searchQuery = ref('')
 
 const connectionTypes = ['adb', 'uart']
-const communicationProtocols = ['wifi', 'bluetooth', 'lte']
+const communicationProtocols = ['wifi', 'ble', 'lte']
 
 // Fetch categories on component mount
 const fetchAllCategories = async () => {
