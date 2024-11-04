@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { Device, DeviceModel, DeviceType } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import BaseButton from '@/components/common/BaseButton.vue'
+
+import { createDevice, fetchDevices } from '@/services/DevicesService'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+
 import PlusIcon from '@/icons/PlusIcon.vue'
-import {
-  createDevice,
-  fetchDevices,
-  updateDevice,
-  deleteDevice as removeDevice
-} from '@/services/DevicesService'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
 const devices = ref<Device[]>([])
@@ -21,26 +19,43 @@ const deviceType = computed(() => {
   return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
 })
 
+const openModal = () => {
+  ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
+}
+
 onMounted(() => {
   fetchDevices().then((res) => {
     devices.value = res as unknown as Device[]
   })
 })
 
-const newDevice = (device: Device) => {
-  devices.value.push(device)
-  createDevice(device)
+const newDevice = (newDeviceModel: DeviceModel) => {
+  const device = {
+    id: devices.value.length + 1,
+    device_id: newDeviceModel.device_id,
+    category: parseInt(newDeviceModel.category),
+    connection_ids: {
+      adb_device_id: newDeviceModel.connection_ids.adb_device_id,
+      serial_number: newDeviceModel.connection_ids.serial_number
+    },
+    communication_ids: {
+      mac_address: newDeviceModel.communication_ids.mac_address
+    }
+  }
+
+  createDevice(device).then((res: Boolean) => {
+    if (res) {
+      update()
+    } else {
+      console.error('Failed to create device')
+    }
+  })
 }
 
-const editDevice = (id: number, device: Device) => {
-  const index = devices.value.findIndex((d) => d.id === id)
-  devices.value[index] = device
-  updateDevice(id, device)
-}
-
-const deleteDevice = (id: number) => {
-  devices.value = devices.value.filter((device) => device.id !== id)
-  removeDevice(id)
+const update = () => {
+  fetchDevices().then((res) => {
+    devices.value = res as unknown as Device[]
+  })
 }
 </script>
 
@@ -49,9 +64,9 @@ const deleteDevice = (id: number) => {
     <div class="flex h-full flex-col gap-2">
       <div class="flex grow-0 items-center gap-2">
         <router-link
-          to="/devices"
+          to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
-          >Device Types</router-link
+          >Device categories</router-link
         >
         <chevron-right-icon />
         <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
@@ -87,31 +102,20 @@ const deleteDevice = (id: number) => {
             <h2 class="w-64">Device instance name</h2>
             <h2 class="w-12">Status</h2>
           </div>
-          <base-button
-            class="w-40 justify-between rounded-md"
-            @click="
-              () => {
-                newDevice({
-                  id: devices.length + 1,
-                  device_id: `Test New Device ${devices.length + 1}`,
-                  category: 1
-                })
-              }
-            "
-          >
+          <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
             Add device <plus-icon />
           </base-button>
         </div>
         <div class="flex grow flex-col gap-2 overflow-y-auto">
           <device-instance
+            @update="update"
             v-for="device in devices"
             :key="device.id"
             :device="device"
-            @edit-device="editDevice(device.id, device)"
-            @delete-device="deleteDevice(device.id)"
           />
         </div>
       </div>
     </div>
+    <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
   </main>
 </template>

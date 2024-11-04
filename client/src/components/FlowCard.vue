@@ -6,7 +6,7 @@ import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, inject, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
 
@@ -17,19 +17,13 @@ defineProps<{
 const emit = defineEmits(['flowUpdated'])
 
 const router = useRouter()
+const showEditFlowForm = ref(false)
+const editFlowType = ref<Flow | null>(null)
+const flows = inject<Ref<Flow[]>>('flows', ref([]))
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
   router.push(`${currentPath}/${id}`)
-}
-
-// Flow editor
-const showEditFlowForm = ref(false)
-const editFlowType = ref<Flow | null>(null)
-
-const editFlow = (flow: Flow) => {
-  editFlowType.value = { ...flow }
-  showEditFlowForm.value = true
 }
 
 const deleteFlow = async (id: string) => {
@@ -51,6 +45,12 @@ const deleteFlow = async (id: string) => {
 const cancelEditFlow = () => {
   editFlowType.value = null
   showEditFlowForm.value = false
+}
+
+
+const editFlow = (flow: Flow) => {
+  editFlowType.value = { ...flow }
+  ;(document.getElementById(`editFlowForm${flow.id}`) as HTMLDialogElement).showModal()
 }
 
 const updateFlow = async () => {
@@ -126,14 +126,12 @@ const updateFlow = async () => {
     </base-button>
   </div>
 
-  <modal
-    v-if="showEditFlowForm && editFlowType"
-    :showModal="showEditFlowForm"
+  <base-modal
+    :id="'editFlowForm' + flow.id"
     submitButtonText="Update"
     title="Edit Flow"
     @submit="updateFlow"
-    @close="cancelEditFlow"
   >
-    <base-input-field v-model="editFlowType.name" label="Name" name="name" placeholder="" />
-  </modal>
+    <base-input-field label="Name" name="name" placeholder="" />
+  </base-modal>
 </template>

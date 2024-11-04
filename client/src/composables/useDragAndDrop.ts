@@ -1,13 +1,14 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
-import type { CustomNode } from '@/types/NodeType'
+import type { BaseNode as Node } from '@/types/NodeType'
+import { stripNodeStyles } from '../utils/stripNodeStyles'
 
-let draggedNode: CustomNode
+let draggedNode: Node
 let uniqueId = 0
 
-function setNode(node: CustomNode) {
+function setNode(node: Node) {
   draggedNode = node
-  draggedNode.data!.flowId = uniqueId.toString()
+  draggedNode.id = uniqueId.toString()
 }
 
 function getNode() {
@@ -32,7 +33,7 @@ export default function useDragAndDrop() {
     document.body.style.userSelect = dragging ? 'none' : ''
   })
 
-  function onDragStart(event: DragEvent, device: CustomNode) {
+  function onDragStart(event: DragEvent, device: Node) {
     if (event.dataTransfer) {
       setNode(device)
       event.dataTransfer.setData('application/vueflow', 'node')
@@ -67,7 +68,7 @@ export default function useDragAndDrop() {
 
     const node = getNode()
     const id = getId()
-    const newNode: CustomNode = {
+    const newNode: Node = {
       ...node,
       id,
       position
@@ -78,7 +79,8 @@ export default function useDragAndDrop() {
         position: {
           x: node.position.x - node.dimensions.width / 2,
           y: node.position.y - node.dimensions.height / 2
-        }
+        },
+        style: stripNodeStyles
       }))
       off()
     })

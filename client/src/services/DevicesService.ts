@@ -44,12 +44,26 @@ export async function fetchDevice(id: number): Promise<Device | null> {
  * @returns true if response is 200/OK, signifying that the device was created successfully
  */
 export async function createDevice(device: Device): Promise<Boolean> {
+  if (device.connection_ids.adb_device_id === '') {
+    delete device.connection_ids.adb_device_id
+  }
+  if (device.connection_ids.serial_number === '') {
+    delete device.connection_ids.serial_number
+  }
+  if (device.communication_ids.mac_address === '') {
+    delete device.communication_ids.mac_address
+  }
+
+  console.log('Here, ', device)
+
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       device_id: device.device_id,
-      category: device.category
+      category: device.category,
+      connection_ids: device.connection_ids,
+      communication_ids: device.communication_ids
     })
   }
   return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok

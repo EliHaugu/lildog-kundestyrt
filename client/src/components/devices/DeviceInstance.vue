@@ -1,15 +1,45 @@
 <script setup lang="ts">
-import type { Device } from '@/types/DeviceTypes'
 import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 
 import BaseButton from '../common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+import type { Device, DeviceModel } from '@/types/DeviceTypes'
+import { updateDevice, deleteDevice as removeDevice } from '@/services/DevicesService'
 
-defineEmits(['edit-device', 'delete-device'])
-defineProps<{
+const emit = defineEmits(['update'])
+const props = defineProps<{
   device: Device
 }>()
+
+const openModal = () => {
+  ;(document.getElementById('editDeviceModal' + props.device.id) as HTMLDialogElement).showModal()
+}
+
+const editDevice = (editDeviceModel: DeviceModel) => {
+  const device = {
+    id: props.device.id,
+    device_id: editDeviceModel.device_id,
+    category: parseInt(editDeviceModel.category),
+    connection_ids: {
+      adb_device_id: editDeviceModel.connection_ids.adb_device_id,
+      serial_number: editDeviceModel.connection_ids.serial_number
+    },
+    communication_ids: {
+      mac_address: editDeviceModel.communication_ids.mac_address
+    }
+  }
+  updateDevice(props.device.id, device).then(() => {
+    emit('update')
+  })
+}
+
+const deleteDevice = () => {
+  removeDevice(props.device.id).then(() => {
+    emit('update')
+  })
+}
 </script>
 
 <template>
@@ -24,12 +54,19 @@ defineProps<{
       </div>
     </div>
     <div class="flex items-center justify-start gap-3">
-      <base-button variant="icon" class="rounded-md" @click="$emit('edit-device')">
+      <base-button variant="icon" class="rounded-md" @click="openModal">
         <edit-pen class="dark:fill-white-100" />
       </base-button>
-      <base-button variant="icon" class="rounded-md" @click="$emit('delete-device')">
+      <base-button variant="icon" class="rounded-md" @click="deleteDevice">
         <delete-icon class="fill-error" />
       </base-button>
     </div>
+    <device-modal
+      :id="'editDeviceModal' + device.id"
+      :device="device"
+      submit="Save"
+      title="Edit Device"
+      @submit="editDevice"
+    />
   </div>
 </template>

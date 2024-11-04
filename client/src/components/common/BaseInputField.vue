@@ -1,29 +1,3 @@
-<template>
-  <div class="flex flex-col gap-1">
-    <label v-if="label">{{ label }}</label>
-    <component
-      :is="inputComponent"
-      :type="type"
-      :placeholder="placeholder"
-      :class="computedClass"
-      :value="modelValue"
-      @input="onInput"
-      v-bind="$attrs"
-      v-on="listeners"
-    >
-      <option value="" disabled selected>Select connection type</option>
-      <option
-        v-if="inputComponent === 'select'"
-        v-for="option in options"
-        :key="option"
-        :value="option"
-      >
-        {{ option }}
-      </option>
-    </component>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
 
@@ -79,4 +53,23 @@ const inputComponent = computed(() => {
 })
 </script>
 
-<style scoped></style>
+<template>
+  <div class="flex flex-col gap-1">
+    <label v-if="label">{{ label }}</label>
+    <component
+      :is="inputComponent"
+      :type="type"
+      :placeholder="placeholder"
+      :class="computedClass"
+      :value="modelValue"
+      @input="onInput"
+      v-bind="$attrs"
+      v-on="listeners"
+    >
+      <option value="" disabled selected>Select</option>
+      <option v-for="option in options" :key="option" :value="option">
+        {{ option }}
+      </option>
+    </component>
+  </div>
+</template>
