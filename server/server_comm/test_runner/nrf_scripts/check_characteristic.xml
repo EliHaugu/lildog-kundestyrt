@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test-suite description="Check Characteristic UUID">
+    <target id="devkit" name="Kit" address="${MAC_ADDRESS}"/>
+
+    <test id="characteristic-uuid" description="Check Characteristic UUID">
+        <connect target="devkit" timeout="5000" />
+        <discover-services target="devkit" timeout="5000" />
+        <assert-service target="devkit" uuid="${SERVICE_UUID}">
+            <assert-characteristic target="devkit" uuid="${CHARACTERISTIC_UUID}" />
+        </assert-service>
+    </test>
+
+    <run-test ref="characteristic-uuid" />
+</test-suite>
