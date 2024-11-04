@@ -19,6 +19,8 @@ import FlowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import EdgeService from '@/services/EdgeService'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
+import { webSocketService } from '@/services/WebSocketService'
+import type { Log } from '@/types/WebSocketServiceTypes'
 
 const route = useRoute()
 const flowId = route.params.id as string
@@ -44,6 +46,13 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 }
 
 const displayLog = ref(false)
+const isRunning = ref(false)
+
+const handleNewLog = (log: Log) => {
+  console.log('new log', log)
+}
+
+// toggle log display
 const toggleLog = () => {
   displayLog.value = !displayLog.value
 }
@@ -122,15 +131,27 @@ const onConnect = async (connection: { source: string; target: string }) => {
 }
 
 onMounted(fetchFlow)
+// toggle websocket connection
+const toggleWebSocket = () => {
+  isRunning.value = !isRunning.value
+
+  if (isRunning.value) {
+    webSocketService.connect(8765)
+    webSocketService.subscribe(handleNewLog)
+  } else {
+    webSocketService.unsubscribe(handleNewLog)
+    webSocketService.disconnect()
+  }
+}
 </script>
 
 <template>
   <main class="flex flex-col">
     <flow-header
+      :is-running="isRunning"
       :display-log="displayLog"
-      :nodes="nodes"
-      :flow="flow ?? {}"
-      @update:display-log="toggleLog"
+      @toggle-log="toggleLog"
+      @toggle-web-socket="toggleWebSocket"
     />
     <flow-log :show="displayLog" />
     <div v-if="!displayLog" class="mt-2 h-[calc(100vh-6rem)] w-[calc(100vw-18rem)]" @drop="onDrop">

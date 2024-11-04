@@ -43,6 +43,16 @@ class WebSocketService implements IWebSocketService {
   public notifyListeners(log: Log) {
     this.eventListeners.forEach((listener) => listener(log))
   }
+
+  public disconnect() {
+    if (this.socket) {
+      console.log('this.socket:', this.socket)
+      this.socket.close()
+      console.log('WebSocket disconnected')
+    } else {
+      console.log('WebSocket already disconnected')
+    }
+  }
 }
 
 export const webSocketService = new WebSocketService()
