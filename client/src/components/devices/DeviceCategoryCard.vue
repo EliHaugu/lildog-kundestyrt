@@ -8,6 +8,7 @@ import BaseInputField from '@/components/common/BaseInputField.vue';
 import BaseModal from '@/components/common/BaseModal.vue';
 
 import EditPen from '@/icons/EditPen.vue';
+import DeleteIcon from '@/icons/DeleteIcon.vue';
 import RightArrow from '@/icons/RightArrow.vue';
 
 import { updateCategory, deleteCategory as deleteCategoryService } from '@/services/CategoryService';
@@ -76,13 +77,22 @@ const navigateToDevices = () => {
   <div class="h-fit rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div class="flex items-center justify-between">
       <h2 class="px-2 text-xl font-semibold">{{ deviceCategory.name }}</h2>
-      <base-button
-        @click="openEditModal"
-        variant="outline"
-        class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
-      >
-        <edit-pen />
-      </base-button>
+      <div>
+        <base-button
+          @click="openEditModal"
+          variant="outline"
+          class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+        >
+          <edit-pen />
+        </base-button>
+        <base-button
+          variant="outline"
+          class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+          @click="deleteCategory"
+        >
+          <delete-icon />
+        </base-button>
+      </div>
     </div>
 
     <div class="mt-1 flex flex-wrap">
@@ -124,14 +134,6 @@ const navigateToDevices = () => {
       @click="navigateToDevices"
     >
       See devices <right-arrow />
-    </base-button>
-
-    <base-button
-      variant="outline"
-      class="ml-auto mt-1 flex w-fit gap-2 rounded-lg border-0 bg-red-500 text-white shadow-none"
-      @click="deleteCategory"
-    >
-      Delete
     </base-button>
   </div>
 
