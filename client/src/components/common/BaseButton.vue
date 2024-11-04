@@ -49,6 +49,8 @@ const variantClass = computed(() => {
       return 'bg-accent-400 text-bg-700 '
     case 'light':
       return 'bg-accent-500 text-bg-900 hover:bg-accent-600'
+    case 'red':
+      return 'bg-error text-white-100'
     default:
       return 'bg-accent-600 text-white-100'
   }

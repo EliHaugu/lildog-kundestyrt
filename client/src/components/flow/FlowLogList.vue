@@ -71,7 +71,11 @@ watch(
       {{ logItems.find((item) => item.id === deviceId)?.name || 'All Devices' }}
     </h2>
     <ul v-if="deviceId !== 0">
-      <li v-for="log in state.logs.filter((item) => item.id === deviceId)" :key="log.id">
+      <li
+        v-for="log in state.logs.filter((item) => item.id === deviceId)"
+        :key="log.id"
+        class="m-2"
+      >
         {{ log.log }}
       </li>
     </ul>
