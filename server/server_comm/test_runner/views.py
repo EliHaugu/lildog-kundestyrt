@@ -72,7 +72,7 @@ class RunTestFlow(APIView):
         protocol = 'https' if self.request.is_secure() else 'http'
         base_url = f"{protocol}://{self.request.get_host()}"
         check_devices_url = f"""
-                            {base_url}{reverse('flow-device-connection')}
+                            {base_url}{reverse('flow-connection')}
                             ?{urlencode({'flow_id': flow_id})}
                             """
         response = requests.get(check_devices_url)
