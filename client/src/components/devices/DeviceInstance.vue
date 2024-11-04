@@ -5,11 +5,42 @@ import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 
 import BaseButton from '../common/BaseButton.vue'
+import BaseInputField from '../common/BaseInputField.vue'
+import BaseModal from '../common/BaseModal.vue'
 
-defineEmits(['edit-device', 'delete-device'])
-defineProps<{
+import { updateDevice, deleteDevice as removeDevice } from '@/services/DevicesService'
+import { ref } from 'vue'
+
+const emit = defineEmits(['update'])
+const props = defineProps<{
   device: Device
 }>()
+
+const openModal = () => {
+  ;(document.getElementById('editDeviceModal' + props.device.id) as HTMLDialogElement).showModal()
+}
+
+const editDeviceModel = ref({
+  name: props.device.device_id,
+  category: props.device.category.toString()
+})
+
+const editDevice = () => {
+  const device = {
+    id: props.device.id,
+    device_id: editDeviceModel.value.name,
+    category: Number(editDeviceModel.value.category)
+  }
+  updateDevice(props.device.id, device).then(() => {
+    emit('update')
+  })
+}
+
+const deleteDevice = () => {
+  removeDevice(props.device.id).then(() => {
+    emit('update')
+  })
+}
 </script>
 
 <template>
@@ -24,12 +55,27 @@ defineProps<{
       </div>
     </div>
     <div class="flex items-center justify-start gap-3">
-      <base-button variant="icon" class="rounded-md" @click="$emit('edit-device')">
+      <base-button variant="icon" class="rounded-md" @click="openModal">
         <edit-pen class="dark:fill-white-100" />
       </base-button>
-      <base-button variant="icon" class="rounded-md" @click="$emit('delete-device')">
+      <base-button variant="icon" class="rounded-md" @click="deleteDevice">
         <delete-icon class="fill-error" />
       </base-button>
     </div>
+    <base-modal
+      :id="'editDeviceModal' + device.id"
+      title="Edit Device"
+      submitButtonText="Add"
+      @submit="editDevice"
+    >
+      <base-input-field v-model="editDeviceModel.name" label="Name" name="name" placeholder="" />
+      <base-input-field
+        v-model="editDeviceModel.category"
+        label="Category"
+        name="category"
+        placeholder=""
+        type="number"
+      />
+    </base-modal>
   </div>
 </template>

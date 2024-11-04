@@ -3,15 +3,12 @@ import type { Device, DeviceType } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 import BaseButton from '@/components/common/BaseButton.vue'
+import BaseInputField from '@/components/common/BaseInputField.vue'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import PlusIcon from '@/icons/PlusIcon.vue'
-import {
-  createDevice,
-  fetchDevices,
-  updateDevice,
-  deleteDevice as removeDevice
-} from '@/services/DevicesService'
+import { createDevice, fetchDevices } from '@/services/DevicesService'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
+import BaseModal from '@/components/common/BaseModal.vue'
 
 const devices = ref<Device[]>([])
 // Inject the device types, and find the device type that matches the current route
@@ -21,26 +18,40 @@ const deviceType = computed(() => {
   return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
 })
 
+const newDeviceModel = ref({
+  name: '',
+  category: ''
+})
+
+const openModal = () => {
+  ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
+}
+
 onMounted(() => {
   fetchDevices().then((res) => {
     devices.value = res as unknown as Device[]
   })
 })
 
-const newDevice = (device: Device) => {
-  devices.value.push(device)
-  createDevice(device)
+const newDevice = () => {
+  const device = {
+    id: devices.value.length + 1,
+    device_id: newDeviceModel.value.name,
+    category: parseInt(newDeviceModel.value.category)
+  }
+  createDevice(device).then((res: Boolean) => {
+    if (res) {
+      update()
+    } else {
+      console.error('Failed to create device')
+    }
+  })
 }
 
-const editDevice = (id: number, device: Device) => {
-  const index = devices.value.findIndex((d) => d.id === id)
-  devices.value[index] = device
-  updateDevice(id, device)
-}
-
-const deleteDevice = (id: number) => {
-  devices.value = devices.value.filter((device) => device.id !== id)
-  removeDevice(id)
+const update = () => {
+  fetchDevices().then((res) => {
+    devices.value = res as unknown as Device[]
+  })
 }
 </script>
 
@@ -87,31 +98,29 @@ const deleteDevice = (id: number) => {
             <h2 class="w-64">Device instance name</h2>
             <h2 class="w-12">Status</h2>
           </div>
-          <base-button
-            class="w-40 justify-between rounded-md"
-            @click="
-              () => {
-                newDevice({
-                  id: devices.length + 1,
-                  device_id: `Test New Device ${devices.length + 1}`,
-                  category: 1
-                })
-              }
-            "
-          >
+          <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
             Add device <plus-icon />
           </base-button>
         </div>
         <div class="flex grow flex-col gap-2 overflow-y-auto">
           <device-instance
+            @update="update"
             v-for="device in devices"
             :key="device.id"
             :device="device"
-            @edit-device="editDevice(device.id, device)"
-            @delete-device="deleteDevice(device.id)"
           />
         </div>
       </div>
     </div>
+    <base-modal id="newDeviceModal" title="Edit Device" submitButtonText="Save" @submit="newDevice">
+      <base-input-field v-model="newDeviceModel.name" label="Name" name="name" placeholder="" />
+      <base-input-field
+        v-model="newDeviceModel.category"
+        label="Category"
+        name="category"
+        placeholder=""
+        type="number"
+      />
+    </base-modal>
   </main>
 </template>

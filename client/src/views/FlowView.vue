@@ -4,7 +4,7 @@ import type { Flow, Flows } from '@/types/FlowType'
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
-import Modal from '../components/common/Modal.vue'
+import BaseModal from '../components/common/BaseModal.vue'
 
 const searchQuery = ref('')
 
@@ -18,19 +18,11 @@ const filteredFlows = computed(() => {
   )
 })
 
-// new form functionality
-
-const showNewFlowForm = ref(false)
 const newFlowStatus = 'Untested'
 const newFlowName = ref('')
 
 const createNewFlow = () => {
-  showNewFlowForm.value = true
-}
-
-const cancelNewFlow = () => {
-  newFlowName.value = ''
-  showNewFlowForm.value = false
+  ;(document.getElementById('newFlowModal') as HTMLDialogElement).showModal()
 }
 
 const addNewFlow = () => {
@@ -48,7 +40,6 @@ const addNewFlow = () => {
   flows.value.push(newFlow)
 
   newFlowName.value = ''
-  showNewFlowForm.value = false
 }
 </script>
 
@@ -56,32 +47,25 @@ const addNewFlow = () => {
   <main class="flex flex-col gap-6">
     <div class="flex h-10 gap-2">
       <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
-      <form action="" class="ml-auto flex flex-grow gap-4 pr-2">
+      <form action="" class="ml-auto w-fit flex-grow">
         <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
       </form>
-      <base-button class="mr-4 w-fit items-center rounded-lg" @click="createNewFlow">
+      <base-button class="w-48 items-center rounded-lg" @click="createNewFlow">
         New flow
         <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </div>
 
-    <modal
-      :showModal="showNewFlowForm"
+    <base-modal
+      id="newFlowModal"
       submitButtonText="Create"
       title="Create New Flow"
       @submit="addNewFlow"
-      @close="cancelNewFlow"
     >
       <base-input-field v-model="newFlowName" label="Flow name" />
-    </modal>
+    </base-modal>
 
-    <div
-      v-if="showNewFlowForm"
-      class="fixed inset-0 bg-[#000000] opacity-30"
-      style="z-index: 2"
-    ></div>
-
-    <ul class="mr-4 flex flex-wrap gap-4">
+    <ul class="mr-4 flex flex-wrap gap-2">
       <flow-card v-for="flow in filteredFlows" :key="flow.id" :flow="flow" />
     </ul>
   </main>

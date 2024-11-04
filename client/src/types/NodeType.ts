@@ -1,12 +1,19 @@
-import type { Node } from '@vue-flow/core'
+import type { Node, XYPosition } from '@vue-flow/core'
 
-export type CustomData = {
+export type ImportNode = {
+  id: number
   label: string
-  connection?: string
-  flowId?: string
-  type?: string
-  testState?: string
-  fields?: { uuid?: string; action?: string; assertion?: string }
+  device: number
+  node_type: string
+  function: string
+  x_pos?: number
+  y_pos?: number
 }
 
-export type CustomNode = Node<CustomData>
+export type BaseNode = {
+  id: string
+  position: XYPosition
+  data: ImportNode
+}
+
+export type CustomNode = Node<BaseNode>

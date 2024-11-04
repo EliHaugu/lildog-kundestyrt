@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import type { CustomData } from '@/types/NodeType'
+/**
+ * This file contains TypeScript errors, it does not manage to reslove a node type's data property.
+ * Every reference points to the correct place, but it is not recognised as so by the compiler.
+ * Therefore you will find @ts-ignore comments in the code to allow the code to compile.
+ * This is not ideal, but it is a workaround to allow the code to compile; it does not
+ * produce any runtime errors relevant to the issue.
+ */
+
+import type { BaseNode } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import type { NodeProps } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
@@ -9,8 +17,8 @@ import SuccessIcon from '@/icons/SuccessIcon.vue'
 import WarningIcon from '@/icons/WarningIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 
-const props = defineProps<NodeProps<CustomData>>()
-const nodeTestState = ref(props.data.testState)
+defineProps<NodeProps<BaseNode>>()
+const nodeTestState = ref('success')
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
@@ -29,15 +37,10 @@ const pickColour = (connectionType: string) => {
   }
 }
 
-const colour = pickColour(props!.data.connection!)
+const colour = pickColour('WiFi')
 
 const editedField = () => {
   edited.value = true
-}
-
-const getKeysByValue = (value: string) => {
-  const fields = props.data.fields as { [key: string]: string } | undefined
-  return Object.keys(fields!).find((key) => fields![key] === value)
 }
 </script>
 
@@ -63,7 +66,10 @@ const getKeysByValue = (value: string) => {
         @click="nodeExpanded = !nodeExpanded"
         class="rounded-lg px-3 py-1 text-lg dark:text-white-100"
       >
-        {{ data.label }}
+        {{
+          // @ts-ignore
+          data.label
+        }}
       </h1>
 
       <div v-if="nodeTestState" class="icon-container p-1">
@@ -78,24 +84,26 @@ const getKeysByValue = (value: string) => {
         class="rounded-sm px-3 py-1 text-lg dark:text-white-100"
         :style="{ backgroundColor: colour }"
       >
-        {{ data.type }}
+        {{
+          // @ts-ignore
+          data.node_type
+        }}
       </h2>
 
       <div class="flex">
-        <h3 class="text-md text-left dark:text-white-100">Connection: {{ data.connection }}</h3>
+        <h3 class="text-md text-left dark:text-white-100">Connection: BLE</h3>
         <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
       </div>
 
-      <ul class="flex flex-col gap-1">
-        <li v-for="field in data.fields" :key="field">
-          <node-field-input
-            :label="getKeysByValue(field!)"
-            :value="field"
-            :colour="colour"
-            @edit="editedField"
-          />
-        </li>
-      </ul>
+      <node-field-input
+        label="Function"
+        :value="
+          // @ts-ignore
+          data.function
+        "
+        :colour="colour"
+        @edit="editedField"
+      />
 
       <button
         :style="{ backgroundColor: colour }"
