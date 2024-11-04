@@ -5,7 +5,7 @@ import flowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import { fetchDevice } from '@/services/DevicesService'
 import CategoryService from '@/services/CategoryService'
-import Modal from '../components/common/Modal.vue'
+import Modal from '../components/common/BaseModal.vue'
 
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
@@ -76,8 +76,6 @@ onMounted(fetchFlows)
 
 // New form functionality
 const showNewFlowForm = ref(false)
-const newFlowStatus = 'Untested'
-const newFlowName = ref('')
 
 const createNewFlow = () => {
   ;(document.getElementById('newFlowModal') as HTMLDialogElement).showModal()
@@ -122,9 +120,9 @@ const addNewFlow = async () => {
     </div>
 
     <!-- New Flow Form -->
-    <modal
-      :showModal="showNewFlowForm"
+    
     <base-modal
+      :showModal="showNewFlowForm"
       id="newFlowModal"
       submitButtonText="Create"
       title="Create New Flow"

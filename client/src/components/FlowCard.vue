@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInputField from './common/BaseInputField.vue'
-import Modal from './common/Modal.vue'
 import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 import PlayIcon from '@/icons/RightArrow.vue'
-import { ref, defineEmits, inject, type Ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import flowService from '@/services/FlowService'
 
@@ -19,7 +18,6 @@ const emit = defineEmits(['flowUpdated'])
 const router = useRouter()
 const showEditFlowForm = ref(false)
 const editFlowType = ref<Flow | null>(null)
-const flows = inject<Ref<Flow[]>>('flows', ref([]))
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
@@ -105,7 +103,7 @@ const updateFlow = async () => {
         {{ flow.status }}
       </label>
       <label
-        v-for="(connectionType, index) in flow.combinedData"
+        v-for="(connectionType, index) in flow.connectionType"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
