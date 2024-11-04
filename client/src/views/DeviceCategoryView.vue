@@ -19,8 +19,6 @@ const route = useRoute();
 
 const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]));
 const categoryId: number = parseInt(route.params.id as string);
-console.log('categoryId', categoryId);
-console.log('deviceCategories', deviceCategories.value);
 
 const deviceCategory = computed(() => {
   return deviceCategories.value.find((category) => category.id === categoryId);

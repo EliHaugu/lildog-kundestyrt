@@ -59,7 +59,6 @@ const addNewDeviceCategory = async () => {
 
   // Send the new category to the server
   const created = await createCategory(newDeviceCategory);
-  console.log('created', created);
   if (created) {
     await fetchAllCategories(); // Refresh the list after adding
     newCategoryName.value = '';

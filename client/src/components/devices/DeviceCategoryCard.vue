@@ -29,8 +29,10 @@ const communicationProtocols = ['wifi', 'bluetooth', 'lte'];
 
 // Function to open the edit modal with the current category data
 const openEditModal = () => {
+  console.log('Opening edit modal');
   editedCategory.value = { ...props.deviceCategory }; // Deep copy to avoid direct mutation
   isEditModalVisible.value = true;
+  console.log('Edited category:', editedCategory.value);
 };
 
 // Function to update the category

@@ -13,7 +13,6 @@ const searchQuery = ref('')
 const flows = inject<Ref<Flows>>('flows', ref([]))
 
 const filteredFlows = computed(() => {
-  console.log(flows.value)
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
     flow.name.toLowerCase().includes(searchQuery.value.toLowerCase())
