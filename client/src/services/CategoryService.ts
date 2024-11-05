@@ -1,6 +1,5 @@
 import type { DeviceCategory } from '@/types/DeviceTypes'
 
-
 const API_BASE_URL = 'http://localhost:8000/data_manager/api/categories'
 
 export default {
@@ -10,7 +9,8 @@ export default {
       throw new Error('Error fetching node')
     }
     return await response.json()
-  }}
+  }
+}
 
 /**
  * @returns list of categories (DeviceCategories) received from the server

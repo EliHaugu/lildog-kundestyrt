@@ -80,6 +80,7 @@ export default {
       id: nodeData.id,
       label: nodeData.label,
       node_type: nodeData.node_type,
+      function: nodeData.function,
       x_pos: nodeData.x_pos,
       y_pos: nodeData.y_pos,
       communication_protocols: categoryData.communication_protocols || []

@@ -10,7 +10,7 @@ import type { CustomNode } from '@/types/NodeType'
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import type { Flow } from '@/types/FlowType'
 
 import { useRoute } from 'vue-router'
@@ -31,8 +31,8 @@ const flow = ref<Flow | null>(null)
 const nodes = ref<CustomNode[]>([])
 const edges = ref<Edge[]>([])
 
-const { onConnect: vueFlowOnConnect, addEdges, updateEdge } = useVueFlow()
-const { onDragOver, onDrop, onDragLeave } = useDragAndDrop()
+const { onConnect: vueFlowOnConnect, addEdges, updateEdge, onNodesChange } = useVueFlow()
+const { onDragOver, onDragLeave } = useDragAndDrop()
 
 vueFlowOnConnect(addEdges)
 
@@ -150,6 +150,84 @@ const toggleWebSocket = () => {
     webSocketService.disconnect()
   }
 }
+
+const addExistingNodeToFlow = async (nodeData: any, position: { x: number; y: number }) => {
+  try {
+    // Ensure flow exists
+    if (flow.value) {
+      // Add the node with full details to the nodes array
+      nodes.value.push({
+        id: nodeData.id,
+        position,
+        style: stripNodeStyles,
+        data: {
+          id: nodeData.id,
+          label: nodeData.data.label,
+          node_type: nodeData.node_type,
+          device: nodeData.data.device,
+          function: nodeData.data.function,
+          x_pos: position.x, // Save the position for persistence
+          y_pos: position.y
+        } as any
+      })
+
+      // Save the updated position in the database
+      await NodeService.updateNode(Number(nodeData.id), {
+        x_pos: position.x,
+        y_pos: position.y
+      })
+
+      // Update the flow's node list with the new node ID if it’s not already present
+      if (!flow.value.nodes?.includes(Number(nodeData.id))) {
+        flow.value.nodes = [...(flow.value.nodes ?? []), Number(nodeData.id)]
+        await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
+      }
+      fetchFlow()
+    }
+  } catch (error) {
+    console.error('Error adding existing node to flow:', error)
+  }
+}
+
+const onDrop = (event: DragEvent) => {
+  event.preventDefault()
+
+  // Parse the full node data from the drag event
+  const nodeData = JSON.parse(event.dataTransfer?.getData('node') || '{}')
+  const dropPosition = { x: event.offsetX, y: event.offsetY }
+
+  if (nodeData.id) {
+    addExistingNodeToFlow(nodeData, dropPosition) // Add existing node to the flow with position
+  }
+}
+
+const removeNodeFromFlow = async (nodeId: string) => {
+  try {
+    // Ensure the flow exists
+    if (flow.value) {
+      // Remove the node from the local `nodes` array
+      nodes.value = nodes.value.filter((node) => node.id !== nodeId)
+
+      // Update the flow's node list in the backend
+      flow.value.nodes = flow.value.nodes?.filter((id) => id !== Number(nodeId)) || []
+      await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
+
+      console.log(`Node ${nodeId} removed from flow`)
+    }
+  } catch (error) {
+    console.error(`Error removing node ${nodeId} from flow:`, error)
+  }
+}
+
+// Intercept deletion in `onNodesChange`
+onNodesChange(async (changes) => {
+  for (const change of changes) {
+    if (change.type === 'remove') {
+      // Call `removeNodeFromFlow` for database update
+      await removeNodeFromFlow(change.id)
+    }
+  }
+})
 </script>
 
 <template>

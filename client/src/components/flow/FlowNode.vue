@@ -10,7 +10,7 @@
 import type { NodeProps } from '@vue-flow/core'
 import { Handle, Position } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import NodeFieldInput from './FlowNodeInput.vue'
 import SuccessIcon from '@/icons/SuccessIcon.vue'
@@ -37,7 +37,7 @@ const pickColour = (protocols: string[]) => {
   return 'grey'
 }
 
-const colour = pickColour(props.data.communicationProtocols || [])
+const colour = computed(() => pickColour(props.data.communicationProtocols || []))
 
 const editedField = () => {
   edited.value = true
