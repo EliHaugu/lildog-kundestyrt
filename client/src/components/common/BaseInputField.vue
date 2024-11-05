@@ -2,7 +2,7 @@
 import { computed, useAttrs } from 'vue'
 
 const props = defineProps({
-  type: {
+  inputType: {
     type: String,
     default: 'text'
   },
@@ -42,7 +42,7 @@ const onInput = (event: Event) => {
 }
 
 const inputComponent = computed(() => {
-  switch (props.type) {
+  switch (props.inputType) {
     case 'textarea':
       return 'textarea'
     case 'select':
@@ -58,7 +58,18 @@ const inputComponent = computed(() => {
     <label v-if="label">{{ label }}</label>
     <component
       :is="inputComponent"
-      :type="type"
+      v-if="inputType !== 'select'"
+      :type="inputType"
+      :placeholder="placeholder"
+      :class="computedClass"
+      :value="modelValue"
+      @input="onInput"
+      v-bind="$attrs"
+      v-on="listeners"
+    />
+    <component
+      :is="inputComponent"
+      v-else
       :placeholder="placeholder"
       :class="computedClass"
       :value="modelValue"

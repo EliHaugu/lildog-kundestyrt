@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { Device, DeviceModel, DeviceType } from '@/types/DeviceTypes'
+import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
-import { createDevice, fetchDevices } from '@/services/DevicesService'
+import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
+import { deleteCategory } from '@/services/CategoryService'
+
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DeviceModal from '@/components/devices/DeviceModal.vue'
@@ -12,28 +14,29 @@ import PlusIcon from '@/icons/PlusIcon.vue'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
 const devices = ref<Device[]>([])
-// Inject the device types, and find the device type that matches the current route
+const router = useRouter()
 const route = useRoute()
-const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
-const deviceType = computed(() => {
-  return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
+
+const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
+const categoryId: number = parseInt(route.params.id as string)
+
+const deviceCategory = computed(() => {
+  return deviceCategories.value.find((category) => category.id === categoryId)
+})
+
+onMounted(async () => {
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
 })
 
 const openModal = () => {
   ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
 }
 
-onMounted(() => {
-  fetchDevices().then((res) => {
-    devices.value = res as unknown as Device[]
-  })
-})
-
-const newDevice = (newDeviceModel: DeviceModel) => {
+const newDevice = async (newDeviceModel: DeviceModel) => {
   const device = {
     id: devices.value.length + 1,
     device_id: newDeviceModel.device_id,
-    category: parseInt(newDeviceModel.category),
+    category: deviceCategory.value?.id || 0,
     connection_ids: {
       adb_device_id: newDeviceModel.connection_ids.adb_device_id,
       serial_number: newDeviceModel.connection_ids.serial_number
@@ -43,19 +46,29 @@ const newDevice = (newDeviceModel: DeviceModel) => {
     }
   }
 
-  createDevice(device).then((res: Boolean) => {
-    if (res) {
-      update()
-    } else {
-      console.error('Failed to create device')
-    }
-  })
+  const res = await createDevice(device)
+  if (res) {
+    update()
+  } else {
+    console.error('Failed to create device')
+  }
 }
 
-const update = () => {
-  fetchDevices().then((res) => {
-    devices.value = res as unknown as Device[]
-  })
+const update = async () => {
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
+}
+
+const deleteCategoryFunc = async () => {
+  if (!deviceCategory.value) return
+  const confirmed = confirm(`Are you sure you want to delete ${deviceCategory.value.name}?`)
+  if (confirmed) {
+    const success = await deleteCategory(deviceCategory.value.id)
+    if (success) {
+      router.push('/categories')
+    } else {
+      console.error('Failed to delete device category')
+    }
+  }
 }
 </script>
 
@@ -69,29 +82,58 @@ const update = () => {
           >Device categories</router-link
         >
         <chevron-right-icon />
-        <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
+        <h1 class="text-xl font-semibold">{{ deviceCategory?.name }}</h1>
       </div>
+
+      <!-- Delete Category Button -->
+      <base-button
+        variant="outline"
+        class="bg-red-500 text-white mt-3 w-fit"
+        @click="deleteCategoryFunc"
+      >
+        Delete Category
+      </base-button>
 
       <div class="z-20 flex grow-0 justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
-          <p class="text-lg font-semibold">Connection type:</p>
-          <label
-            class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
-            :class="{
-              'bg-ble': deviceType?.connectionType === 'BLE',
-              'bg-wifi': deviceType?.connectionType === 'WiFi',
-              'bg-ade': deviceType?.connectionType === 'ADE'
-            }"
-          >
-            {{ deviceType?.connectionType }}
-          </label>
+          <p class="text-lg font-semibold">Connection types:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="connectionType in deviceCategory?.connectionTypes"
+              :key="connectionType"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': connectionType === 'uart',
+                'bg-ade': connectionType === 'adb'
+              }"
+            >
+              {{ connectionType }}
+            </div>
+          </div>
+        </div>
+        <div class="flex w-fit items-center justify-between gap-1">
+          <p class="text-lg font-semibold">Communication protocols:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="protocol in deviceCategory?.communicationProtocols"
+              :key="protocol"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': protocol === 'ble',
+                'bg-wifi': protocol === 'wifi',
+                'bg-ade': protocol === 'lte'
+              }"
+            >
+              {{ protocol }}
+            </div>
+          </div>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
           <p
             class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100"
           >
-            {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0}  devices` }}
+            {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
           </p>
         </div>
       </div>
