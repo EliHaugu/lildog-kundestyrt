@@ -1,3 +1,4 @@
+import ast
 from urllib.parse import urlencode
 
 import requests
@@ -8,8 +9,6 @@ from flow_parser import FlowParser
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from . import node_checker
 
 
 class RunTestFlow(APIView):
@@ -111,13 +110,20 @@ class RunTestFlow(APIView):
         try:
             result = None
             if node.node_type == Node.ASSERT:
-                node_checker.check_valid_input(node.function)
+                try:
+                    tree = ast.parse(node.function)
+                except SyntaxError:
+                    raise ValueError("Input is not correct syntax for Python.")
+
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Return):
+                        if isinstance(node.value, ast.Constant) and isinstance(
+                            node.value.value, bool
+                        ):
+                            return True
+                        ValueError("Input does not return type of boolean.")
                 try:
                     result = exec(node.function)
-                    if result:
-                        result = "Assert OK"
-                    else:
-                        result = "Assert failed"
                 except Exception as e:
                     return f"Exection failed: {str(e)}"
             elif node.node_type == Node.ACTION:
