@@ -36,15 +36,7 @@ export async function createNode(node: Partial<ImportNode>): Promise<Boolean> {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      node,
-      /* label: node.label,
-      device: node.device,
-      node_type: node.node_type,
-      function: node.function, */
-      x_pos: 0,
-      y_pos: 0
-    })
+    body: JSON.stringify(node)
   }
   return (await fetch(`http://127.0.0.1:8000/data_manager/api/nodes/`, requestOptions)).ok
 }
@@ -64,13 +56,11 @@ export async function deleteNode(id: number): Promise<Boolean> {
  * @param node node to update, with the new values
  * @returns true if response is 200/OK, signifying that the node was updated successfully
  */
-export async function updateNode(id: number, node: Partial<ImportNode>): Promise<Boolean> {
+export async function updateNode(id: number, node: ImportNode): Promise<Boolean> {
   const requestOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      node
-    })
+    body: JSON.stringify(node)
   }
   return (await fetch(`http://127.0.0.1:8000/data_manager/api/nodes/${id}/`, requestOptions)).ok
 }
