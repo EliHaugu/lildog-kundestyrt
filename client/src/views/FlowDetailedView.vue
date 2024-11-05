@@ -21,6 +21,8 @@ import { stripNodeStyles } from '@/utils/stripNodeStyles'
 import { webSocketService } from '@/services/WebSocketService'
 import type { Log } from '@/types/WebSocketServiceTypes'
 
+import { runTest } from '@/services/TestService'
+
 const route = useRoute()
 const flowId = route.params.id as string
 
@@ -140,6 +142,7 @@ const toggleWebSocket = () => {
   isRunning.value = !isRunning.value
 
   if (isRunning.value) {
+    runTest(flowId[0])
     webSocketService.connect(8765)
     webSocketService.subscribe(handleNewLog)
   } else {
