@@ -1,57 +1,74 @@
 <script setup lang="ts">
-import type { Device, DeviceType } from '@/types/DeviceTypes'
+import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
-import { useRoute } from 'vue-router'
-import BaseButton from '@/components/common/BaseButton.vue'
-import BaseInputField from '@/components/common/BaseInputField.vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
+import { deleteCategory } from '@/services/CategoryService'
+
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+
 import PlusIcon from '@/icons/PlusIcon.vue'
-import { createDevice, fetchDevices } from '@/services/DevicesService'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
-import BaseModal from '@/components/common/BaseModal.vue'
 
 const devices = ref<Device[]>([])
-// Inject the device types, and find the device type that matches the current route
+const router = useRouter()
 const route = useRoute()
-const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
-const deviceType = computed(() => {
-  return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
+
+const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
+const categoryId: number = parseInt(route.params.id as string)
+
+const deviceCategory = computed(() => {
+  return deviceCategories.value.find((category) => category.id === categoryId)
 })
 
-const newDeviceModel = ref({
-  name: '',
-  category: ''
+onMounted(async () => {
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
 })
 
 const openModal = () => {
   ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
 }
 
-onMounted(() => {
-  fetchDevices().then((res) => {
-    devices.value = res as unknown as Device[]
-  })
-})
-
-const newDevice = () => {
+const newDevice = async (newDeviceModel: DeviceModel) => {
   const device = {
     id: devices.value.length + 1,
-    device_id: newDeviceModel.value.name,
-    category: parseInt(newDeviceModel.value.category)
-  }
-  createDevice(device).then((res: Boolean) => {
-    if (res) {
-      update()
-    } else {
-      console.error('Failed to create device')
+    device_id: newDeviceModel.device_id,
+    category: deviceCategory.value?.id || 0,
+    connection_ids: {
+      adb_device_id: newDeviceModel.connection_ids.adb_device_id,
+      serial_number: newDeviceModel.connection_ids.serial_number
+    },
+    communication_ids: {
+      mac_address: newDeviceModel.communication_ids.mac_address
     }
-  })
+  }
+
+  const res = await createDevice(device)
+  if (res) {
+    update()
+  } else {
+    console.error('Failed to create device')
+  }
 }
 
-const update = () => {
-  fetchDevices().then((res) => {
-    devices.value = res as unknown as Device[]
-  })
+const update = async () => {
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
+}
+
+const deleteCategoryFunc = async () => {
+  if (!deviceCategory.value) return
+  const confirmed = confirm(`Are you sure you want to delete ${deviceCategory.value.name}?`)
+  if (confirmed) {
+    const success = await deleteCategory(deviceCategory.value.id)
+    if (success) {
+      router.push('/categories')
+    } else {
+      console.error('Failed to delete device category')
+    }
+  }
 }
 </script>
 
@@ -60,34 +77,63 @@ const update = () => {
     <div class="flex h-full flex-col gap-2">
       <div class="flex grow-0 items-center gap-2">
         <router-link
-          to="/devices"
+          to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
-          >Device Types</router-link
+          >Device categories</router-link
         >
         <chevron-right-icon />
-        <h1 class="text-xl font-semibold">{{ $route.fullPath.split('/').pop() }}</h1>
+        <h1 class="text-xl font-semibold">{{ deviceCategory?.name }}</h1>
       </div>
+
+      <!-- Delete Category Button -->
+      <base-button
+        variant="outline"
+        class="bg-red-500 text-white mt-3 w-fit"
+        @click="deleteCategoryFunc"
+      >
+        Delete Category
+      </base-button>
 
       <div class="z-20 flex grow-0 justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
-          <p class="text-lg font-semibold">Connection type:</p>
-          <label
-            class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
-            :class="{
-              'bg-ble': deviceType?.connectionType === 'BLE',
-              'bg-wifi': deviceType?.connectionType === 'WiFi',
-              'bg-ade': deviceType?.connectionType === 'ADE'
-            }"
-          >
-            {{ deviceType?.connectionType }}
-          </label>
+          <p class="text-lg font-semibold">Connection types:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="connectionType in deviceCategory?.connectionTypes"
+              :key="connectionType"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': connectionType === 'uart',
+                'bg-ade': connectionType === 'adb'
+              }"
+            >
+              {{ connectionType }}
+            </div>
+          </div>
+        </div>
+        <div class="flex w-fit items-center justify-between gap-1">
+          <p class="text-lg font-semibold">Communication protocols:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="protocol in deviceCategory?.communicationProtocols"
+              :key="protocol"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': protocol === 'ble',
+                'bg-wifi': protocol === 'wifi',
+                'bg-ade': protocol === 'lte'
+              }"
+            >
+              {{ protocol }}
+            </div>
+          </div>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
           <p
             class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100"
           >
-            {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0}  devices` }}
+            {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
           </p>
         </div>
       </div>
@@ -96,7 +142,6 @@ const update = () => {
           <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
             <h2 class="w-12">ID</h2>
             <h2 class="w-64">Device instance name</h2>
-            <h2 class="w-12">Status</h2>
           </div>
           <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
             Add device <plus-icon />
@@ -112,15 +157,6 @@ const update = () => {
         </div>
       </div>
     </div>
-    <base-modal id="newDeviceModal" title="Edit Device" submitButtonText="Save" @submit="newDevice">
-      <base-input-field v-model="newDeviceModel.name" label="Name" name="name" placeholder="" />
-      <base-input-field
-        v-model="newDeviceModel.category"
-        label="Category"
-        name="category"
-        placeholder=""
-        type="number"
-      />
-    </base-modal>
+    <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
   </main>
 </template>

@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import BaseButton from './BaseButton.vue'
+
+const props = defineProps<{
+  id: string
+  submitButtonText: string
+  title?: string
+  onSubmit: () => void
+}>()
+
+const close = () => {
+  ;(document.getElementById(props.id) as HTMLDialogElement).close()
+}
+
+defineEmits(['submit', 'close'])
+
+const submit = () => {
+  props.onSubmit()
+  close()
+}
+</script>
+
 <template>
   <teleport to="body">
     <dialog
@@ -18,26 +40,6 @@
     </dialog>
   </teleport>
 </template>
-
-<script setup lang="ts">
-import BaseButton from './BaseButton.vue'
-
-const props = defineProps<{
-  id: string
-  submitButtonText: string
-  title?: string
-  onSubmit: () => void
-}>()
-
-const close = () => {
-  ;(document.getElementById(props.id) as HTMLDialogElement).close()
-}
-
-const submit = () => {
-  props.onSubmit()
-  close()
-}
-</script>
 
 <style scoped>
 dialog[open]::backdrop {

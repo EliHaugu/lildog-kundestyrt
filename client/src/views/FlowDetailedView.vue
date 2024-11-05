@@ -15,6 +15,10 @@ import FlowEdge from '@/components/flow/FlowEdge.vue'
 import { ref, type Ref } from 'vue'
 import { inject, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { webSocketService } from '@/services/WebSocketService'
+import type { Log } from '@/types/WebSocketServiceTypes'
+
+import { runTest } from '@/services/TestService'
 
 const flows = inject<Ref<Flows>>('flows', ref([]))
 
@@ -41,14 +45,40 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 }
 
 const displayLog = ref(false)
+const isRunning = ref(false)
+
+const handleNewLog = (log: Log) => {
+  console.log('new log', log)
+}
+
+// toggle log display
 const toggleLog = () => {
   displayLog.value = !displayLog.value
+}
+
+// toggle websocket connection
+const toggleWebSocket = () => {
+  isRunning.value = !isRunning.value
+
+  if (isRunning.value) {
+    runTest(flowId[0])
+    webSocketService.connect(8765)
+    webSocketService.subscribe(handleNewLog)
+  } else {
+    webSocketService.unsubscribe(handleNewLog)
+    webSocketService.disconnect()
+  }
 }
 </script>
 
 <template>
   <main class="flex flex-col">
-    <flow-header :display-log="displayLog" @update:display-log="toggleLog" />
+    <flow-header
+      :is-running="isRunning"
+      :display-log="displayLog"
+      @toggle-log="toggleLog"
+      @toggle-web-socket="toggleWebSocket"
+    />
     <flow-log :show="displayLog" />
     <div v-if="!displayLog" class="mt-2 h-[calc(100vh-6rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow

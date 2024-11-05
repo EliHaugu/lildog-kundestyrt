@@ -1,16 +1,18 @@
 <script setup lang="ts">
-defineEmits(['update:displayLog'])
-defineProps({
-  displayLog: Boolean,
-  nodes: Array
-})
-
 import { listItems } from '@/assets/mock_data'
 import BaseButton from '@/components/common/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
 import NodesList from '@/components/flow/NodesList.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
+
+defineEmits(['toggle-log', 'toggle-web-socket'])
+defineProps({
+  displayLog: Boolean,
+  isRunning: Boolean,
+  nodes: Array
+})
 </script>
+
 <template>
   <header
     class="relative flex items-center gap-2 rounded-xl bg-white-100 p-2 shadow-md dark:bg-accent-800"
@@ -23,10 +25,16 @@ import ExportIcon from '@/icons/ExportIcon.vue'
     </h1>
 
     <div class="ml-auto flex gap-2">
-      <base-button variant="default" class="h-9 rounded-lg leading-tight"> Run </base-button>
+      <base-button
+        @click="$emit('toggle-web-socket')"
+        :variant="isRunning ? 'red' : 'default'"
+        class="h-9 rounded-lg leading-tight"
+      >
+        {{ isRunning ? 'Stop' : 'Run' }}
+      </base-button>
       <base-button
         :aria-expanded="displayLog"
-        @click="$emit('update:displayLog')"
+        @click="$emit('toggle-log')"
         class="h-9 rounded-lg leading-tight aria-expanded:bg-accent-500"
       >
         Logs

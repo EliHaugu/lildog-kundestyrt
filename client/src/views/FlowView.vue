@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import { ref, inject, computed, type Ref } from 'vue'
 import type { Flow, Flows } from '@/types/FlowType'
+
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '../components/common/BaseModal.vue'
 
+const newFlowStatus = 'Untested'
+const newFlowName = ref('')
 const searchQuery = ref('')
-
 const flows = inject<Ref<Flows>>('flows', ref([]))
 
 const filteredFlows = computed(() => {
-  console.log(flows.value)
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
     flow.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
-
-const newFlowStatus = 'Untested'
-const newFlowName = ref('')
 
 const createNewFlow = () => {
   ;(document.getElementById('newFlowModal') as HTMLDialogElement).showModal()

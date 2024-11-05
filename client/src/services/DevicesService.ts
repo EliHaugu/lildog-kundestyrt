@@ -1,7 +1,7 @@
 import type { Device } from '@/types/DeviceTypes'
 
 /**
- * @param category category to fetch devices from
+ * Fetch all devices.
  * @returns list of devices received from the server
  */
 export async function fetchDevices(): Promise<Device[]> {
@@ -9,14 +9,38 @@ export async function fetchDevices(): Promise<Device[]> {
     method: 'GET'
   }
 
-  const response = await fetch(
-    `http://127.0.0.1:8000/data_manager/api/devices`,
-    requestOptions
-  ).then((response) => {
-    return response.json()
-  })
+  const response = await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)
 
-  return response
+  if (!response.ok) {
+    console.error('Failed to fetch devices')
+    return []
+  }
+
+  return await response.json()
+}
+
+/**
+ * Fetch devices by category name.
+ * @param categoryName - Name of the category to fetch devices from
+ * @returns list of devices received from the server
+ */
+export async function fetchDevicesByCategory(categoryId: number): Promise<Device[]> {
+  const requestOptions = {
+    method: 'GET'
+  }
+
+  const url = `http://127.0.0.1:8000/data_manager/api/devices/?category_id=${encodeURIComponent(
+    categoryId
+  )}`
+
+  const response = await fetch(url, requestOptions)
+
+  if (!response.ok) {
+    console.error(`Failed to fetch devices for category: ${categoryId}`)
+    return []
+  }
+
+  return await response.json()
 }
 
 /**
@@ -24,18 +48,24 @@ export async function fetchDevices(): Promise<Device[]> {
  * @returns true if response is 200/OK, signifying that the device was created successfully
  */
 export async function createDevice(device: Device): Promise<Boolean> {
+  if (device.connection_ids.adb_device_id === '') {
+    delete device.connection_ids.adb_device_id
+  }
+  if (device.connection_ids.serial_number === '') {
+    delete device.connection_ids.serial_number
+  }
+  if (device.communication_ids.mac_address === '') {
+    delete device.communication_ids.mac_address
+  }
+
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       device_id: device.device_id,
-      category: device.category,
-      connection_ids: {
-        adb_device_id: 'adb-001'
-      },
-      communication_ids: {
-        mac_address: 'A1:B2:C3:D4:E5:F6'
-      }
+      category: device.category, // Should be the category ID
+      connection_ids: device.connection_ids,
+      communication_ids: device.communication_ids
     })
   }
   return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok

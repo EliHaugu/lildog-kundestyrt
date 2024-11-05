@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import type { Device } from '@/types/DeviceTypes'
-import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 
 import BaseButton from '../common/BaseButton.vue'
-import BaseInputField from '../common/BaseInputField.vue'
-import BaseModal from '../common/BaseModal.vue'
-
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+import type { Device, DeviceModel } from '@/types/DeviceTypes'
 import { updateDevice, deleteDevice as removeDevice } from '@/services/DevicesService'
-import { ref } from 'vue'
 
 const emit = defineEmits(['update'])
 const props = defineProps<{
@@ -20,16 +16,18 @@ const openModal = () => {
   ;(document.getElementById('editDeviceModal' + props.device.id) as HTMLDialogElement).showModal()
 }
 
-const editDeviceModel = ref({
-  name: props.device.device_id,
-  category: props.device.category.toString()
-})
-
-const editDevice = () => {
+const editDevice = (editDeviceModel: DeviceModel) => {
   const device = {
     id: props.device.id,
-    device_id: editDeviceModel.value.name,
-    category: Number(editDeviceModel.value.category)
+    device_id: editDeviceModel.device_id,
+    category: parseInt(editDeviceModel.category),
+    connection_ids: {
+      adb_device_id: editDeviceModel.connection_ids.adb_device_id,
+      serial_number: editDeviceModel.connection_ids.serial_number
+    },
+    communication_ids: {
+      mac_address: editDeviceModel.communication_ids.mac_address
+    }
   }
   updateDevice(props.device.id, device).then(() => {
     emit('update')
@@ -50,9 +48,6 @@ const deleteDevice = () => {
     <div class="flex items-center justify-start gap-3">
       <p class="w-12">{{ device.id }}</p>
       <p class="w-64">{{ device.device_id }}</p>
-      <div class="w-fit rounded-full bg-success p-1">
-        <check-icon />
-      </div>
     </div>
     <div class="flex items-center justify-start gap-3">
       <base-button variant="icon" class="rounded-md" @click="openModal">
@@ -62,20 +57,12 @@ const deleteDevice = () => {
         <delete-icon class="fill-error" />
       </base-button>
     </div>
-    <base-modal
+    <device-modal
       :id="'editDeviceModal' + device.id"
+      :device="device"
+      submit="Save"
       title="Edit Device"
-      submitButtonText="Add"
       @submit="editDevice"
-    >
-      <base-input-field v-model="editDeviceModel.name" label="Name" name="name" placeholder="" />
-      <base-input-field
-        v-model="editDeviceModel.category"
-        label="Category"
-        name="category"
-        placeholder=""
-        type="number"
-      />
-    </base-modal>
+    />
   </div>
 </template>
