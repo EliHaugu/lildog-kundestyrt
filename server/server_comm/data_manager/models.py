@@ -107,16 +107,6 @@ class Device(models.Model):
                     f"All {conn_type} devices must have a {conn_id} field."
                 )
 
-        for comm_protocol, comm_id in comm_protocol_id_mapping.items():
-            if (
-                comm_protocol in self.category.communication_protocols
-                and comm_id not in self.category.communication_protocols
-                and not self.communication_ids.get(comm_id)
-            ):
-                raise ValidationError(
-                    f"All {comm_protocol} devices must have a {comm_id} field."
-                )
-
         invalid_connection_keys = [
             key
             for key in self.connection_ids.keys()
