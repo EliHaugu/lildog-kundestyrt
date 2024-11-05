@@ -2,17 +2,12 @@
 import { ref, provide } from 'vue'
 import Layout from '@/components/PageLayout.vue'
 import { mock_device_types, mock_flows } from '@/assets/mock_data'
-import type { DeviceType } from '@/types/DeviceTypes'
+import type { DeviceCategory } from '@/types/DeviceTypes'
 import type { Flow } from './types/FlowType'
 
-const deviceTypes = ref<DeviceType[]>(mock_device_types)
+const deviceCategories = ref<DeviceCategory[]>(mock_device_types)
 
-function updateDeviceTypes(newData: DeviceType[]) {
-  deviceTypes.value = newData
-}
-
-provide('deviceTypes', deviceTypes)
-provide('updateDeviceTypes', updateDeviceTypes)
+provide('deviceCategories', deviceCategories)
 
 const flows = ref<Flow[]>(mock_flows)
 

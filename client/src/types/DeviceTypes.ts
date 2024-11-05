@@ -11,9 +11,11 @@ type Device = {
   }
 }
 
-type DeviceType = {
+type DeviceCategory = {
+  id: number
   name: string
-  connectionType: string
+  connectionTypes: string[]
+  communicationProtocols: string[]
   devices?: Device[]
 }
 
@@ -29,4 +31,4 @@ type DeviceModel = {
   }
 }
 
-export type { Device, DeviceType, DeviceModel }
+export type { Device, DeviceCategory, DeviceModel }
