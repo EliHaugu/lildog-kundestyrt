@@ -11,7 +11,6 @@ from rest_framework.views import APIView
 
 from . import node_checker
 
-
 class RunTestFlow(APIView):
     """
     API endpoint to run a specific test flow by flow_id
@@ -120,6 +119,7 @@ class RunTestFlow(APIView):
                         result = "Assert failed"
                 except Exception as e:
                     return f"Exection failed: {str(e)}"
+
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
                 result = True
