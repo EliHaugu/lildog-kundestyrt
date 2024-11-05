@@ -31,6 +31,7 @@ class Category(models.Model):
         ),
         size=len(COMMUNICATION_PROTOCOLS_CHOICES),
         default=list,
+        blank=True,
     )
 
     connection_types: ArrayField = ArrayField(
