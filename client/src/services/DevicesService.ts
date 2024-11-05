@@ -24,19 +24,19 @@ export async function fetchDevices(): Promise<Device[]> {
  * @param categoryName - Name of the category to fetch devices from
  * @returns list of devices received from the server
  */
-export async function fetchDevicesByCategory(categoryName: string): Promise<Device[]> {
+export async function fetchDevicesByCategory(categoryId: number): Promise<Device[]> {
   const requestOptions = {
     method: 'GET'
   }
 
-  const url = `http://127.0.0.1:8000/data_manager/api/devices/?category_name=${encodeURIComponent(
-    categoryName
+  const url = `http://127.0.0.1:8000/data_manager/api/devices/?category_id=${encodeURIComponent(
+    categoryId
   )}`
 
   const response = await fetch(url, requestOptions)
 
   if (!response.ok) {
-    console.error(`Failed to fetch devices for category: ${categoryName}`)
+    console.error(`Failed to fetch devices for category: ${categoryId}`)
     return []
   }
 

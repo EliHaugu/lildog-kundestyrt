@@ -25,7 +25,7 @@ const deviceCategory = computed(() => {
 })
 
 onMounted(async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '')
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
 })
 
 const openModal = () => {
@@ -55,7 +55,7 @@ const newDevice = async (newDeviceModel: DeviceModel) => {
 }
 
 const update = async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.name || '')
+  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
 }
 
 const deleteCategoryFunc = async () => {

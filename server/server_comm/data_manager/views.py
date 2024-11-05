@@ -1,5 +1,5 @@
 from django_filters.rest_framework import (
-    CharFilter,
+    NumberFilter,
     DjangoFilterBackend,
     FilterSet,
 )
@@ -26,13 +26,11 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class DeviceFilter(FilterSet):
-    category_name = CharFilter(
-        field_name='category__category_name', lookup_expr='exact'
-    )
+    category_id = NumberFilter(field_name='category__id', lookup_expr='exact')
 
     class Meta:
         model = Device
-        fields = ['category', 'category_name']
+        fields = ['category_id']  # Remove 'category_name'
 
 
 class DeviceListCreateView(generics.ListCreateAPIView):

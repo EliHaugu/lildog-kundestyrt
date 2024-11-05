@@ -24,7 +24,7 @@ const devices = ref<Device[]>([])
 const numDevices = ref(0)
 
 onMounted(async () => {
-  const fetchedDevices = await fetchDevicesByCategory(props.deviceCategory.name)
+  const fetchedDevices = await fetchDevicesByCategory(props.deviceCategory.id)
   devices.value = fetchedDevices
   numDevices.value = fetchedDevices.length
 })
