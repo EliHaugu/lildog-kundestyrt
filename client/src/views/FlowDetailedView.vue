@@ -151,7 +151,7 @@ const toggleWebSocket = () => {
   }
 }
 
-const addExistingNodeToFlow = async (nodeData: any, position: { x: number; y: number }) => {
+const addNodeToFlow = async (nodeData: any, position: { x: number; y: number }) => {
   try {
     // Ensure flow exists
     if (flow.value) {
@@ -197,25 +197,54 @@ const onDrop = (event: DragEvent) => {
   const dropPosition = { x: event.offsetX, y: event.offsetY }
 
   if (nodeData.id) {
-    addExistingNodeToFlow(nodeData, dropPosition) // Add existing node to the flow with position
+    addNodeToFlow(nodeData, dropPosition) // Add node to the flow with position
   }
 }
 
 const removeNodeFromFlow = async (nodeId: string) => {
   try {
-    // Ensure the flow exists
     if (flow.value) {
-      // Remove the node from the local `nodes` array
+      // Step 1: Remove the node from the flow (frontend only)
       nodes.value = nodes.value.filter((node) => node.id !== nodeId)
-
-      // Update the flow's node list in the backend
       flow.value.nodes = flow.value.nodes?.filter((id) => id !== Number(nodeId)) || []
-      await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
 
-      console.log(`Node ${nodeId} removed from flow`)
+      // Step 2: Identify edges that are now disconnected and need to be deleted from the backend
+      const disconnectedEdges = edges.value.filter((edge) => {
+        const sourceInFlow = flow.value?.nodes?.includes(Number(edge.source)) ?? false
+        const targetInFlow = flow.value?.nodes?.includes(Number(edge.target)) ?? false
+        return !(sourceInFlow && targetInFlow)
+      })
+
+      // Step 3: Delete disconnected edges from the backend
+      for (const edge of disconnectedEdges) {
+        if (!isNaN(Number(edge.id))) {
+          console.log(`Deleting disconnected edge with ID: ${edge.id} from backend`)
+          await EdgeService.deleteEdge(Number(edge.id))
+        } else {
+          console.warn(`Skipping deletion for invalid edge ID: ${edge.id}`)
+        }
+      }
+
+      // Step 4: Remove disconnected edges from the frontend state
+      edges.value = edges.value.filter((edge) => {
+        const sourceInFlow = flow.value?.nodes?.includes(Number(edge.source)) ?? false
+        const targetInFlow = flow.value?.nodes?.includes(Number(edge.target)) ?? false
+        return sourceInFlow && targetInFlow
+      })
+
+      // Step 5: Update the backend to reflect the flow's current nodes and edges without the removed node and edges
+      flow.value.edges =
+        flow.value.edges?.filter((edgeId) =>
+          edges.value.some((edge) => String(edge.id) === String(edgeId))
+        ) || []
+      await FlowService.updateFlow(flowId, { nodes: flow.value.nodes, edges: flow.value.edges })
+
+      console.log(
+        `Node ${nodeId} removed from the flow and its disconnected edges deleted from backend`
+      )
     }
   } catch (error) {
-    console.error(`Error removing node ${nodeId} from flow:`, error)
+    console.error(`Error removing node ${nodeId} and deleting disconnected edges from flow:`, error)
   }
 }
 
