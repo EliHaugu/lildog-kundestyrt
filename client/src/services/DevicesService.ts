@@ -58,14 +58,12 @@ export async function createDevice(device: Device): Promise<Boolean> {
     delete device.communication_ids.mac_address
   }
 
-  console.log('Here, ', device)
-
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       device_id: device.device_id,
-      category: device.category,
+      category: device.category, // Should be the category ID
       connection_ids: device.connection_ids,
       communication_ids: device.communication_ids
     })

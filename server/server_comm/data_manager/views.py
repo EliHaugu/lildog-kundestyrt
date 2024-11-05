@@ -1,4 +1,3 @@
-from django.forms import ValidationError
 from django_filters.rest_framework import (
     DjangoFilterBackend,
     FilterSet,
@@ -49,15 +48,19 @@ class DeviceFilter(FilterSet):
         fields = ['category_id']
 
 
+class DeviceFilter(FilterSet):
+    category_id = NumberFilter(field_name='category__id', lookup_expr='exact')
+
+    class Meta:
+        model = Device
+        fields = ['category_id']
+
+
 class DeviceListCreateView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = DeviceFilter
-
-    @handle_validation
-    def perform_create(self, serializer):
-        serializer.save()
 
 
 class DeviceDetailView(generics.RetrieveUpdateDestroyAPIView):

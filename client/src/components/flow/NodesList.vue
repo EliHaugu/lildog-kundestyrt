@@ -269,7 +269,7 @@ const newNode = () => {
         label="Node type"
         name="node-type"
         placeholder=""
-        type="select"
+        inputType="select"
         :options="['Assert', 'Action']"
       />
       <base-input-field
@@ -277,11 +277,11 @@ const newNode = () => {
         label="Device"
         name="device"
         placeholder=""
-        type="number"
+        inputType="number"
       />
       <base-input-field
         v-model="newNodeModel.function"
-        type="textarea"
+        inputType="textarea"
         label="Function"
         name="Function"
         placeholder=""

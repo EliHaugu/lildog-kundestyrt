@@ -38,4 +38,4 @@ type DeviceModel = {
   }
 }
 
-export type { Device, DeviceType, DeviceModel }
+export type { Device, DeviceCategory, DeviceModel }
