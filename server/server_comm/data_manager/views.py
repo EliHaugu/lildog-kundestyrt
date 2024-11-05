@@ -16,13 +16,16 @@ from .serializers import (
     NodeSerializer,
 )
 
+
 def handle_validation(view_func):
     def wrapper(*args, **kwargs):
         try:
             return view_func(*args, **kwargs)
         except ValidationError as e:
             raise DRFValidationError(e.messages)
+
     return wrapper
+
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
@@ -32,9 +35,11 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
+
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
 
 class DeviceFilter(FilterSet):
     category_id = NumberFilter(field_name='category__id', lookup_expr='exact')
@@ -42,6 +47,7 @@ class DeviceFilter(FilterSet):
     class Meta:
         model = Device
         fields = ['category_id']
+
 
 class DeviceListCreateView(generics.ListCreateAPIView):
     queryset = Device.objects.all()
@@ -53,6 +59,7 @@ class DeviceListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
+
 class DeviceDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
@@ -60,6 +67,7 @@ class DeviceDetailView(generics.RetrieveUpdateDestroyAPIView):
     @handle_validation
     def perform_update(self, serializer):
         serializer.save()
+
 
 class NodeListCreateView(generics.ListCreateAPIView):
     queryset = Node.objects.all()
@@ -69,6 +77,7 @@ class NodeListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
+
 class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
@@ -76,6 +85,7 @@ class NodeDetailView(generics.RetrieveUpdateDestroyAPIView):
     @handle_validation
     def perform_update(self, serializer):
         serializer.save()
+
 
 class EdgeListCreateView(generics.ListCreateAPIView):
     queryset = Edge.objects.all()
@@ -85,6 +95,7 @@ class EdgeListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save()
 
+
 class EdgeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Edge.objects.all()
     serializer_class = EdgeSerializer
@@ -93,6 +104,7 @@ class EdgeDetailView(generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         serializer.save()
 
+
 class FlowListCreateView(generics.ListCreateAPIView):
     queryset = Flow.objects.all()
     serializer_class = FlowSerializer
@@ -100,6 +112,7 @@ class FlowListCreateView(generics.ListCreateAPIView):
     @handle_validation
     def perform_create(self, serializer):
         serializer.save()
+
 
 class FlowDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Flow.objects.all()
