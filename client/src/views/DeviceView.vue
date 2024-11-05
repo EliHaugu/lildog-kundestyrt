@@ -142,7 +142,6 @@ const deleteCategoryFunc = async () => {
           <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
             <h2 class="w-12">ID</h2>
             <h2 class="w-64">Device instance name</h2>
-            <h2 class="w-12">Status</h2>
           </div>
           <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
             Add device <plus-icon />
