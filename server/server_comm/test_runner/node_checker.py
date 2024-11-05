@@ -20,15 +20,3 @@ class node_checker:
         raise ValueError(
             "Input does not contain a return statement with a boolean value."
         )
-
-    @staticmethod
-    def run_input(function: str) -> str:
-        try:
-            result = exec(function)
-
-            if result:
-                return "Assert OK"
-            else:
-                return "Assert failed"
-        except Exception as e:
-            return f"Exection failed: {str(e)}"
