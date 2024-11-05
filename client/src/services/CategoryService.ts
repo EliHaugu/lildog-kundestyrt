@@ -23,7 +23,7 @@ export async function fetchCategories(): Promise<DeviceCategory[]> {
  * @returns true if response is 200/OK, signifying that the category was created successfully
  */
 export async function createCategory(
-  category: Partial<{ category_name: string; connection_types: string[] }>
+  category: Partial<{ category_name: string; connection_types: string[], communication_protocols: string[] }>
 ): Promise<Boolean> {
   const requestOptions = {
     method: 'POST',
@@ -70,7 +70,7 @@ const mapCategory = (category: {
   communication_protocols: string[]
 }): DeviceCategory => {
   return {
-    id: category.id, // Include the ID
+    id: category.id,
     name: category.category_name,
     connectionTypes: category.connection_types,
     communicationProtocols: category.communication_protocols

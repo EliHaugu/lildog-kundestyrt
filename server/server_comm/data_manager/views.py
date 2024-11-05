@@ -30,7 +30,7 @@ class DeviceFilter(FilterSet):
 
     class Meta:
         model = Device
-        fields = ['category_id']  # Remove 'category_name'
+        fields = ['category_id']
 
 
 class DeviceListCreateView(generics.ListCreateAPIView):
