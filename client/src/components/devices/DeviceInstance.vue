@@ -49,9 +49,6 @@ const deleteDevice = () => {
     <div class="flex items-center justify-start gap-3">
       <p class="w-12">{{ device.id }}</p>
       <p class="w-64">{{ device.device_id }}</p>
-      <div class="w-fit rounded-full bg-success p-1">
-        <check-icon />
-      </div>
     </div>
     <div class="flex items-center justify-start gap-3">
       <base-button variant="icon" class="rounded-md" @click="openModal">
