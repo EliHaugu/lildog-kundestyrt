@@ -9,6 +9,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from . import node_checker
+
 
 class RunTestFlow(APIView):
     """
@@ -109,8 +111,8 @@ class RunTestFlow(APIView):
         try:
             result = None
             if node.node_type == Node.ASSERT:
-                # TODO add code from LIL-91
-                result = True
+                node_checker.check_valid_input(node.function)
+                result = node_checker.run_input(node.function)
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
                 result = True
