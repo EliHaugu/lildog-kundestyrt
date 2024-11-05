@@ -112,7 +112,14 @@ class RunTestFlow(APIView):
             result = None
             if node.node_type == Node.ASSERT:
                 node_checker.check_valid_input(node.function)
-                result = node_checker.run_input(node.function)
+                try:
+                    result = exec(node.function)
+                    if result:
+                        result = "Assert OK"
+                    else:
+                        result = "Assert failed"
+                except Exception as e:
+                    return f"Exection failed: {str(e)}"
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
                 result = True
