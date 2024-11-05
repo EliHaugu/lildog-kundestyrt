@@ -59,7 +59,9 @@ const newNode = () => {
     label: newNodeModel.value.label,
     node_type: newNodeModel.value.node_type,
     device: Number(newNodeModel.value.device),
-    function: newNodeModel.value.function
+    function: newNodeModel.value.function,
+    x_pos: 0,
+    y_pos: 0
   }
   createNode(node).then((res: Boolean) => {
     if (res) {
