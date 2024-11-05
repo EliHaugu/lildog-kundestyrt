@@ -23,7 +23,11 @@ export async function fetchCategories(): Promise<DeviceCategory[]> {
  * @returns true if response is 200/OK, signifying that the category was created successfully
  */
 export async function createCategory(
-  category: Partial<{ category_name: string; connection_types: string[], communication_protocols: string[] }>
+  category: Partial<{
+    category_name: string
+    connection_types: string[]
+    communication_protocols: string[]
+  }>
 ): Promise<Boolean> {
   const requestOptions = {
     method: 'POST',
