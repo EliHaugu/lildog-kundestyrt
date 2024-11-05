@@ -1,7 +1,7 @@
 from django_filters.rest_framework import (
-    NumberFilter,
     DjangoFilterBackend,
     FilterSet,
+    NumberFilter,
 )
 from rest_framework import generics
 
