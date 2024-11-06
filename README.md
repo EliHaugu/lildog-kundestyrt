@@ -1,5 +1,25 @@
 # lildog-kundestyrt
 
+## How to run frontend
+Make sure to change into the ` client ` directory before executing commands.
+1. Installing the dependencies
+```bash
+npm i
+```
+
+### Running as a development server
+2. Run the project as a development server
+```bash
+npm run dev
+```
+
+### Deploying the client side
+2. Build the project
+```bash
+npm run build
+```
+3. Deploy the `dist` folder to a web server or container.
+
 ## How to run backend
 ### 1. Create and enter a venv
 This is recommended to avoid issues with differing versions of packages in project and local environment. In addition, this avoids bloat not necessary for the project being added when freezing requirements.
