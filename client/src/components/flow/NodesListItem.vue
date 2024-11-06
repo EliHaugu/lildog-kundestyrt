@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BaseNode as Node } from '@/types/NodeType'
 import { updateNode, deleteNode as removeNode } from '@/services/NodesService'
-import useDragAndDrop from '@/composables/useDragAndDrop'
 import { ref } from 'vue'
 
 import BaseInputField from '../common/BaseInputField.vue'
