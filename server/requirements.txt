@@ -100,4 +100,4 @@ urllib3==2.2.3
 wcwidth==0.2.13
 websockets==13.1
 zipp==3.20.2
-zope.interface==7.1.0
+zope.interface==7.1.1
