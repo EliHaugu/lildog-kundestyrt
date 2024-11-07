@@ -89,7 +89,7 @@ sqlparse==0.5.1
 structlog==24.1.0
 toml==0.10.2
 tomli==2.0.1
-Twisted==24.7.0
+Twisted==24.10.0
 txaio==23.1.1
 types-pyserial==3.5.0.20240826
 types-PyYAML==6.0.12.20240917
