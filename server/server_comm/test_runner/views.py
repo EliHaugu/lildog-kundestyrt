@@ -117,13 +117,13 @@ class RunTestFlow(APIView):
             else:
                 raise ValueError(f"Invalid node type: {node.node_type}")
             return {
-                "node_label": node.label,
+                "node_id": node.id,
                 "status": "success",
                 "output": result,
             }
         except Exception as e:
             return {
-                "node_label": node.label,
+                "node_id": node.id,
                 "status": "failed",
                 "error": str(e),
             }
