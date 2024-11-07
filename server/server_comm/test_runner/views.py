@@ -8,7 +8,6 @@ from flow_parser import FlowParser
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from test_runner.nrf_scripts.nrf_connect import run_check_connection
 
 
 class RunTestFlow(APIView):
