@@ -126,6 +126,7 @@ class RunTestFlow(APIView):
                     result = exec(node.function)
                 except Exception as e:
                     return f"Exection failed: {str(e)}"
+
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
                 result = True
