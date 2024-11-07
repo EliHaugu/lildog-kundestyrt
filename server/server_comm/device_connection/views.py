@@ -2,12 +2,13 @@ import subprocess
 import time
 
 import requests
-from consts import conn_type_id_mapping
+from consts import comm_protocol_id_mapping, conn_type_id_mapping
 from data_manager.models import Flow
 from django.http import JsonResponse
 from django.views import View
 from serial import Serial, SerialTimeoutException
 from serial.tools import list_ports
+from test_runner.nrf_scripts.nrf_connect import run_check_connection
 
 
 class SerialDeviceConnectionView(View):
@@ -206,30 +207,43 @@ class APIConnectionView(View):
             )
 
 
+class nRFConnectionView(View):
+    def check_connection(self, adb_id: str, comm_id: str):
+        return run_check_connection(adb_id, comm_id)
+
+
 class FlowDeviceConnectionView(View):
     def parse_devices(self, flow_id: str):
         flow = Flow.objects.get(id=flow_id)
-        devices: dict[str, list] = {}
+        devices_conn: dict[str, list] = {}
+        devices_comm: dict[str, list] = {}
 
         for node in flow.nodes.all():
             device = node.device
             device_id = device.device_id
             category = device.category
-            devices.setdefault(device_id, [])
+            devices_conn.setdefault(device_id, [])
+            devices_comm.setdefault(device_id, [])
 
             connection_types = category.connection_types
             for conn_type in connection_types:
                 conn_id_field = conn_type_id_mapping[conn_type]
                 conn_id = device.connection_ids.get(conn_id_field)
-                devices[device_id].append((conn_type, conn_id))
+                devices_conn[device_id].append((conn_type, conn_id))
 
-        return devices
+            communication_protocols = category.communication_protocols
+            for comm_protocol in communication_protocols:
+                comm_id_field = comm_protocol_id_mapping[comm_protocol]
+                comm_id = device.communication_ids.get(comm_id_field)
+                devices_comm[device_id].append((comm_protocol, comm_id))
+
+        return devices_conn, devices_comm
 
     def connect_devices(self, flow_id: str):
-        devices = self.parse_devices(flow_id)
+        devices_conn, devices_comm = self.parse_devices(flow_id)
 
-        for connection_info in devices.values():
-            for conn in connection_info:
+        for device, conn_info in devices_conn.items():
+            for conn in conn_info:
                 conn_type = conn[0]
                 conn_id = conn[1]
 
@@ -240,6 +254,13 @@ class FlowDeviceConnectionView(View):
                     case "adb":
                         android_view = AndroidDeviceConnectionView()
                         android_view.check_connection(conn_id)
+
+                        # if mac_address + adb, connect nrf device
+                        for _, comm_id in devices_comm[device]:
+                            match comm_id:
+                                case "mac_address":
+                                    nrf_view = nRFConnectionView()
+                                    nrf_view.check_connection(conn_id, comm_id)
 
     def get(self, request):
         flow_id = request.GET.get("flow_id")
