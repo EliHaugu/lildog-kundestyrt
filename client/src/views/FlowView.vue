@@ -126,7 +126,6 @@ const addNewFlow = async () => {
     <!-- New Flow Form -->
 
     <base-modal
-      :showModal="showNewFlowForm"
       id="newFlowModal"
       submitButtonText="Create"
       title="Create New Flow"

@@ -6,6 +6,7 @@ export type ImportNode = {
   device: number
   node_type: string
   function: string
+  testState?: string
   x_pos?: number
   y_pos?: number
 }
