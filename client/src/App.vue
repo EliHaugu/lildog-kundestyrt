@@ -1,22 +1,5 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue'
 import Layout from '@/components/PageLayout.vue'
-import { mock_device_types, mock_flows } from '@/assets/mock_data'
-import type { DeviceCategory } from '@/types/DeviceTypes'
-import type { Flow } from './types/FlowType'
-
-const deviceCategories = ref<DeviceCategory[]>(mock_device_types)
-
-provide('deviceCategories', deviceCategories)
-
-const flows = ref<Flow[]>(mock_flows)
-
-function updateFlows(newData: Flow[]) {
-  flows.value = newData
-}
-
-provide('flows', flows)
-provide('updateFlows', updateFlows)
 </script>
 <template>
   <Layout>

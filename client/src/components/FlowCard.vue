@@ -95,7 +95,7 @@ const updateFlow = async () => {
     </div>
     <div class="mt-1 flex gap-1">
       <!-- Has to be retrieved from the log
-      <label
+      <div
         class="my-2 mr-6 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': flow.status === 'Completed',
@@ -105,8 +105,8 @@ const updateFlow = async () => {
         }"
       >
         {{ flow.status }}
-      </label> -->
-      <label
+      </div> -->
+      <div
         v-for="(connectionType, index) in flow.connectionType"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
@@ -116,8 +116,8 @@ const updateFlow = async () => {
         }"
       >
         {{ connectionType }}
-      </label>
-      <label
+      </div>
+      <div
         v-for="(communicationProtocol, index) in flow.communicationProtocol"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
@@ -127,7 +127,7 @@ const updateFlow = async () => {
         }"
       >
         {{ communicationProtocol }}
-      </label>
+      </div>
     </div>
     <!-- <base-button
       variant="light"
