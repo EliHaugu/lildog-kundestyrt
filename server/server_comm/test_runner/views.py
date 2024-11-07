@@ -110,28 +110,31 @@ class RunTestFlow(APIView):
         try:
             result = None
             if node.node_type == Node.ASSERT:
+                
+                # Execute the function code in a local scope
+                local_scope = {}
                 try:
-                    tree = ast.parse(node.function)
-                except SyntaxError:
-                    raise ValueError("Input is not correct syntax for Python.")
-
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Return):
-                        if isinstance(node.value, ast.Constant) and isinstance(
-                            node.value.value, bool
-                        ):
-                            return True
-                        ValueError("Input does not return type of boolean.")
-                try:
-                    result = exec(node.function)
+                    exec(node.function, {}, local_scope)
                 except Exception as e:
-                    return f"Exection failed: {str(e)}"
+                    return {
+                        "node_label": node.label,
+                        "status": "failed",
+                        "error": f"Execution failed: {str(e)}"
+                    }
+
+                # Check if there's a boolean result in the local scope
+                # Assume the main result should be in the 'result' variable, if not assign None
+                result = local_scope.get('result', None)
+
+                if not isinstance(result, bool):
+                    raise ValueError("The function did not return a boolean value.")
 
             elif node.node_type == Node.ACTION:
-                # TODO add code from LIL-95
+                # Placeholder for ACTION node handling
                 result = True
             else:
                 raise ValueError(f"Invalid node type: {node.node_type}")
+            
             return {
                 "node_label": node.label,
                 "status": "success",
