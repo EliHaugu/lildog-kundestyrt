@@ -8,37 +8,36 @@
  */
 
 import type { NodeProps } from '@vue-flow/core'
-import type { BaseNode } from '@/types/NodeType'
 import { Handle, Position } from '@vue-flow/core'
 import { blue, green, pink, purple } from '@/utils/colorRanges'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import NodeFieldInput from './FlowNodeInput.vue'
 import SuccessIcon from '@/icons/SuccessIcon.vue'
 import WarningIcon from '@/icons/WarningIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 
-defineProps<NodeProps<BaseNode>>()
-const nodeTestState = ref('success')
+const props = defineProps<NodeProps>()
+const nodeTestState = ref(props.data.testState)
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
-const pickColour = (connectionType: string) => {
-  switch (connectionType) {
-    case 'BLE':
-      return blue[Math.floor(Math.random() * blue.length)]
-    case 'LTE':
-      return green[Math.floor(Math.random() * green.length)]
-    case 'WiFi':
-      return pink[Math.floor(Math.random() * pink.length)]
-    case 'ADE':
-      return purple[Math.floor(Math.random() * purple.length)]
-    default:
-      break
+const pickColour = (protocols: string[]) => {
+  console.log('protocols', protocols)
+  console.log('data', props.data)
+  if (protocols.includes('ble')) {
+    return blue[Math.floor(Math.random() * blue.length)]
+  } else if (protocols.includes('wifi')) {
+    return green[Math.floor(Math.random() * green.length)]
+  } else if (protocols.includes('uart')) {
+    return pink[Math.floor(Math.random() * pink.length)]
+  } else if (protocols.includes('adb')) {
+    return purple[Math.floor(Math.random() * purple.length)]
   }
+  return 'grey'
 }
 
-const colour = pickColour('WiFi')
+const colour = computed(() => pickColour(props.data.communicationProtocols || []))
 
 const editedField = () => {
   edited.value = true

@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { listItems } from '@/assets/mock_data'
+import { defineEmits, defineProps } from 'vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import ExitIcon from '@/icons/ExitIcon.vue'
-import NodesList from '@/components/flow/NodesList.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
+import NodesList from './NodesList.vue'
 
 defineEmits(['toggle-log', 'toggle-web-socket'])
 defineProps({
   displayLog: Boolean,
   isRunning: Boolean,
-  nodes: Array
+  nodes: Array,
+  flow: Object
 })
 </script>
 
@@ -21,7 +22,7 @@ defineProps({
       ><exit-icon
     /></router-link>
     <h1>
-      {{ listItems.find((item) => item.id === $route.params.id)?.name }}
+      {{ flow?.name }}
     </h1>
 
     <div class="ml-auto flex gap-2">

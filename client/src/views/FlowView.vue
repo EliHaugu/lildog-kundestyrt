@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { ref, inject, computed, type Ref } from 'vue'
-import type { Flow, Flows } from '@/types/FlowType'
+import { ref, computed, onMounted } from 'vue'
+import type { Flow } from '@/types/FlowType'
+import flowService from '@/services/FlowService'
+import NodeService from '@/services/NodeService'
+import { fetchDevice } from '@/services/DevicesService'
+import CategoryService from '@/services/CategoryService'
 
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
@@ -10,8 +14,60 @@ import BaseModal from '../components/common/BaseModal.vue'
 const newFlowStatus = 'Untested'
 const newFlowName = ref('')
 const searchQuery = ref('')
-const flows = inject<Ref<Flows>>('flows', ref([]))
+const flows = ref<Flow[]>([])
 
+// Function to fetch flows from the API
+const fetchFlows = async () => {
+  try {
+    const response = await flowService.getFlows()
+
+    const flowsWithConnections = await Promise.all(
+      response.map(async (flow: Flow) => {
+        const nodeIds = flow.nodes ?? []
+
+        // Retrieve each node's device and category connection types and communication protocols
+        const connections = await Promise.all(
+          nodeIds.map(async (nodeId: number) => {
+            const node = await NodeService.getNode(nodeId)
+
+            // Get device and category data if device is present
+            if (node.device) {
+              const device = await fetchDevice(node.device)
+              if (device && device.category) {
+                const category = await CategoryService.getCategory(device.category)
+
+                return {
+                  connectionTypes: category.connection_types || [],
+                  communicationProtocols: category.communication_protocols || []
+                }
+              }
+            }
+            return { connectionTypes: [], communicationProtocols: [] }
+          })
+        )
+
+        // Flatten the arrays and deduplicate connection types and protocols for each flow
+        const connectionTypes = Array.from(new Set(connections.flatMap((c) => c.connectionTypes)))
+        const communicationProtocols = Array.from(
+          new Set(connections.flatMap((c) => c.communicationProtocols))
+        )
+
+        return {
+          ...flow,
+          connectionType: connectionTypes, // Assign to flow object
+          communicationProtocol: communicationProtocols // Assign to flow object
+        }
+      })
+    )
+
+    flows.value = flowsWithConnections
+  } catch (error) {
+    console.error('Error fetching flows:', error)
+    flows.value = []
+  }
+}
+
+// Computed property to filter flows based on search query
 const filteredFlows = computed(() => {
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
@@ -19,25 +75,38 @@ const filteredFlows = computed(() => {
   )
 })
 
+// Call fetchFlows when the component is mounted
+onMounted(fetchFlows)
+
+// New form functionality
+const showNewFlowForm = ref(false)
+
 const createNewFlow = () => {
   ;(document.getElementById('newFlowModal') as HTMLDialogElement).showModal()
 }
 
-const addNewFlow = () => {
+const addNewFlow = async () => {
   if (!newFlowName.value) return
 
   const newFlow: Flow = {
-    id: (flows.value.length + 1).toString(),
-    name: newFlowName.value + (flows.value.length + 1).toString(),
+    id: '', // backend generates ID
+    name: newFlowName.value,
     status: newFlowStatus,
-    connectionTypes: [],
+    connectionType: [],
+    communicationProtocol: [],
     nodes: [],
     edges: []
   }
 
-  flows.value.push(newFlow)
-
-  newFlowName.value = ''
+  try {
+    await flowService.createFlow(newFlow)
+    console.log('Flow created')
+    await fetchFlows() // Re-fetch flows after adding a new flow
+    newFlowName.value = ''
+    showNewFlowForm.value = false
+  } catch (error) {
+    console.error('Error creating flow:', error)
+  }
 }
 </script>
 
@@ -54,7 +123,10 @@ const addNewFlow = () => {
       </base-button>
     </div>
 
+    <!-- New Flow Form -->
+
     <base-modal
+      :showModal="showNewFlowForm"
       id="newFlowModal"
       submitButtonText="Create"
       title="Create New Flow"
@@ -63,8 +135,16 @@ const addNewFlow = () => {
       <base-input-field v-model="newFlowName" label="Flow name" />
     </base-modal>
 
-    <ul class="mr-4 flex flex-wrap gap-2">
-      <flow-card v-for="flow in filteredFlows" :key="flow.id" :flow="flow" />
+    <!-- Flow List Display -->
+    <ul class="mr-4 flex flex-wrap gap-4">
+      <flow-card
+        v-for="flow in filteredFlows"
+        :key="flow.id"
+        :flow="flow"
+        @flowUpdated="fetchFlows"
+        :connection-types="flow.connectionType || []"
+        :communication-protocols="flow.communicationProtocol || []"
+      />
     </ul>
   </main>
 </template>

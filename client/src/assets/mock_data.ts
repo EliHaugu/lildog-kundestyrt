@@ -1,9 +1,3 @@
-import type { DeviceType } from '@/types/DeviceTypes'
-import type { Flow } from '@/types/FlowType'
-import type { CustomNode } from '@/types/NodeType'
-import { stripNodeStyles } from '@/utils/stripNodeStyles'
-import type { Edge } from '@vue-flow/core'
-
 export const listItems = [
   {
     id: '1',
@@ -89,50 +83,6 @@ export const logItems = [
   }
 ]
 
-export const mock_flows: Flow[] = [
-  {
-    id: '1',
-    name: 'First Flow',
-    status: 'Completed',
-    connectionTypes: ['BLE', 'ADE', 'WiFi'],
-    nodes: [
-      {
-        id: '1',
-        position: { x: 0, y: 0 },
-        style: stripNodeStyles,
-        data: {
-          type: 'action',
-          label: 'Node 1',
-          device: 1,
-          function: 'Sample function'
-        }
-      },
-      {
-        id: '2',
-        label: 'Node 2',
-        nodeType: 'Action',
-        device: 2,
-        function: 'Sample function',
-        position: { x: 150, y: 100 },
-        style: stripNodeStyles
-      },
-      {
-        id: '3',
-        label: 'Node 3',
-        nodeType: 'Assertion',
-        device: 2,
-        function: 'Sample function',
-        position: { x: 300, y: 200 },
-        style: stripNodeStyles
-      }
-    ] as unknown as CustomNode[],
-    edges: [
-      { id: 'e1-2', source: '1', target: '2', type: 'smoothstep', updatable: true },
-      { id: 'e2-3', source: '2', target: '3', type: 'smoothstep', updatable: true }
-    ] as Edge[]
-  }
-]
-
 export const mock_devices = [
   {
     id: 1,
@@ -188,28 +138,5 @@ export const mock_devices = [
       key: 'zxvc_234523',
       value: '1234'
     }
-  }
-]
-
-export const mock_device_types: DeviceType[] = [
-  {
-    name: 'Halsbånd',
-    connectionType: 'BLE'
-    //devices: mock_devices.filter((device) => device.deviceType === 'Halsbånd')
-  },
-  {
-    name: 'HundeChip',
-    connectionType: 'ADE'
-    //devices: mock_devices.filter((device) => device.deviceType === 'HundeChip')
-  },
-  {
-    name: 'GPS-tracker',
-    connectionType: 'WiFi'
-    //devices: mock_devices.filter((device) => device.deviceType === 'GPS-tracker')
-  },
-  {
-    name: 'Lyspære',
-    connectionType: 'BLE'
-    //devices: mock_devices.filter((device) => device.deviceType === 'Lys')
   }
 ]

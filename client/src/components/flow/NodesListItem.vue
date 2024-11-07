@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BaseNode as Node } from '@/types/NodeType'
 import { updateNode, deleteNode as removeNode } from '@/services/NodesService'
-import useDragAndDrop from '@/composables/useDragAndDrop'
 import { ref } from 'vue'
 
 import BaseInputField from '../common/BaseInputField.vue'
@@ -28,8 +27,6 @@ const editNodeModel = ref({
   y_pos: props.node.position.y
 })
 
-const { onDragStart } = useDragAndDrop()
-
 const editNode = () => {
   const node = {
     id: parseInt(props.node.id),
@@ -53,6 +50,22 @@ const deleteNode = () => {
 
 const openModal = () => {
   ;(document.getElementById('editNode-' + props.node.id) as HTMLDialogElement).showModal()
+}
+
+const onDragStart = (event: DragEvent, node: Node) => {
+  // Pass the entire node data as a JSON string to use in FlowDetailedView
+  event.dataTransfer?.setData(
+    'node',
+    JSON.stringify({
+      id: node.id,
+      data: {
+        label: node.data.label,
+        node_type: node.data.node_type,
+        device: node.data.device,
+        function: node.data.function
+      }
+    })
+  )
 }
 </script>
 

@@ -1,26 +1,53 @@
 <script setup lang="ts">
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseInputField from './common/BaseInputField.vue'
+import type { Flow } from '@/types/FlowType'
+import EditPen from '@/icons/EditPen.vue'
+import DeleteIcon from '@/icons/DeleteIcon.vue'
+import { ref, defineEmits, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import flowService from '@/services/FlowService'
 import BaseModal from './common/BaseModal.vue'
 
-import PlayIcon from '@/icons/RightArrow.vue'
-import EditPen from '@/icons/EditPen.vue'
-
-import type { Flow } from '@/types/FlowType'
-import { inject, ref, type Ref } from 'vue'
-import { router } from '@/router'
-
-const props = defineProps<{
+defineProps<{
   flow: Flow
+  connectionTypes?: string[]
+  communicationProtocols?: string[]
 }>()
+const emit = defineEmits(['flowUpdated'])
 
-const showEditFlowForm = ref(false)
 const editFlowType = ref<Flow | null>(null)
-const flows = inject<Ref<Flow[]>>('flows', ref([]))
+
+const editFlowName = computed({
+  get: () => editFlowType.value?.name || '',
+  set: (newName: string) => {
+    if (editFlowType.value) {
+      editFlowType.value.name = newName
+    }
+  }
+})
+
+const router = useRouter()
 
 const navigateToFlow = (id: string) => {
   const currentPath = router.currentRoute.value.fullPath
   router.push(`${currentPath}/${id}`)
+}
+
+const deleteFlow = async (id: string) => {
+  const userConfirmed = confirm('Are you sure you want to delete this flow?')
+
+  if (userConfirmed) {
+    try {
+      await flowService.deleteFlow(id)
+      console.log('Flow deleted successfully')
+      emit('flowUpdated')
+    } catch (error) {
+      console.error('Error deleting flow:', error)
+    }
+  } else {
+    console.log('User canceled the deletion')
+  }
 }
 
 const editFlow = (flow: Flow) => {
@@ -28,24 +55,19 @@ const editFlow = (flow: Flow) => {
   ;(document.getElementById(`editFlowForm${flow.id}`) as HTMLDialogElement).showModal()
 }
 
-const updateFlow = () => {
+const updateFlow = async () => {
   if (!editFlowType.value) return
 
-  const updatedFlowTypes = flows.value.map((flow) => {
-    if (flow.id === props.flow.id && editFlowType.value) {
-      return { ...editFlowType.value }
-    }
-    return flow
-  })
-
-  updateFlowCard(updatedFlowTypes)
-  editFlowType.value = null
-  showEditFlowForm.value = false
+  try {
+    await flowService.updateFlow(editFlowType.value.id, editFlowType.value)
+    console.log('Flow updated')
+    emit('flowUpdated')
+  } catch (error) {
+    console.error('Error updating flow:', error)
+  } finally {
+    editFlowType.value = null
+  }
 }
-
-const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () => {
-  console.error('updateFlows function not provided')
-})
 </script>
 
 <template>
@@ -54,8 +76,15 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     @click="navigateToFlow(flow.id)"
     style="z-index: 1"
   >
-    <div :class="['flex items-center justify-between']">
+    <div :class="['flex items-center']">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
+      <base-button
+        @click.stop="deleteFlow(flow.id)"
+        variant="outline"
+        class="ml-auto h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+      >
+        <delete-icon fill="red" />
+      </base-button>
       <base-button
         @click.stop="editFlow(flow)"
         variant="outline"
@@ -65,7 +94,8 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
       </base-button>
     </div>
     <div class="mt-1 flex gap-1">
-      <label
+      <!-- Has to be retrieved from the log
+      <div
         class="my-2 mr-6 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': flow.status === 'Completed',
@@ -75,27 +105,37 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
         }"
       >
         {{ flow.status }}
-      </label>
-      <label
-        v-for="(connectionType, index) in flow.connectionTypes"
+      </div> -->
+      <div
+        v-for="(connectionType, index) in flow.connectionType"
         :key="index"
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
-          'bg-ble': connectionType === 'BLE',
-          'bg-wifi': connectionType === 'WiFi',
-          'bg-ade': connectionType === 'ADE'
+          'bg-success': connectionType === 'uart',
+          'bg-ade': connectionType === 'adb'
         }"
       >
         {{ connectionType }}
-      </label>
+      </div>
+      <div
+        v-for="(communicationProtocol, index) in flow.communicationProtocol"
+        :key="index"
+        class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
+        :class="{
+          'bg-wifi': communicationProtocol === 'wifi',
+          'bg-ble': communicationProtocol === 'bluetooth'
+        }"
+      >
+        {{ communicationProtocol }}
+      </div>
     </div>
-    <base-button
+    <!-- <base-button
       variant="light"
       class="ml-auto mt-7 flex h-6 items-center gap-2 rounded-xl border-0 text-white-100"
       @click.stop=""
     >
       Run Flow <play-icon fill="white" />
-    </base-button>
+    </base-button> -->
   </div>
 
   <base-modal
@@ -104,6 +144,6 @@ const updateFlowCard = inject<(newFlowTypes: Flow[]) => void>('updateFlows', () 
     title="Edit Flow"
     @submit="updateFlow"
   >
-    <base-input-field label="Name" name="name" placeholder="" />
+    <base-input-field v-model="editFlowName" label="Name" name="name" placeholder="" />
   </base-modal>
 </template>
