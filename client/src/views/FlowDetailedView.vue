@@ -18,6 +18,8 @@ import { useRoute } from 'vue-router'
 import { webSocketService } from '@/services/WebSocketService'
 import type { Log } from '@/types/WebSocketServiceTypes'
 
+import { runTest } from '@/services/TestService'
+
 const flows = inject<Ref<Flows>>('flows', ref([]))
 
 const route = useRoute()
@@ -66,6 +68,7 @@ const toggleWebSocket = () => {
   isRunning.value = !isRunning.value
 
   if (isRunning.value) {
+    runTest(flowId[0])
     webSocketService.connect(8765)
     webSocketService.subscribe(handleNewLog)
   } else {
