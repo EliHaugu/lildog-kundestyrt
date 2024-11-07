@@ -46,6 +46,13 @@ const deviceModel = ref({
   >
     <base-input-field v-model="deviceModel.device_id" label="Name" name="name" placeholder="" />
     <base-input-field
+      v-model="deviceModel.category"
+      label="Category"
+      name="category"
+      placeholder=""
+      type="number"
+    />
+    <base-input-field
       v-model="deviceModel.connection_ids.adb_device_id"
       label="ADB Device ID"
       name="adb_device_id"

@@ -23,22 +23,17 @@ const editNodeModel = ref({
   label: props.node.data.label,
   node_type: props.node.data.node_type,
   device: props.node.data.device.toString(),
-  function: props.node.data.function,
-  x_pos: props.node.position.x,
-  y_pos: props.node.position.y
+  function: props.node.data.function
 })
 
 const { onDragStart } = useDragAndDrop()
 
 const editNode = () => {
   const node = {
-    id: parseInt(props.node.id),
     label: editNodeModel.value.label,
     node_type: editNodeModel.value.node_type,
     device: Number(editNodeModel.value.device),
-    function: editNodeModel.value.function,
-    x_pos: editNodeModel.value.x_pos,
-    y_pos: editNodeModel.value.y_pos
+    function: editNodeModel.value.function
   }
   updateNode(parseInt(props.node.id), node).then(() => {
     emit('update')
@@ -52,7 +47,7 @@ const deleteNode = () => {
 }
 
 const openModal = () => {
-  ;(document.getElementById('editNode-' + props.node.id) as HTMLDialogElement).showModal()
+  ;(document.getElementById('editNode') as HTMLDialogElement).showModal()
 }
 </script>
 

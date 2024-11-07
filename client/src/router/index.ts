@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import FlowView from '@/views/FlowView.vue'
 import LogView from '@/components/flow/FlowLog.vue'
+import CategoryView from '@/views/CategoryView.vue'
+import DeviceView from '@/views/DeviceView.vue'
 import FlowDetailedView from '@/views/FlowDetailedView.vue'
 import CategoryView from '@/views/CategoryView.vue'
 import DeviceView from '@/views/DeviceView.vue'
@@ -10,6 +12,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
+    component: FlowView
     component: FlowView
   },
   {
@@ -32,9 +35,12 @@ const routes = [
     path: '/categories',
     name: 'categories',
     component: CategoryView
+    path: '/categories',
+    name: 'categories',
+    component: CategoryView
   },
   {
-    path: '/categories/:id',
+    path: '/categories/:category',
     name: 'category',
     component: DeviceView
   }

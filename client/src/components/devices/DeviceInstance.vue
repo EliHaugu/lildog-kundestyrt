@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CheckIcon from '@/icons/CheckIcon.vue'
 import EditPen from '@/icons/EditPen.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
 

@@ -5,10 +5,9 @@ import ExitIcon from '@/icons/ExitIcon.vue'
 import NodesList from '@/components/flow/NodesList.vue'
 import ExportIcon from '@/icons/ExportIcon.vue'
 
-defineEmits(['toggle-log', 'toggle-web-socket'])
+defineEmits(['update:displayLog'])
 defineProps({
   displayLog: Boolean,
-  isRunning: Boolean,
   nodes: Array
 })
 </script>

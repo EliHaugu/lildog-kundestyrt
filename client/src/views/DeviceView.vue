@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
+import type { Device, DeviceModel, DeviceType } from '@/types/DeviceTypes'
 import { computed, inject, onMounted, ref, type Ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
-import { deleteCategory } from '@/services/CategoryService'
-
+import { createDevice, fetchDevices } from '@/services/DevicesService'
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+
 import BaseButton from '@/components/common/BaseButton.vue'
 import DeviceModal from '@/components/devices/DeviceModal.vue'
 
@@ -16,33 +17,40 @@ import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 const devices = ref<Device[]>([])
 const router = useRouter()
 const route = useRoute()
-
-const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
-const categoryId: number = parseInt(route.params.id as string)
-
-const deviceCategory = computed(() => {
-  return deviceCategories.value.find((category) => category.id === categoryId)
-})
-
-onMounted(async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
+const deviceTypes = inject<Ref<DeviceType[]>>('deviceTypes', ref([]))
+const deviceType = computed(() => {
+  return deviceTypes.value.find((deviceType) => deviceType.name === route.fullPath.split('/').pop())
 })
 
 const openModal = () => {
   ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
 }
 
-const newDevice = async (newDeviceModel: DeviceModel) => {
+onMounted(() => {
+  fetchDevices().then((res) => {
+    devices.value = res as unknown as Device[]
+  })
+})
+
+const newDevice = (newDeviceModel: DeviceModel) => {
   const device = {
     id: devices.value.length + 1,
     device_id: newDeviceModel.device_id,
-    category: deviceCategory.value?.id || 0,
+    category: parseInt(newDeviceModel.category),
     connection_ids: {
       adb_device_id: newDeviceModel.connection_ids.adb_device_id,
       serial_number: newDeviceModel.connection_ids.serial_number
     },
     communication_ids: {
       mac_address: newDeviceModel.communication_ids.mac_address
+    }
+  }
+
+  createDevice(device).then((res: Boolean) => {
+    if (res) {
+      update()
+    } else {
+      console.error('Failed to create device')
     }
   }
 
@@ -78,7 +86,9 @@ const deleteCategoryFunc = async () => {
       <div class="flex grow-0 items-center gap-2">
         <router-link
           to="/categories"
+          to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
+          >Device categories</router-link
           >Device categories</router-link
         >
         <chevron-right-icon />
@@ -157,6 +167,7 @@ const deleteCategoryFunc = async () => {
         </div>
       </div>
     </div>
+    <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
     <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
   </main>
 </template>
