@@ -22,6 +22,14 @@ class SerialDeviceConnectionView(View):
     def check_connection(self, conn_id: str):
         try:
             device_port = self.get_device_port(conn_id)
+            if not device_port:
+                return JsonResponse(
+                    {
+                        "status": "error",
+                        "message": "device port not found",
+                        "response": None,
+                    }
+                )
             serial_device = Serial(device_port, timeout=10)
 
             serial_device.write(b"ping\n")
@@ -113,6 +121,14 @@ class AndroidDeviceConnectionView(View):
 
     def check_connection(self, conn_id: str):
         adb_devices = self.get_adb_devices()
+        if not adb_devices:
+            return JsonResponse(
+                {
+                    "status": "not_connected",
+                    "message": "no android devices connected",
+                    "response": None,
+                }
+            )
 
         if conn_id in adb_devices:
             return JsonResponse(
@@ -159,7 +175,7 @@ class APIConnectionView(View):
                     }
                 )
             else:
-                JsonResponse(
+                return JsonResponse(
                     {
                         "status": "error",
                         "message": (
@@ -209,58 +225,86 @@ class APIConnectionView(View):
 
 class nRFConnectionView(View):
     def check_connection(self, adb_id: str, comm_id: str):
-        return run_check_connection(adb_id, comm_id)
+        res = run_check_connection(adb_id, comm_id)
+        if res.status == "success":
+            return {
+                "status": "connected",
+                "message": f"adb device {adb_id} connected to nrf",
+                "response": res.json(),
+            }
+
+    def get(self, request):
+        api_url = request.GET.get("api_url")
+        if api_url:
+            return self.check_connection(api_url)
+        else:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "message": "api_url is required",
+                    "response": None,
+                }
+            )
 
 
 class FlowDeviceConnectionView(View):
     def parse_devices(self, flow_id: str):
         flow = Flow.objects.get(id=flow_id)
-        devices_conn: dict[str, list] = {}
-        devices_comm: dict[str, list] = {}
+        devices_conn: dict[str, dict] = {}
+        devices_comm: dict[str, dict] = {}
 
         for node in flow.nodes.all():
             device = node.device
             device_id = device.device_id
             category = device.category
-            devices_conn.setdefault(device_id, [])
-            devices_comm.setdefault(device_id, [])
+            devices_conn.setdefault(device_id, {})
+            devices_comm.setdefault(device_id, {})
 
             connection_types = category.connection_types
             for conn_type in connection_types:
                 conn_id_field = conn_type_id_mapping[conn_type]
-                conn_id = device.connection_ids.get(conn_id_field)
-                devices_conn[device_id].append((conn_type, conn_id))
+                if conn_id_field in device.connection_ids.keys():
+                    conn_id = device.connection_ids.get(conn_id_field)
+                    devices_conn[device_id][conn_type] = conn_id
 
             communication_protocols = category.communication_protocols
             for comm_protocol in communication_protocols:
                 comm_id_field = comm_protocol_id_mapping[comm_protocol]
-                comm_id = device.communication_ids.get(comm_id_field)
-                devices_comm[device_id].append((comm_protocol, comm_id))
+                if comm_id_field in device.communication_ids.keys():
+                    comm_id = device.communication_ids.get(comm_id_field)
+                    devices_comm[device_id][comm_protocol] = comm_id
 
         return devices_conn, devices_comm
 
     def connect_devices(self, flow_id: str):
         devices_conn, devices_comm = self.parse_devices(flow_id)
+        responses = []
 
-        for device, conn_info in devices_conn.items():
-            for conn in conn_info:
-                conn_type = conn[0]
-                conn_id = conn[1]
+        for device in devices_conn:
+            for conn_type in devices_conn[device]:
+                conn_id = devices_conn[device][conn_type]
 
                 match conn_type:
                     case "uart":
                         serial_view = SerialDeviceConnectionView()
-                        serial_view.check_connection(conn_id)
+                        res = serial_view.check_connection(conn_id)
+                        responses.append(res)
                     case "adb":
                         android_view = AndroidDeviceConnectionView()
-                        android_view.check_connection(conn_id)
+                        res = android_view.check_connection(conn_id)
+                        responses.append(res)
 
                         # if mac_address + adb, connect nrf device
-                        for _, comm_id in devices_comm[device]:
-                            match comm_id:
-                                case "mac_address":
+                        for comm_type, comm_id in devices_comm[device].items():
+                            match comm_type:
+                                case "bluetooth":
                                     nrf_view = nRFConnectionView()
-                                    nrf_view.check_connection(conn_id, comm_id)
+                                    res = nrf_view.check_connection(
+                                        conn_id, comm_id
+                                    )
+                                    responses.append(res)
+
+        return JsonResponse({"response": responses})
 
     def get(self, request):
         flow_id = request.GET.get("flow_id")
