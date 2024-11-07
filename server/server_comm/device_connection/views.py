@@ -1,3 +1,4 @@
+import json
 import subprocess
 import time
 
@@ -226,12 +227,14 @@ class APIConnectionView(View):
 class nRFConnectionView(View):
     def check_connection(self, adb_id: str, comm_id: str):
         res = run_check_connection(adb_id, comm_id)
-        if res.status == "success":
-            return {
-                "status": "connected",
-                "message": f"adb device {adb_id} connected to nrf",
-                "response": res.json(),
-            }
+        if res["status"] == "success":
+            return JsonResponse(
+                {
+                    "status": "connected",
+                    "message": f"adb device {adb_id} connected to nrf",
+                    "response": res,
+                }
+            )
 
     def get(self, request):
         api_url = request.GET.get("api_url")
@@ -288,11 +291,11 @@ class FlowDeviceConnectionView(View):
                     case "uart":
                         serial_view = SerialDeviceConnectionView()
                         res = serial_view.check_connection(conn_id)
-                        responses.append(res)
+                        responses.append(json.loads(res.content))
                     case "adb":
                         android_view = AndroidDeviceConnectionView()
                         res = android_view.check_connection(conn_id)
-                        responses.append(res)
+                        responses.append(json.loads(res.content))
 
                         # if mac_address + adb, connect nrf device
                         for comm_type, comm_id in devices_comm[device].items():
@@ -302,7 +305,7 @@ class FlowDeviceConnectionView(View):
                                     res = nrf_view.check_connection(
                                         conn_id, comm_id
                                     )
-                                    responses.append(res)
+                                    responses.append(json.loads(res.content))
 
         return JsonResponse({"response": responses})
 
