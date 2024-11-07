@@ -109,8 +109,9 @@ class RunTestFlow(APIView):
         try:
             result = None
             if node.node_type == Node.ASSERT:
-                # TODO add code from LIL-91
-                result = True
+                
+                result = self.check_assertion(node.function)
+                
             elif node.node_type == Node.ACTION:
                 # TODO add code from LIL-95
                 result = True
@@ -127,3 +128,20 @@ class RunTestFlow(APIView):
                 "status": "failed",
                 "error": str(e),
             }
+    
+    def check_assertion(self, function):
+        """
+        Executes a given function and checks if it returns a boolean value.
+        Raises:
+            ValueError: If the executed function does not return a boolean value.
+        """
+        function_code = "def temp_function():\n    " + function.replace("\n", "\n    ")
+        local_scope = {}
+        exec(function_code, {}, local_scope)
+        
+        result = local_scope['temp_function']()
+
+        if not isinstance(result, bool):
+            raise ValueError("The function did not return a boolean value.")
+
+        return result
