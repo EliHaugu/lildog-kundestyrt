@@ -9,6 +9,13 @@ type Device = {
   communication_ids: {
     mac_address?: string
   }
+  connection_ids: {
+    adb_device_id?: string
+    serial_number?: string
+  }
+  communication_ids: {
+    mac_address?: string
+  }
 }
 
 type DeviceCategory = {

@@ -10,10 +10,14 @@ import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DeviceModal from '@/components/devices/DeviceModal.vue'
 
+import BaseButton from '@/components/common/BaseButton.vue'
+import DeviceModal from '@/components/devices/DeviceModal.vue'
+
 import PlusIcon from '@/icons/PlusIcon.vue'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
 const devices = ref<Device[]>([])
+const router = useRouter()
 const router = useRouter()
 const route = useRoute()
 
@@ -78,12 +82,24 @@ const deleteCategoryFunc = async () => {
       <div class="flex grow-0 items-center gap-2">
         <router-link
           to="/categories"
+          to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
+          >Device categories</router-link
           >Device categories</router-link
         >
         <chevron-right-icon />
         <h1 class="text-xl font-semibold">{{ deviceCategory?.name }}</h1>
+        <h1 class="text-xl font-semibold">{{ deviceCategory?.name }}</h1>
       </div>
+
+      <!-- Delete Category Button -->
+      <base-button
+        variant="outline"
+        class="bg-red-500 text-white mt-3 w-fit"
+        @click="deleteCategoryFunc"
+      >
+        Delete Category
+      </base-button>
 
       <!-- Delete Category Button -->
       <base-button
@@ -127,12 +143,44 @@ const deleteCategoryFunc = async () => {
               {{ protocol }}
             </div>
           </div>
+          <p class="text-lg font-semibold">Connection types:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="connectionType in deviceCategory?.connectionTypes"
+              :key="connectionType"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': connectionType === 'uart',
+                'bg-ade': connectionType === 'adb'
+              }"
+            >
+              {{ connectionType }}
+            </div>
+          </div>
+        </div>
+        <div class="flex w-fit items-center justify-between gap-1">
+          <p class="text-lg font-semibold">Communication protocols:</p>
+          <div class="my-2 flex flex-wrap">
+            <div
+              v-for="protocol in deviceCategory?.communicationProtocols"
+              :key="protocol"
+              class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
+              :class="{
+                'bg-ble': protocol === 'ble',
+                'bg-wifi': protocol === 'wifi',
+                'bg-ade': protocol === 'lte'
+              }"
+            >
+              {{ protocol }}
+            </div>
+          </div>
         </div>
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Number of devices:</p>
           <p
             class="m-2 w-fit rounded-xl border-2 border-[#6B8AFA] bg-accent-600 px-2 text-white-100"
           >
+            {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
             {{ devices?.length === 1 ? '1 device' : `${devices?.length || 0} devices` }}
           </p>
         </div>
@@ -157,6 +205,7 @@ const deleteCategoryFunc = async () => {
         </div>
       </div>
     </div>
+    <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
     <device-modal id="newDeviceModal" submit="Create" title="New Device" @submit="newDevice" />
   </main>
 </template>

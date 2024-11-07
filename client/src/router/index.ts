@@ -11,6 +11,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: FlowView
+    component: FlowView
   },
   {
     path: '/flow',
@@ -29,6 +30,9 @@ const routes = [
     props: true
   },
   {
+    path: '/categories',
+    name: 'categories',
+    component: CategoryView
     path: '/categories',
     name: 'categories',
     component: CategoryView

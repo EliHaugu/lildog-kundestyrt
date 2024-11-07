@@ -52,6 +52,13 @@ const handleNewLog = (log: Log) => {
 }
 
 // toggle log display
+const isRunning = ref(false)
+
+const handleNewLog = (log: Log) => {
+  console.log('new log', log)
+}
+
+// toggle log display
 const toggleLog = () => {
   displayLog.value = !displayLog.value
 }
@@ -73,6 +80,12 @@ const toggleWebSocket = () => {
 
 <template>
   <main class="flex flex-col">
+    <flow-header
+      :is-running="isRunning"
+      :display-log="displayLog"
+      @toggle-log="toggleLog"
+      @toggle-web-socket="toggleWebSocket"
+    />
     <flow-header
       :is-running="isRunning"
       :display-log="displayLog"
