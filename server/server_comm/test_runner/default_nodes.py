@@ -1,7 +1,7 @@
 import ast
 import os
 
-from data_manager.models import Node
+from data_manager.models import Category, Device, Node
 from django.http import JsonResponse
 from test_runner.nrf_scripts.nrf_connect import (
     run_check_connection,
@@ -15,9 +15,9 @@ def run_default_node(node: Node):
 
     match node_type.lower():
         case "nrf connect":
-            return run_nrf_connect_node()
+            return run_nrf_connect_node(node)
         case "nrf custom":
-            return run_nrf_custom_node()
+            return run_nrf_custom_node(node)
         case _:
             return JsonResponse(
                 {
@@ -29,8 +29,8 @@ def run_default_node(node: Node):
 
 
 def run_nrf_connect_node(node: Node):
-    device = node.device
-    category = device.category
+    device: Device = node.device  # type: ignore
+    category: Category = device.category  # type: ignore
     connection_types = category.connection_types
     connection_ids = device.connection_ids
 
@@ -92,8 +92,8 @@ def run_nrf_connect_node(node: Node):
 
 
 def run_nrf_custom_node(node: Node):
-    device = node.device
-    category = device.category
+    device: Device = node.device  # type: ignore
+    category: Category = device.category  # type: ignore
     connection_types = category.connection_types
     connection_ids = device.connection_ids
 
