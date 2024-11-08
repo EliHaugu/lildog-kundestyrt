@@ -131,7 +131,7 @@ def run_check_characteristic(
     )
 
 
-def run_custom_script(android_device_id, mac_address, extras):
+def run_custom_script(android_device_id, extras):
     script_dir = os.path.dirname(__file__)
     os.chdir(script_dir)
 
@@ -145,9 +145,6 @@ def run_custom_script(android_device_id, mac_address, extras):
         "./test.sh",
         "-d",
         android_device_id,
-        "-e",
-        "MAC_ADDRESS",
-        mac_address,
     ]
     command.extend(extra_cmd)
     command.append("custom_script.xml")
