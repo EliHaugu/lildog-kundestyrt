@@ -1,3 +1,4 @@
+import json
 from urllib.parse import urlencode
 
 import requests
@@ -8,6 +9,7 @@ from flow_parser import FlowParser
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from test_runner.default_nodes import run_default_node
 
 
 class RunTestFlow(APIView):
@@ -110,8 +112,20 @@ class RunTestFlow(APIView):
 
             elif node.node_type == Node.ACTION:
                 try:
-                    # TODO: HOW DO WE RUN NRF SCRIPTS?
-                    exec(node.function)
+                    function = node.function.split("\n")
+                    if (
+                        len(function) > 1
+                        and "THIS IS A DEFAULT NODE" in function[1]
+                    ):
+                        res = json.loads(run_default_node(node).content)
+                        if res['status'] != "success":
+                            return {
+                                "node_id": node.id,
+                                "status": "failed",
+                                "output": res,
+                            }
+                    else:
+                        exec(node.function)
                     result = True
                 except Exception as e:
                     ex_type = type(e).__name__
