@@ -48,9 +48,9 @@ const editDeviceCategory = () => {
 // Function to update the category
 const saveCategoryChanges = async () => {
   const updatedData = {
-    name: editedCategory.value.name,
-    connectionTypes: editedCategory.value.connectionTypes,
-    communicationProtocols: editedCategory.value.communicationProtocols
+    category_name: editedCategory.value.category_name,
+    connection_types: editedCategory.value.connection_types,
+    communication_protocols: editedCategory.value.communication_protocols
   }
 
   const success = await updateCategory(editedCategory.value.id, updatedData)
@@ -64,7 +64,7 @@ const saveCategoryChanges = async () => {
 
 // Function to delete the category
 const deleteCategory = async () => {
-  const confirmed = confirm(`Are you sure you want to delete ${props.deviceCategory.name}?`)
+  const confirmed = confirm(`Are you sure you want to delete ${props.deviceCategory.category_name}?`)
   if (confirmed) {
     const success = await deleteCategoryService(props.deviceCategory.id)
     if (success) {
@@ -89,7 +89,7 @@ const navigateToDevices = () => {
 <template>
   <div class="flex h-fit flex-col gap-0 rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold">{{ deviceCategory.name }}</h2>
+      <h2 class="text-xl font-semibold">{{ deviceCategory.category_name }}</h2>
       <div>
         <base-button
           @click.stop="editDeviceCategory"
@@ -110,7 +110,7 @@ const navigateToDevices = () => {
 
     <div class="mt-1 flex flex-wrap gap-2">
       <div
-        v-for="connectionType in deviceCategory.connectionTypes"
+        v-for="connectionType in deviceCategory.connection_types"
         :key="connectionType"
         class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
@@ -122,7 +122,7 @@ const navigateToDevices = () => {
       </div>
 
       <div
-        v-for="protocol in deviceCategory.communicationProtocols"
+        v-for="protocol in deviceCategory.communication_protocols"
         :key="protocol"
         class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
@@ -155,7 +155,7 @@ const navigateToDevices = () => {
     title="Edit Device Category"
     @submit="saveCategoryChanges"
   >
-    <base-input-field v-model="editedCategory.name" label="Name" name="name" placeholder="" />
+    <base-input-field v-model="editedCategory.category_name" label="Name" name="name" placeholder="" />
     <!-- <base-input-field
       v-model="editedCategory.connectionTypes"
       label="Connection type"

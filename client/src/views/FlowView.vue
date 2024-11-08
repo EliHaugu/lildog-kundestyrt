@@ -4,12 +4,12 @@ import type { Flow } from '@/types/FlowType'
 import flowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import { fetchDevice } from '@/services/DevicesService'
-import CategoryService from '@/services/CategoryService'
 
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '../components/common/BaseModal.vue'
+import { getCategory } from '@/services/CategoryService'
 
 const newFlowStatus = 'Untested'
 const newFlowName = ref('')
@@ -34,7 +34,7 @@ const fetchFlows = async () => {
             if (node.device) {
               const device = await fetchDevice(node.device)
               if (device && device.category) {
-                const category = await CategoryService.getCategory(device.category)
+                const category = await getCategory(device.category)
 
                 return {
                   connectionTypes: category.connection_types || [],
@@ -135,7 +135,7 @@ const addNewFlow = async () => {
     </base-modal>
 
     <!-- Flow List Display -->
-    <ul class="mr-4 flex flex-wrap gap-4">
+    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       <flow-card
         v-for="flow in filteredFlows"
         :key="flow.id"

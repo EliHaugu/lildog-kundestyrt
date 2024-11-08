@@ -9,12 +9,11 @@ import BaseModal from '../components/common/BaseModal.vue'
 
 import { fetchCategories, createCategory } from '@/services/CategoryService'
 
-const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
-
 const openModal = () => {
-  ;(document.getElementById('newDeviceCategoryModal') as HTMLDialogElement).showModal()
+  (document.getElementById('newDeviceCategoryModal') as HTMLDialogElement).showModal()
 }
 
+const categories = ref<DeviceCategory[]>([])
 const newCategoryName = ref('')
 const newCategoryConnection = ref('')
 const newCategoryCommunication = ref('')
@@ -30,8 +29,7 @@ const fetchAllCategories = async () => {
     console.error('Failed to fetch device categories')
     return
   }
-
-  deviceCategories.value = data
+  categories.value = data
 }
 
 onMounted(fetchAllCategories)
@@ -76,16 +74,16 @@ const refreshCategories = async () => {
 
 // Filtered categories based on search query
 const filteredCategories = computed(() => {
-  return deviceCategories.value.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return categories.value.filter((category) =>
+    category.category_name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 </script>
 
 <template>
   <main class="flex flex-col gap-6">
-    <section class="flex h-10 gap-2">
-      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Device categories</h1>
+    <section class="flex gap-2">
+      <h1 class="flex-shrink-0 p-2 text-xl font-semibold">Device categories</h1>
       <form action="" class="ml-auto flex-grow">
         <base-input-field
           v-model="searchQuery"

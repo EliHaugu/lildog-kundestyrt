@@ -10,12 +10,12 @@ import flowService from '@/services/FlowService'
 import BaseModal from './common/BaseModal.vue'
 import { runTest } from '@/services/TestService'
 
+const emit = defineEmits(['flowUpdated'])
 const props = defineProps<{
   flow: Flow
   connectionTypes?: string[]
   communicationProtocols?: string[]
 }>()
-const emit = defineEmits(['flowUpdated'])
 
 const editFlowType = ref<Flow | null>(null)
 const flow = ref<Flow>(props.flow)
@@ -76,7 +76,7 @@ const test = (flowId: string) => {
 
 <template>
   <a
-    class="relative h-40 w-[25rem] cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
+    class="relative h-40  cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
     :href="'flow/' + flow.id"
   >
     <div class="flex items-center gap-2">

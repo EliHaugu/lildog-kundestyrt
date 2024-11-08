@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
-import { computed, inject, onMounted, ref, type Ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
-import { deleteCategory } from '@/services/CategoryService'
+import { deleteCategory , getCategory} from '@/services/CategoryService'
 
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -13,30 +13,33 @@ import DeviceModal from '@/components/devices/DeviceModal.vue'
 import PlusIcon from '@/icons/PlusIcon.vue'
 import ChevronRightIcon from '@/icons/ChevronRightIcon.vue'
 
+const category = ref<DeviceCategory>({
+  id: 0,
+  category_name: '',
+  connection_types: [],
+  communication_protocols: []
+})
 const devices = ref<Device[]>([])
 const router = useRouter()
 const route = useRoute()
 
-const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
-const categoryId: number = parseInt(route.params.id as string)
 
-const deviceCategory = computed(() => {
-  return deviceCategories.value.find((category) => category.id === categoryId)
-})
 
 onMounted(async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
+  category.value = await getCategory(Number(route.params.id))
+  devices.value = await fetchDevicesByCategory(Number(route.params.id))
 })
 
+
 const openModal = () => {
-  ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
+  (document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
 }
 
 const newDevice = async (newDeviceModel: DeviceModel) => {
   const device = {
     id: devices.value.length + 1,
     device_id: newDeviceModel.device_id,
-    category: deviceCategory.value?.id || 0,
+    category: category.value.id,
     connection_ids: {
       adb_device_id: newDeviceModel.connection_ids.adb_device_id,
       serial_number: newDeviceModel.connection_ids.serial_number
@@ -55,14 +58,13 @@ const newDevice = async (newDeviceModel: DeviceModel) => {
 }
 
 const update = async () => {
-  devices.value = await fetchDevicesByCategory(deviceCategory.value?.id || 0)
+  devices.value = await fetchDevicesByCategory(category.value.id)
 }
 
 const deleteCategoryFunc = async () => {
-  if (!deviceCategory.value) return
-  const confirmed = confirm(`Are you sure you want to delete ${deviceCategory.value.name}?`)
+  const confirmed = confirm(`Are you sure you want to delete this category?`)
   if (confirmed) {
-    const success = await deleteCategory(deviceCategory.value.id)
+    const success = await deleteCategory(category.value.id)
     if (success) {
       router.push('/categories')
     } else {
@@ -75,31 +77,28 @@ const deleteCategoryFunc = async () => {
 <template>
   <main class="pb-8 pr-4">
     <div class="flex h-full flex-col gap-2">
-      <div class="flex grow-0 items-center gap-2">
+      <div class="flex items-center gap-2">
         <router-link
           to="/categories"
           class="rounded-md px-2 py-1 text-xl font-semibold hover:bg-accent-800 hover:text-white-100"
           >Device categories</router-link
         >
         <chevron-right-icon />
-        <h1 class="text-xl font-semibold">{{ deviceCategory?.name }}</h1>
-      </div>
-
-      <!-- Delete Category Button -->
-      <base-button
+        <h1 class="text-xl font-semibold">{{category.category_name}}</h1>
+        <base-button
         variant="outline"
-        class="bg-red-500 text-white mt-3 w-fit"
+        class="bg-red-500 ml-auto text-white w-fit"
         @click="deleteCategoryFunc"
       >
         Delete Category
       </base-button>
-
+      </div>
       <div class="z-20 flex grow-0 justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
           <p class="text-lg font-semibold">Connection types:</p>
           <div class="my-2 flex flex-wrap">
             <div
-              v-for="connectionType in deviceCategory?.connectionTypes"
+              v-for="connectionType in category.connection_types"
               :key="connectionType"
               class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
               :class="{
@@ -115,7 +114,7 @@ const deleteCategoryFunc = async () => {
           <p class="text-lg font-semibold">Communication protocols:</p>
           <div class="my-2 flex flex-wrap">
             <div
-              v-for="protocol in deviceCategory?.communicationProtocols"
+              v-for="protocol in category.communication_protocols"
               :key="protocol"
               class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
               :class="{
