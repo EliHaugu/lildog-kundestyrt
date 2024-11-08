@@ -26,9 +26,8 @@ class RunTestFlow(APIView):
 
         results = []
 
-        self.test_setup(flow_id)
-
         for flow in test_flows:
+            flow_id = flow.id
             flow_result = {
                 "flow_name": flow.name,
                 "nodes_executed": [],
@@ -36,6 +35,13 @@ class RunTestFlow(APIView):
                 "error": None,
             }
             try:
+                res = self.check_device_connections(flow_id)
+                if res['status'] != 'success':
+                    flow_result["status"] = "failed"
+                    flow_result["error"] = res["message"]
+                    results.append(flow_result)
+                    break
+
                 flow_parser = FlowParser(flow)
                 execution_order = flow_parser.get_execution_order()
 
@@ -48,6 +54,7 @@ class RunTestFlow(APIView):
                         if result["status"] == "failed":
                             flow_result["status"] = "failed"
                             flow_result["error"] = result["error"]
+                            results.append(flow_result)
                             break
 
             except Exception as e:
@@ -90,17 +97,6 @@ class RunTestFlow(APIView):
             "status": "error",
             "message": "Failed to check device connections",
         }
-
-    def test_setup(self, flow_id):
-        """
-        Set up and assert device connections for the test flow.
-        """
-        #   TODO comment back in when this API is fixed
-        # self.check_device_connections(flow_id)
-
-        # TODO Connect android device(s) in command nodes to nrf kit (LIL-90)
-
-        # TODO Assert that connection is setup (LIL-90)
 
     def run_node(self, node):
         """
