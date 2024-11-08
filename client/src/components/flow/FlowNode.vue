@@ -18,14 +18,11 @@ import WarningIcon from '@/icons/WarningIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
 
 const props = defineProps<NodeProps>()
-const nodeTestState = ref(props.data.testState)
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
 const pickColour = (protocols: string[]) => {
-  console.log('protocols', protocols)
-  console.log('data', props.data)
-  if (protocols.includes('ble')) {
+  if (protocols.includes('bluetooth')) {
     return blue[Math.floor(Math.random() * blue.length)]
   } else if (protocols.includes('wifi')) {
     return green[Math.floor(Math.random() * green.length)]
@@ -49,10 +46,10 @@ const editedField = () => {
     aria-expanded="false"
     class="flow_node flex flex-col gap-1 rounded-xl border-2 bg-primary-200 p-1"
     :class="{
-      'border-idle': nodeTestState === 'idle',
-      'border-success': nodeTestState === 'success',
-      'border-warning': nodeTestState === 'warning',
-      'border-error': nodeTestState === 'error'
+      'border-idle': data.testState === 'idle',
+      'border-success': data.testState === 'success',
+      'border-warning': data.testState === 'warning',
+      'border-error': data.testState === 'error'
     }"
   >
     <div
@@ -72,10 +69,10 @@ const editedField = () => {
         }}
       </h1>
 
-      <div v-if="nodeTestState" class="icon-container p-1">
-        <success-icon v-if="nodeTestState === 'success'" />
-        <warning-icon v-if="nodeTestState === 'warning'" />
-        <error-icon v-if="nodeTestState === 'error'" />
+      <div v-if="data.testState" class="icon-container p-1">
+        <success-icon v-if="data.testState === 'success'" />
+        <warning-icon v-if="data.testState === 'warning'" />
+        <error-icon v-if="data.testState === 'error'" />
       </div>
     </div>
 

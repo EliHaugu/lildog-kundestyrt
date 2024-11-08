@@ -14,7 +14,6 @@ class WebSocketService implements IWebSocketService {
 
         if (data.id && Array.isArray(data.log)) {
           this.notifyListeners(data)
-          console.log('WebSocket message received:', data)
         } else {
           console.error('Invalid WebSocket message format:', data)
         }

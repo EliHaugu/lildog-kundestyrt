@@ -5,13 +5,15 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import useDragAndDrop from '@/composables/useDragAndDrop'
 
 import type { Connection, Edge, GraphEdge, NodeDragEvent } from '@vue-flow/core'
-import type { CustomNode } from '@/types/NodeType'
+import type { CustomNode, ImportNode } from '@/types/NodeType'
+import type { Log } from '@/types/WebSocketServiceTypes'
+import type { Flow } from '@/types/FlowType'
+import type { responseType } from '@/services/TestService'
 
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
 import { onMounted, ref } from 'vue'
-import type { Flow } from '@/types/FlowType'
 
 import { useRoute } from 'vue-router'
 import FlowService from '@/services/FlowService'
@@ -19,8 +21,7 @@ import NodeService from '@/services/NodeService'
 import EdgeService from '@/services/EdgeService'
 import { stripNodeStyles } from '@/utils/stripNodeStyles'
 import { webSocketService } from '@/services/WebSocketService'
-import type { Log } from '@/types/WebSocketServiceTypes'
-
+import { updateNode } from '@/services/NodesService'
 import { runTest } from '@/services/TestService'
 
 const route = useRoute()
@@ -49,22 +50,19 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 const displayLog = ref(false)
 const isRunning = ref(false)
 
-const handleNewLog = (log: Log) => {
-  console.log('new log', log)
-}
-
-// toggle log display
 const toggleLog = () => {
   displayLog.value = !displayLog.value
 }
 
 const updateNodePosition = async (nodeId: string, position: { x: number; y: number }) => {
   try {
-    await NodeService.updateNode(Number(nodeId), {
-      x_pos: position.x,
-      y_pos: position.y
-    })
-    console.log(`Node ${nodeId} position updated`)
+    const node: CustomNode = nodes.value.find((n) => n.id === nodeId)!
+    const exportNode = node.data! as unknown as ImportNode
+
+    exportNode.x_pos = position.x
+    exportNode.y_pos = position.y
+
+    await updateNode(Number(nodeId), exportNode)
   } catch (error) {
     console.error(`Error updating node ${nodeId} position:`, error)
   }
@@ -80,13 +78,11 @@ const fetchFlow = async () => {
     // Step 1: Fetch the main flow data
     const response = await FlowService.getFlow(flowId)
     flow.value = response
-    console.log('Fetching flow data:', response)
 
     // Step 2: Fetch detailed node data by IDs, handling undefined `nodes`
     const nodeIds: number[] = response.nodes ?? []
     const nodePromises = nodeIds.map((nodeId: number) => NodeService.getNodeProtocol(nodeId))
     const fetchedNodes = await Promise.all(nodePromises)
-    console.log('Fetched nodes:', fetchedNodes)
 
     // Map fetched nodes to VueFlow format
     nodes.value = fetchedNodes.map((node: any) => ({
@@ -99,6 +95,7 @@ const fetchFlow = async () => {
         device: node.device, // Add any additional properties expected in the type
         node_type: node.node_type,
         function: node.function, // Assuming `function` might be required
+        testState: 'idle',
         x_pos: node.x_pos,
         y_pos: node.y_pos,
         communicationProtocols: node.communication_protocols
@@ -109,7 +106,6 @@ const fetchFlow = async () => {
     const edgeIds = response.edges ?? [] // Use an empty array if `edges` is undefined
     const edgePromises = edgeIds.map((edgeId: number) => EdgeService.getEdge(edgeId))
     const fetchedEdges = await Promise.all(edgePromises)
-    console.log('Fetched edges:', fetchedEdges)
 
     // Map fetched edges to VueFlow format
     edges.value = fetchedEdges.map((edge: any) => ({
@@ -138,16 +134,39 @@ const onConnect = async (connection: { source: string; target: string }) => {
 }
 
 onMounted(fetchFlow)
+
+const runFlow = async () => {
+  try {
+    const response = (await runTest(flowId)) as responseType
+    const updatedNodes = response.results[0].nodes_executed
+
+    // Update the node status based on the test results
+    for (const node of updatedNodes) {
+      const updatedNode = nodes.value.find((n) => n.id === node.node_id.toString())
+      if (updatedNode) {
+        // @ts-ignore
+        updatedNode.data!.testState = node.status
+      }
+    }
+  } catch (error) {
+    console.error('Error running test:', error)
+  }
+}
+
 // toggle websocket connection
 const toggleWebSocket = () => {
   isRunning.value = !isRunning.value
 
   if (isRunning.value) {
-    runTest(flowId[0])
+    runFlow()
     webSocketService.connect(8765)
-    webSocketService.subscribe(handleNewLog)
+    webSocketService.subscribe((log: Log) => {
+      console.log(log)
+    })
   } else {
-    webSocketService.unsubscribe(handleNewLog)
+    webSocketService.unsubscribe((log: Log) => {
+      console.log(log)
+    })
     webSocketService.disconnect()
   }
 }
