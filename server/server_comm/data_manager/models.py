@@ -153,7 +153,10 @@ class Node(models.Model):
         max_length=50, choices=NODE_TYPE_CHOICES, default=ACTION
     )
     device: models.ForeignKey = models.ForeignKey(
-        Device, on_delete=models.CASCADE
+        Device,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     function: models.TextField = models.TextField()
     x_pos: models.IntegerField = models.IntegerField(blank=True, null=True)
