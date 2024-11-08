@@ -299,16 +299,6 @@ class FlowDeviceConnectionView(View):
                         res = android_view.check_connection(conn_id)
                         responses.append(json.loads(res.content))
 
-                        # if mac_address + adb, connect nrf device
-                        for comm_type, comm_id in devices_comm[device].items():
-                            match comm_type:
-                                case "bluetooth":
-                                    nrf_view = nRFConnectionView()
-                                    res = nrf_view.check_connection(
-                                        conn_id, comm_id
-                                    )
-                                    responses.append(json.loads(res.content))
-
         return JsonResponse({"response": responses})
 
     def get(self, request):
