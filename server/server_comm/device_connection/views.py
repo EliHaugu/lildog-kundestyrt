@@ -235,6 +235,8 @@ class nRFConnectionView(View):
                     "response": res,
                 }
             )
+        else:
+            return JsonResponse(res)
 
     def get(self, request):
         api_url = request.GET.get("api_url")
