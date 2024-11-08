@@ -225,13 +225,13 @@ class APIConnectionView(View):
 
 
 class nRFConnectionView(View):
-    def check_connection(self, adb_id: str, comm_id: str):
-        res = run_check_connection(adb_id, comm_id)
+    def check_connection(self, adb_device_id: str, mac_address: str):
+        res = run_check_connection(adb_device_id, mac_address)
         if res["status"] == "success":
             return JsonResponse(
                 {
                     "status": "connected",
-                    "message": f"adb device {adb_id} connected to nrf",
+                    "message": f"adb device {adb_device_id} connected to nrf",
                     "response": res,
                 }
             )
@@ -239,14 +239,15 @@ class nRFConnectionView(View):
             return JsonResponse(res)
 
     def get(self, request):
-        api_url = request.GET.get("api_url")
-        if api_url:
-            return self.check_connection(api_url)
+        adb_device_id = request.GET.get("adb_device_id")
+        mac_address = request.GET.get("mac_address")
+        if adb_device_id and mac_address:
+            return self.check_connection(adb_device_id, mac_address)
         else:
             return JsonResponse(
                 {
                     "status": "error",
-                    "message": "api_url is required",
+                    "message": "adb_device_id and mac_address is required",
                     "response": None,
                 }
             )
