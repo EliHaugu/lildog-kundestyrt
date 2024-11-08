@@ -10,13 +10,12 @@ defineProps({
 <template>
   <span class="flex items-center gap-1">
     <label :for="label" class="text-md dark:text-white-100">{{ label }}:</label>
-    <input
+    <textarea
       :name="label"
-      type="text"
       :value="value"
       :style="{ backgroundColor: colour }"
       class="ml-auto rounded-sm px-2 py-1"
-      @input="$emit('edit')"
+      @input="$emit('edit', ($event.target as HTMLTextAreaElement).value)"
     />
   </span>
 </template>
