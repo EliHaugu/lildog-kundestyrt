@@ -1,0 +1,31 @@
+default_node_functions:
+  nrf_connect: |
+    # THIS IS A DEFAULT NODE, TYPE: NRF CONNECT, DO NOT REMOVE ANY LINES
+    # With this node you can check the connection between your device and another
+    # The android_device_id of your chosen device will be used to connect
+    # Please fill in the marked areas with your parameters
+
+    # Insert mac addresses of devices to check connection to
+    # An example is added in the list, remove this before adding your own
+    mac_addresses = ['example_mac_address']
+
+  nrf_custom: |
+    # THIS IS A DEFAULT NODE, TYPE: NRF CUSTOM, DO NOT REMOVE ANY LINES
+    # With this node you can add your own custom nRF test scripts with custom vars
+    # The android_device_id of your chosen device will be used to connect
+    # Please fill in the marked areas with your parameters
+
+    # Insert variables to be used in your script
+    # This can be mac addresses to be used, service uuids, etc.
+    # An example is added to the object below, remove this before adding your own
+    # VARIABLES START
+    {
+      'example_var_name_in_script': 'example_var_value',
+    }
+    # VARIABLES END
+
+    # Insert your XML script here
+    # An example is shown below, remove this before adding your own
+    # XML SCRIPT START
+    <example_xml_script> </example_xml_script>
+    # XML SCRIPT END
