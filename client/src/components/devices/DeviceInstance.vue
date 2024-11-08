@@ -46,14 +46,14 @@ const deleteDevice = () => {
     class="flex items-center justify-between gap-6 rounded-md px-2 py-1 hover:bg-secondary-50 dark:hover:bg-accent-700"
   >
     <div class="flex items-center justify-start gap-3">
-      <p class="w-12">{{ device.id }}</p>
-      <p class="w-64">{{ device.device_id }}</p>
+      <p class="w-12" aria-label="ID">{{ device.id }}</p>
+      <p class="w-64" aria-label="Name">{{ device.device_id }}</p>
     </div>
     <div class="flex items-center justify-start gap-3">
-      <base-button variant="icon" class="rounded-md" @click="openModal">
+      <base-button aria-label="Edit device" variant="icon" class="rounded-md" @click="openModal">
         <edit-pen class="dark:fill-white-100" />
       </base-button>
-      <base-button variant="icon" class="rounded-md" @click="deleteDevice">
+      <base-button aria-label="Delete device" variant="icon" class="rounded-md" @click="deleteDevice">
         <delete-icon class="fill-error" />
       </base-button>
     </div>

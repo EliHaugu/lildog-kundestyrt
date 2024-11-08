@@ -64,6 +64,7 @@ const inputComponent = computed(() => {
       :class="computedClass"
       :value="modelValue"
       @input="onInput"
+      :aria-label="label"
       v-bind="$attrs"
       v-on="listeners"
     />
@@ -74,6 +75,7 @@ const inputComponent = computed(() => {
       :class="computedClass"
       :value="modelValue"
       @input="onInput"
+      :aria-label="label"
       v-bind="$attrs"
       v-on="listeners"
     >

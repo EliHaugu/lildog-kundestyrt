@@ -35,6 +35,7 @@ export default {
       idle: '#AAAAAA',
       ade: '#B900CA',
       ble: '#006FFF',
+      lte: '#69E75C',
       wifi: '#00CAC0'
     },
     extend: {}

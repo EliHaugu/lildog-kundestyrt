@@ -95,13 +95,15 @@ const navigateToDevices = () => {
           @click.stop="editDeviceCategory"
           variant="outline"
           class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
-        >
+          aria-label="Edit category"
+          >
           <edit-pen />
         </base-button>
         <base-button
           variant="outline"
           class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
           @click="deleteCategory"
+          aria-label="Delete category"
         >
           <delete-icon />
         </base-button>
@@ -143,6 +145,7 @@ const navigateToDevices = () => {
       variant="outline"
       class="ml-auto mt-3 flex w-fit gap-2 rounded-lg border-0 bg-secondary-50 shadow-none dark:bg-accent-700"
       @click="navigateToDevices"
+      aria-label="See devices"
     >
       See devices <right-arrow />
     </base-button>

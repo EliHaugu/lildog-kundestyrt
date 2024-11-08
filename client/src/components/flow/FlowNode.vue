@@ -21,6 +21,7 @@ const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
+
 const pickColour = (protocols: string[]) => {
   if (protocols.includes('bluetooth')) {
     return blue[Math.floor(Math.random() * blue.length)]
@@ -30,6 +31,8 @@ const pickColour = (protocols: string[]) => {
     return pink[Math.floor(Math.random() * pink.length)]
   } else if (protocols.includes('adb')) {
     return purple[Math.floor(Math.random() * purple.length)]
+  } else if (protocols.includes('lte')) {
+    return green[Math.floor(Math.random() * green.length)]
   }
   return 'grey'
 }

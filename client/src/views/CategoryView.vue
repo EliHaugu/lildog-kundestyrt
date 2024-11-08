@@ -93,7 +93,6 @@ const filteredCategories = computed(() => {
       </form>
       <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
         New category
-        <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </section>
     <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">

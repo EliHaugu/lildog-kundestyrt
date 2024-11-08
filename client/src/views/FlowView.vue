@@ -113,13 +113,12 @@ const addNewFlow = async () => {
 <template>
   <main class="flex flex-col gap-6">
     <div class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
+      <h1 class="p-2 text-xl font-semibold">Test flows</h1>
       <form action="" class="ml-auto w-fit flex-grow">
         <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
       </form>
-      <base-button class="w-48 items-center rounded-lg" @click="createNewFlow">
+      <base-button class="flex w-48 flex-shrink-0 items-center gap-2" @click="createNewFlow">
         New flow
-        <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </div>
 
