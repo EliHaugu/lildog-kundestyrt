@@ -260,7 +260,7 @@ class FlowDeviceConnectionView(View):
 
         for node in flow.nodes.all():
             device = node.device
-            device_id = device.device_id
+            device_id = device.id
             category = device.category
             devices_conn.setdefault(device_id, {})
             devices_comm.setdefault(device_id, {})
