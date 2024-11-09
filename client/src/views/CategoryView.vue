@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DeviceCategory } from '@/types/DeviceTypes'
-import { ref, computed, onMounted, inject, type Ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 import DeviceCategoryCard from '../components/devices/DeviceCategoryCard.vue'
 import BaseButton from '../components/common/BaseButton.vue'
@@ -10,7 +10,7 @@ import BaseModal from '../components/common/BaseModal.vue'
 import { fetchCategories, createCategory } from '@/services/CategoryService'
 
 const openModal = () => {
-  (document.getElementById('newDeviceCategoryModal') as HTMLDialogElement).showModal()
+  ;(document.getElementById('newDeviceCategoryModal') as HTMLDialogElement).showModal()
 }
 
 const categories = ref<DeviceCategory[]>([])

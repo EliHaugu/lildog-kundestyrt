@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { Device, DeviceModel, DeviceCategory } from '@/types/DeviceTypes'
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { createDevice, fetchDevicesByCategory } from '@/services/DevicesService'
-import { deleteCategory , getCategory} from '@/services/CategoryService'
+import { deleteCategory, getCategory } from '@/services/CategoryService'
 
 import DeviceInstance from '@/components/devices/DeviceInstance.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -23,16 +23,13 @@ const devices = ref<Device[]>([])
 const router = useRouter()
 const route = useRoute()
 
-
-
 onMounted(async () => {
   category.value = await getCategory(Number(route.params.id))
   devices.value = await fetchDevicesByCategory(Number(route.params.id))
 })
 
-
 const openModal = () => {
-  (document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
+  ;(document.getElementById('newDeviceModal') as HTMLDialogElement).showModal()
 }
 
 const newDevice = async (newDeviceModel: DeviceModel) => {
@@ -76,7 +73,7 @@ const deleteCategoryFunc = async () => {
 
 <template>
   <main class="pb-8 pr-4">
-    <div class="flex h-full flex-col gap-2">
+    <div class="relative flex h-full flex-col gap-2">
       <div class="flex items-center gap-2">
         <router-link
           to="/categories"
@@ -84,14 +81,14 @@ const deleteCategoryFunc = async () => {
           >Device categories</router-link
         >
         <chevron-right-icon />
-        <h1 class="text-xl font-semibold">{{category.category_name}}</h1>
+        <h1 class="text-xl font-semibold">{{ category.category_name }}</h1>
         <base-button
-        variant="outline"
-        class="bg-red-500 ml-auto text-white w-fit"
-        @click="deleteCategoryFunc"
-      >
-        Delete Category
-      </base-button>
+          variant="outline"
+          class="bg-red-500 text-white ml-auto w-fit"
+          @click="deleteCategoryFunc"
+        >
+          Delete Category
+        </base-button>
       </div>
       <div class="z-20 flex grow-0 justify-start gap-6">
         <div class="flex w-fit items-center justify-between gap-1">
@@ -136,17 +133,30 @@ const deleteCategoryFunc = async () => {
           </p>
         </div>
       </div>
-      <div class="flex grow flex-col gap-2 overflow-y-auto">
-        <div class="flex grow-0 items-center justify-between gap-6">
-          <div class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold">
-            <h2 class="w-12">ID</h2>
-            <h2 class="w-64">Device instance name</h2>
+      <base-button
+        role=""
+        class="absolute right-0 top-[6.75rem] w-fit justify-between text-nowrap rounded-md"
+        @click="openModal"
+      >
+        Add device <plus-icon />
+      </base-button>
+      <div
+        class="flex grow flex-col gap-2 overflow-y-auto"
+        role="table"
+        aria-label="Devices in this category"
+      >
+        <div class="flex grow-0 items-center justify-between gap-6" role="rowgroup">
+          <div
+            class="z-20 flex w-full items-center justify-start gap-3 text-xl font-semibold"
+            role="row"
+          >
+            <h2 class="w-12" role="columnheader">ID</h2>
+            <h2 class="w-64" role="columnheader">Device instance name</h2>
+            <h2 class="sr-only" role="columnheader">Edit device</h2>
+            <h2 class="sr-only" role="columnheader">Delete device</h2>
           </div>
-          <base-button class="justify-between text-nowrap rounded-md" @click="openModal">
-            Add device <plus-icon />
-          </base-button>
         </div>
-        <div class="flex grow flex-col gap-2 overflow-y-auto">
+        <div class="flex grow flex-col gap-2 overflow-y-auto" role="rowgroup">
           <device-instance
             @update="update"
             v-for="device in devices"

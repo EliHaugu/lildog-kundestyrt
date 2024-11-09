@@ -14,7 +14,7 @@ defineProps({
       :name="label"
       :value="value"
       :style="{ backgroundColor: colour }"
-      class="ml-auto rounded-sm px-2 py-1"
+      class="ml-auto h-fit min-h-8 resize rounded-sm px-2 py-1"
       @input="$emit('edit', ($event.target as HTMLTextAreaElement).value)"
     />
   </span>

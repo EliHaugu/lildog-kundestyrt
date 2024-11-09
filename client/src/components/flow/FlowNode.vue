@@ -22,7 +22,6 @@ const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
-
 const pickColour = (protocols: string[]) => {
   if (protocols.includes('bluetooth')) {
     return blue[Math.floor(Math.random() * blue.length)]
@@ -44,7 +43,6 @@ const editedField = (fn: string) => {
   edited.value = true
 
   updateNode(Number(props.data.id), {
-    ...props.data,
     function: fn
   })
 }

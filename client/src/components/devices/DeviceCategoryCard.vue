@@ -64,7 +64,9 @@ const saveCategoryChanges = async () => {
 
 // Function to delete the category
 const deleteCategory = async () => {
-  const confirmed = confirm(`Are you sure you want to delete ${props.deviceCategory.category_name}?`)
+  const confirmed = confirm(
+    `Are you sure you want to delete ${props.deviceCategory.category_name}?`
+  )
   if (confirmed) {
     const success = await deleteCategoryService(props.deviceCategory.id)
     if (success) {
@@ -96,7 +98,7 @@ const navigateToDevices = () => {
           variant="outline"
           class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
           aria-label="Edit category"
-          >
+        >
           <edit-pen />
         </base-button>
         <base-button
@@ -158,7 +160,12 @@ const navigateToDevices = () => {
     title="Edit Device Category"
     @submit="saveCategoryChanges"
   >
-    <base-input-field v-model="editedCategory.category_name" label="Name" name="name" placeholder="" />
+    <base-input-field
+      v-model="editedCategory.category_name"
+      label="Name"
+      name="name"
+      placeholder=""
+    />
     <!-- <base-input-field
       v-model="editedCategory.connectionTypes"
       label="Connection type"

@@ -23,17 +23,19 @@ const modifyCurrentDevices = (id: number) => {
 
 <template>
   <div v-if="show">
-    <nav class="mt-2 flex">
-      <ul class="flex h-full flex-grow gap-2 overflow-x-scroll">
+    <nav class="mt-2 flex" role="tabpanel">
+      <ul class="flex h-full flex-grow gap-2 overflow-x-scroll" role="tablist">
         <li
           @click="modifyCurrentDevices(0)"
           :aria-expanded="currentDevices.some((device) => device.item === 0)"
           tabindex="1"
+          role="tab"
           class="h-9 w-fit flex-shrink-0 rounded-md bg-primary-100 px-4 py-1.5 text-sm leading-6 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400 dark:hover:bg-accent-600 dark:aria-expanded:bg-accent-500"
         >
           All Devices
         </li>
         <li
+          role="tab"
           :key="item.id"
           v-for="item in logItems"
           @click="modifyCurrentDevices(item.id)"

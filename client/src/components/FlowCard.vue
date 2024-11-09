@@ -76,7 +76,7 @@ const test = (flowId: string) => {
 
 <template>
   <router-link
-    class="relative h-40  cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
+    class="relative h-40 cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
     :to="'flow/' + flow.id"
   >
     <div class="flex items-center gap-2">
@@ -117,7 +117,7 @@ const test = (flowId: string) => {
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': connectionType === 'uart',
-          'bg-ade': connectionType === 'adb',
+          'bg-ade': connectionType === 'adb'
         }"
       >
         {{ connectionType }}
