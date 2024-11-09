@@ -23,7 +23,7 @@ async def log(websocket):
 
 
 async def main():
-    async with websockets.serve(log, "localhost", 8765):
+    async with websockets.serve(log, "0.0.0.0", 8765):
         await asyncio.Future()  # run forever
 
 

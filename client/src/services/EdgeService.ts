@@ -1,5 +1,4 @@
-// services/EdgeService.ts
-const API_BASE_URL = 'http://localhost:8000/data_manager/api'
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/data_manager/api`
 
 export default {
   // Fetch all edges
