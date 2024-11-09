@@ -10,11 +10,9 @@ export async function fetchNodes(): Promise<Node[]> {
     method: 'GET'
   }
 
-  const response = await fetch(API_BASE_URL, requestOptions).then(
-    (response) => {
-      return response.json()
-    }
-  )
+  const response = await fetch(API_BASE_URL, requestOptions).then((response) => {
+    return response.json()
+  })
   const baseResponse = []
   for (let i = 0; i < response.length; i++) {
     baseResponse.push({

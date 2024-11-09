@@ -57,8 +57,7 @@ export async function deleteCategory(id: number): Promise<Boolean> {
   const requestOptions = {
     method: 'DELETE'
   }
-  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions))
-    .ok
+  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions)).ok
 }
 
 /**
@@ -75,8 +74,7 @@ export async function updateCategory(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(mapToBackendModel(category))
   }
-  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions))
-    .ok
+  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions)).ok
 }
 
 const mapCategory = (category: {
