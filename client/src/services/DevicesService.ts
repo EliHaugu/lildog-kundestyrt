@@ -31,9 +31,7 @@ export async function fetchDevicesByCategory(categoryId: number): Promise<Device
     method: 'GET'
   }
 
-  const url = `${API_BASE_URL}?category_id=${encodeURIComponent(
-    categoryId
-  )}`
+  const url = `${API_BASE_URL}?category_id=${encodeURIComponent(categoryId)}`
 
   const response = await fetch(url, requestOptions)
 
@@ -50,10 +48,7 @@ export async function fetchDevice(id: number): Promise<Device | null> {
     method: 'GET'
   }
   try {
-    const response = await fetch(
-      `${API_BASE_URL}${id}/`,
-      requestOptions
-    )
+    const response = await fetch(`${API_BASE_URL}${id}/`, requestOptions)
     if (!response.ok) {
       throw new Error(`Error fetching device with ID ${id}: ${response.statusText}`)
     }
