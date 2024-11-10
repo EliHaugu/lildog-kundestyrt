@@ -82,20 +82,20 @@ const test = (flowId: string) => {
     <div class="flex items-center gap-2">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
       <base-button
-        @click.stop="deleteFlow(flow.id)"
-        variant="outline"
-        aria-label="Delete flow"
-        class="ml-auto h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
-      >
-        <delete-icon fill="red" />
-      </base-button>
-      <base-button
         @click.stop="editFlow(flow)"
         aria-label="Edit flow"
         variant="outline"
-        class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+        class="icon ml-auto bg-secondary-50 dark:bg-accent-700"
       >
         <edit-pen />
+      </base-button>
+      <base-button
+        @click.stop="deleteFlow(flow.id)"
+        variant="outline"
+        aria-label="Delete flow"
+        class="icon bg-secondary-50 dark:bg-accent-700"
+      >
+        <delete-icon />
       </base-button>
     </div>
 

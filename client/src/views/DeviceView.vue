@@ -135,13 +135,13 @@ const deleteCategoryFunc = async () => {
       </div>
       <base-button
         role=""
-        class="absolute right-0 top-[6.75rem] w-fit justify-between text-nowrap rounded-md"
+        class="absolute right-0 top-[6.75rem] z-20 w-fit justify-between text-nowrap rounded-md"
         @click="openModal"
       >
         Add device <plus-icon />
       </base-button>
       <div
-        class="flex grow flex-col gap-2 overflow-y-auto"
+        class="z-10 flex grow flex-col gap-2 overflow-y-auto"
         role="table"
         aria-label="Devices in this category"
       >

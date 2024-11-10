@@ -81,17 +81,17 @@ const filteredCategories = computed(() => {
 </script>
 
 <template>
-  <main class="flex flex-col gap-6">
-    <section class="flex gap-2">
+  <main class="flex flex-col gap-4">
+    <section class="flex h-10 gap-2">
       <h1 class="flex-shrink-0 p-2 text-xl font-semibold">Device categories</h1>
       <form action="" class="ml-auto flex-grow">
         <base-input-field
           v-model="searchQuery"
           placeholder="Search categories"
-          class="flex-shrink rounded-lg"
+          class="h-10 flex-shrink rounded-lg"
         />
       </form>
-      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
+      <base-button @click="openModal" class="flex h-10 w-48 flex-shrink-0 items-center gap-2">
         New category
       </base-button>
     </section>

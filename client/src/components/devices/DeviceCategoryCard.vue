@@ -92,18 +92,18 @@ const navigateToDevices = () => {
   <div class="flex h-fit flex-col gap-0 rounded-md bg-secondary-50 p-3 dark:bg-accent-700">
     <div class="flex items-center justify-between">
       <h2 class="text-xl font-semibold">{{ deviceCategory.category_name }}</h2>
-      <div>
+      <div class="flex gap-2">
         <base-button
           @click.stop="editDeviceCategory"
           variant="outline"
-          class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+          class="icon bg-secondary-50 dark:bg-accent-700"
           aria-label="Edit category"
         >
           <edit-pen />
         </base-button>
         <base-button
           variant="outline"
-          class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+          class="icon bg-secondary-50 dark:bg-accent-700"
           @click="deleteCategory"
           aria-label="Delete category"
         >
@@ -145,7 +145,7 @@ const navigateToDevices = () => {
 
     <base-button
       variant="outline"
-      class="ml-auto mt-3 flex w-fit gap-2 rounded-lg border-0 bg-secondary-50 shadow-none dark:bg-accent-700"
+      class="ml-auto mt-3 flex w-fit gap-2 rounded-lg border-0 bg-secondary-50 shadow-none dark:bg-accent-700 dark:fill-white-100"
       @click="navigateToDevices"
       aria-label="See devices"
     >
