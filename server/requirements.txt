@@ -42,7 +42,7 @@ keyring==23.13.1
 lxml==4.9.4
 MarkupSafe==2.1.5
 mccabe==0.7.0
-more-itertools==10.2.0
+more-itertools==10.5.0
 msgpack==1.1.0
 mypy==1.11.2
 mypy-extensions==1.0.0
