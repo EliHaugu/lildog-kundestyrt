@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DeviceCategory } from '@/types/DeviceTypes'
-import { ref, computed, onMounted, inject, type Ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 import DeviceCategoryCard from '../components/devices/DeviceCategoryCard.vue'
 import BaseButton from '../components/common/BaseButton.vue'
@@ -9,12 +9,11 @@ import BaseModal from '../components/common/BaseModal.vue'
 
 import { fetchCategories, createCategory } from '@/services/CategoryService'
 
-const deviceCategories = inject<Ref<DeviceCategory[]>>('deviceCategories', ref([]))
-
 const openModal = () => {
   ;(document.getElementById('newDeviceCategoryModal') as HTMLDialogElement).showModal()
 }
 
+const categories = ref<DeviceCategory[]>([])
 const newCategoryName = ref('')
 const newCategoryConnection = ref('')
 const newCategoryCommunication = ref('')
@@ -30,8 +29,7 @@ const fetchAllCategories = async () => {
     console.error('Failed to fetch device categories')
     return
   }
-
-  deviceCategories.value = data
+  categories.value = data
 }
 
 onMounted(fetchAllCategories)
@@ -76,26 +74,25 @@ const refreshCategories = async () => {
 
 // Filtered categories based on search query
 const filteredCategories = computed(() => {
-  return deviceCategories.value.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return categories.value.filter((category) =>
+    category.category_name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 </script>
 
 <template>
-  <main class="flex flex-col gap-6">
+  <main class="flex flex-col gap-4">
     <section class="flex h-10 gap-2">
-      <h1 class="flex-shrink-0 p-2 pt-1 text-2xl font-semibold">Device categories</h1>
+      <h1 class="flex-shrink-0 p-2 text-xl font-semibold">Device categories</h1>
       <form action="" class="ml-auto flex-grow">
         <base-input-field
           v-model="searchQuery"
           placeholder="Search categories"
-          class="flex-shrink rounded-lg"
+          class="h-10 flex-shrink rounded-lg"
         />
       </form>
-      <base-button @click="openModal" class="flex w-48 flex-shrink-0 items-center gap-2">
+      <base-button @click="openModal" class="flex h-10 w-48 flex-shrink-0 items-center gap-2">
         New category
-        <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </section>
     <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">

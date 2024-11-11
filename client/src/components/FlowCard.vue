@@ -10,12 +10,12 @@ import flowService from '@/services/FlowService'
 import BaseModal from './common/BaseModal.vue'
 import { runTest } from '@/services/TestService'
 
+const emit = defineEmits(['flowUpdated'])
 const props = defineProps<{
   flow: Flow
   connectionTypes?: string[]
   communicationProtocols?: string[]
 }>()
-const emit = defineEmits(['flowUpdated'])
 
 const editFlowType = ref<Flow | null>(null)
 const flow = ref<Flow>(props.flow)
@@ -75,25 +75,27 @@ const test = (flowId: string) => {
 </script>
 
 <template>
-  <a
-    class="relative h-40 w-[25rem] cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
-    :href="'flow/' + flow.id"
+  <router-link
+    class="relative h-40 cursor-pointer rounded-md bg-secondary-50 p-3 transition-all duration-200 hover:bg-opacity-50 hover:shadow-md dark:bg-accent-700"
+    :to="'flow/' + flow.id"
   >
     <div class="flex items-center gap-2">
       <h2 class="text-lg font-semibold">{{ flow.name }}</h2>
       <base-button
-        @click.stop="deleteFlow(flow.id)"
-        variant="outline"
-        class="ml-auto h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
-      >
-        <delete-icon fill="red" />
-      </base-button>
-      <base-button
         @click.stop="editFlow(flow)"
+        aria-label="Edit flow"
         variant="outline"
-        class="h-fit rounded-lg border-none bg-secondary-50 shadow-none dark:bg-accent-700"
+        class="icon ml-auto bg-secondary-50 dark:bg-accent-700"
       >
         <edit-pen />
+      </base-button>
+      <base-button
+        @click.stop="deleteFlow(flow.id)"
+        variant="outline"
+        aria-label="Delete flow"
+        class="icon bg-secondary-50 dark:bg-accent-700"
+      >
+        <delete-icon />
       </base-button>
     </div>
 
@@ -126,7 +128,8 @@ const test = (flowId: string) => {
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-wifi': communicationProtocol === 'wifi',
-          'bg-ble': communicationProtocol === 'bluetooth'
+          'bg-ble': communicationProtocol === 'bluetooth',
+          'bg-lte': communicationProtocol === 'lte'
         }"
       >
         {{ communicationProtocol }}
@@ -139,7 +142,7 @@ const test = (flowId: string) => {
     >
       Run Flow <play-icon fill="white" />
     </base-button>
-  </a>
+  </router-link>
 
   <base-modal
     :id="'editFlowForm' + flow.id"

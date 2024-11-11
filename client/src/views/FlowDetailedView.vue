@@ -150,6 +150,8 @@ const runFlow = async () => {
     }
   } catch (error) {
     console.error('Error running test:', error)
+  } finally {
+    isRunning.value = false
   }
 }
 

@@ -13,9 +13,9 @@ type Device = {
 
 type DeviceCategory = {
   id: number
-  name: string
-  connectionTypes: string[]
-  communicationProtocols: string[]
+  category_name: string
+  connection_types: string[]
+  communication_protocols: string[]
   devices?: Device[]
 }
 

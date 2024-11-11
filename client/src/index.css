@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .icon {
+    @apply h-fit rounded-lg border-none shadow-none dark:fill-white-100;
+  }
+}
 html {
   --primary-100: #ffffff;
   --primary-200: #fbfbfb;

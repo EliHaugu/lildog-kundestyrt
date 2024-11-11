@@ -16,6 +16,7 @@ import NodeFieldInput from './FlowNodeInput.vue'
 import SuccessIcon from '@/icons/SuccessIcon.vue'
 import WarningIcon from '@/icons/WarningIcon.vue'
 import ErrorIcon from '@/icons/ErrorIcon.vue'
+import { updateNode } from '@/services/NodesService'
 
 const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
@@ -30,14 +31,20 @@ const pickColour = (protocols: string[]) => {
     return pink[Math.floor(Math.random() * pink.length)]
   } else if (protocols.includes('adb')) {
     return purple[Math.floor(Math.random() * purple.length)]
+  } else if (protocols.includes('lte')) {
+    return green[Math.floor(Math.random() * green.length)]
   }
   return 'grey'
 }
 
 const colour = computed(() => pickColour(props.data.communicationProtocols || []))
 
-const editedField = () => {
+const editedField = (fn: string) => {
   edited.value = true
+
+  updateNode(Number(props.data.id), {
+    function: fn
+  })
 }
 </script>
 
