@@ -2,9 +2,10 @@ import asyncio
 import json
 import os
 import sys
+from typing import AsyncGenerator, Callable
 
 import django
-import serial_asyncio
+import serial_asyncio  # type: ignore
 import websockets
 from asgiref.sync import sync_to_async
 from serial.tools import list_ports
@@ -20,40 +21,46 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server_comm.settings')
 django.setup()
 
 # import view from django
-from device_connection.views import FlowDeviceConnectionView  # type: ignore
+from device_connection import views  # type: ignore # noqa: E402
+
+# custom type for typing for log streams from different sources
+LogStreamType = Callable[[str], AsyncGenerator[bytes | str, None]]
 
 
-async def adb_log_stream(adb_device_id):
+async def adb_log_stream(adb_id: str) -> AsyncGenerator[str, None]:
     process = await asyncio.create_subprocess_exec(
         "adb",
         "-s",
-        adb_device_id,
+        adb_id,
         "logcat",
         stdout=asyncio.subprocess.PIPE,
     )
 
+    if process.stdout is None:
+        raise RuntimeError("Failed to get stdout for the subprocess")
+
     try:
         while True:
-            log_line = await process.stdout.readline()
+            log_line: bytes = await process.stdout.readline()
             if not log_line:
                 await asyncio.sleep(0.1)
                 continue
             yield log_line.decode('utf-8').strip()
 
     except asyncio.CancelledError:
-        print(f"ADB log stream for {adb_device_id} was closed")
+        print(f"ADB log stream for {adb_id} was closed")
 
     except Exception as e:
-        print(
-            f"Error occurred while logging adb device {adb_device_id}: {str(e)}"
-        )
+        print(f"Error occurred logging adb device {adb_id}: {str(e)}")
 
     finally:
         process.terminate()
         await process.wait()
 
 
-async def uart_log_stream(serial_number):
+async def uart_log_stream(
+    serial_number: str,
+) -> AsyncGenerator[bytes | str, None]:
     def get_device_port(serial_number: str):
         ports = list_ports.comports()
         for port in ports:
@@ -77,17 +84,21 @@ async def uart_log_stream(serial_number):
         print(f"UART log stream for {serial_number} was closed")
 
     except Exception as e:
-        print(
-            f"Error occurred while logging UART device {serial_number}: {str(e)}"
-        )
+        print(f"Error occurred logging UART device {serial_number}: {str(e)}")
 
     finally:
         reader.close()
 
 
 async def stream_device_log(
-    websocket, device_id, device_name, conn_type, conn_id, log_id
-):
+    websocket: websockets.WebSocketServerProtocol,
+    device_id: str,
+    device_name: str,
+    conn_type: str,
+    conn_id: str,
+    log_id: int,
+) -> None:
+    log_stream: LogStreamType | None = None
     match conn_type:
         case "adb":
             log_stream = adb_log_stream
@@ -96,6 +107,9 @@ async def stream_device_log(
         case _:
             print(f"Unsupported connection type: {conn_type}")
             return
+
+    if log_stream is None:
+        raise RuntimeError("No valid log stream found")
 
     try:
         async for line in log_stream(conn_id):
@@ -115,18 +129,20 @@ async def stream_device_log(
         print(f"Connection closed for {device_name} (ID: {device_id})")
 
 
-async def log_all(websocket, path):
+async def log_all(
+    websocket: websockets.WebSocketServerProtocol, path: str
+) -> None:
     # parse flow_id from path
     flow_id = path.split("/")[-1]
     print(f"Server connected, logging for flow {flow_id}")
 
-    flow_view = FlowDeviceConnectionView()
+    flow_view = views.FlowDeviceConnectionView()
     devices_conn, _, devices_name = await sync_to_async(
         flow_view.parse_devices
     )(flow_id)
 
     # log counter to give ids to each log
-    log_ids = {}
+    log_ids: dict[str, dict[str, int]] = {}
     current_log_id = 1
     for device_id in devices_name:
         log_ids.setdefault(device_id, {})
@@ -138,7 +154,7 @@ async def log_all(websocket, path):
     tasks = []
     for device_id in devices_name:
         device_name: str = devices_name[device_id]
-        device_conn: list = devices_conn[device_id]
+        device_conn: dict = devices_conn[device_id]
 
         for conn_type, conn_id in device_conn.items():
             log_id = log_ids[device_id][conn_type]
@@ -156,7 +172,7 @@ async def log_all(websocket, path):
     await asyncio.gather(*tasks)
 
 
-async def main():
+async def main() -> None:
     async with websockets.serve(log_all, "localhost", 8765):
         print("Websocket startet running on port 8765")
         await asyncio.Future()  # run forever
