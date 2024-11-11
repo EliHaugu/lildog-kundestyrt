@@ -93,7 +93,7 @@ Twisted==24.10.0
 txaio==23.1.1
 types-pyserial==3.5.0.20240826
 types-PyYAML==6.0.12.20240917
-types-requests==2.32.0.20240914
+types-requests==2.32.0.20241016
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.3
