@@ -35,7 +35,12 @@ class SerialDeviceConnectionView(View):
 
             serial_device.write(b"ping\n")
             time.sleep(1)
-            res = serial_device.readline().strip()
+            line = serial_device.readline()
+            res = (
+                line.decode("utf-8").strip()
+                if isinstance(line, bytes)
+                else line
+            )
 
             if res:
                 return JsonResponse(
@@ -258,32 +263,42 @@ class FlowDeviceConnectionView(View):
         flow = Flow.objects.get(id=flow_id)
         devices_conn: dict[str, dict] = {}
         devices_comm: dict[str, dict] = {}
+        devices_name: dict[str, str] = {}
 
         for node in flow.nodes.all():
             device = node.device
             device_id = device.id
+            device_name = device.device_id
             category = device.category
             devices_conn.setdefault(device_id, {})
             devices_comm.setdefault(device_id, {})
 
             connection_types = category.connection_types
             for conn_type in connection_types:
-                conn_id_field = conn_type_id_mapping[conn_type]
-                if conn_id_field in device.connection_ids.keys():
+                conn_id_field = conn_type_id_mapping.get(conn_type)
+                if (
+                    conn_id_field
+                    and conn_id_field in device.connection_ids.keys()
+                ):
                     conn_id = device.connection_ids.get(conn_id_field)
                     devices_conn[device_id][conn_type] = conn_id
 
             communication_protocols = category.communication_protocols
             for comm_protocol in communication_protocols:
-                comm_id_field = comm_protocol_id_mapping[comm_protocol]
-                if comm_id_field in device.communication_ids.keys():
+                comm_id_field = comm_protocol_id_mapping.get(comm_protocol)
+                if (
+                    comm_id_field
+                    and comm_id_field in device.communication_ids.keys()
+                ):
                     comm_id = device.communication_ids.get(comm_id_field)
                     devices_comm[device_id][comm_protocol] = comm_id
 
-        return devices_conn, devices_comm
+            devices_name[device_id] = device_name
+
+        return devices_conn, devices_comm, devices_name
 
     def connect_devices(self, flow_id: str):
-        devices_conn, devices_comm = self.parse_devices(flow_id)
+        devices_conn, devices_comm, _ = self.parse_devices(flow_id)
         responses = []
 
         for device in devices_conn:
@@ -299,6 +314,14 @@ class FlowDeviceConnectionView(View):
                         android_view = AndroidDeviceConnectionView()
                         res = android_view.check_connection(conn_id)
                         responses.append(json.loads(res.content))
+                    case _:
+                        return JsonResponse(
+                            {
+                                "status": "error",
+                                "message": "invalid connection type",
+                                "response": None,
+                            }
+                        )
 
         return JsonResponse({"response": responses})
 
