@@ -1,3 +1,4 @@
+import json
 from urllib.parse import urlencode
 
 import requests
@@ -8,6 +9,7 @@ from flow_parser import FlowParser
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from test_runner.default_nodes import run_default_node
 
 
 class RunTestFlow(APIView):
@@ -72,7 +74,7 @@ class RunTestFlow(APIView):
         protocol = 'https' if self.request.is_secure() else 'http'
         base_url = f"{protocol}://{self.request.get_host()}"
         check_devices_url = f"""
-                            {base_url}{reverse('flow-device-connection')}
+                            {base_url}{reverse('flow-connection')}
                             ?{urlencode({'flow_id': flow_id})}
                             """
         response = requests.get(check_devices_url)
@@ -109,8 +111,25 @@ class RunTestFlow(APIView):
                 result = self.check_assertion(node.function)
 
             elif node.node_type == Node.ACTION:
-                # TODO add code from LIL-95
-                result = True
+                try:
+                    function = node.function.split("\n")
+                    if (
+                        len(function) > 1
+                        and "THIS IS A DEFAULT NODE" in function[1]
+                    ):
+                        res = json.loads(run_default_node(node).content)
+                        if res['status'] != "success":
+                            return {
+                                "node_id": node.id,
+                                "status": "failed",
+                                "output": res,
+                            }
+                    else:
+                        exec(node.function)
+                    result = True
+                except Exception as e:
+                    ex_type = type(e).__name__
+                    raise ValueError(f"Invalid Python code, {ex_type}:{e}")
             else:
                 raise ValueError(f"Invalid node type: {node.node_type}")
             return {

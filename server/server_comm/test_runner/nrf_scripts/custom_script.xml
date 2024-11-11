@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test-suite description="Custom script">
+    <target id="devkit" name="Kit" address="${MAC_ADDRESS}"/>
+
+    <test id="led-on" description="Turn LED on">
+        <connect target="devkit" timeout="5000" />
+        <discover-services target="devkit" timeout="5000" />
+        <write service-uuid="${SERVICE_UUID}"
+                characteristic-uuid="${CHARACTERISTIC_UUID}"
+                value="01"
+                target="devkit"/>
+    </test>
+
+    <run-test ref="led-on" />
+</test-suite>
