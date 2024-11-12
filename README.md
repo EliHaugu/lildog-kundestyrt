@@ -42,6 +42,9 @@ Open the `server` folder and run the following command: `python3 -m server`
 ## How to update requirements
 If you have added new pip packages to the project and want to save them for everyone to use, when in your venv (ensure that you are in the venv so you don't freeze unnecessary packages), run the following command in the server folder: `pip freeze > requirements.txt`
 
+## Swagger
+The application has implemented swagger. View the API documentation at `http://localhost:8000/swagger/` after running the server.
+
 ## Testing
 ### How to write a test
 pytest automatically looks for files that match the pattern `test_*.py` or `*_test.py` and within those files finds functions that begin with `test`. To create new tests, follow this pattern and create your file in the `server/tests` folder.
