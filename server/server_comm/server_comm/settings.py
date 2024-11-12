@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "device_connection",
     "corsheaders",
     "test_runner",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
