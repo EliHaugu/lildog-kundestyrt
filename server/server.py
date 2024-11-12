@@ -132,9 +132,16 @@ async def stream_device_log(
 async def log_all(
     websocket: websockets.WebSocketServerProtocol, path: str
 ) -> None:
+    await websocket.send(json.dumps({"message": "Connected to websocket!"}))
+
     # parse flow_id from path
-    flow_id = path.split("/")[-1]
-    print(f"Server connected, logging for flow {flow_id}")
+    flow_id_str = path.split("/")[-1]
+    if not flow_id_str.isdigit():
+        await websocket.send(
+            json.dumps({"error": "Missing or invalid flow ID"})
+        )
+        return
+    flow_id: int = int(flow_id_str)
 
     flow_view = views.FlowDeviceConnectionView()
     devices_conn, _, devices_name = await sync_to_async(

@@ -28,3 +28,4 @@ def start_server():
     poll_server()
     yield
     process.terminate()
+    process.wait()

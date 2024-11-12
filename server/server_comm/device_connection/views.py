@@ -259,7 +259,7 @@ class nRFConnectionView(View):
 
 
 class FlowDeviceConnectionView(View):
-    def parse_devices(self, flow_id: str):
+    def parse_devices(self, flow_id: int):
         flow = Flow.objects.get(id=flow_id)
         devices_conn: dict[str, dict] = {}
         devices_comm: dict[str, dict] = {}
@@ -297,7 +297,7 @@ class FlowDeviceConnectionView(View):
 
         return devices_conn, devices_comm, devices_name
 
-    def connect_devices(self, flow_id: str):
+    def connect_devices(self, flow_id: int):
         devices_conn, devices_comm, _ = self.parse_devices(flow_id)
         responses = []
 
