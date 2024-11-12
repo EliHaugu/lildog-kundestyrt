@@ -21,7 +21,7 @@ const props = defineProps({
 const editNodeModel = ref({
   label: props.node.data.label,
   node_type: props.node.data.node_type,
-  device: props.node.data.device.toString(),
+  device: props.node.data.device?.toString() ?? undefined,
   function: props.node.data.function,
   x_pos: props.node.position.x,
   y_pos: props.node.position.y
