@@ -106,7 +106,7 @@ const newNode = () => {
         >
       </nav>
       <div class="flex gap-1 px-2">
-        <base-input-field class="h-9" />
+        <base-input-field class="h-9 flex-grow" />
         <base-button
           @click="openModal"
           variant="icon"
