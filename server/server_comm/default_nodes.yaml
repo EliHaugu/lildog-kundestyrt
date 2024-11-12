@@ -29,3 +29,34 @@ default_node_functions:
     # XML SCRIPT START
     <example_xml_script> </example_xml_script>
     # XML SCRIPT END
+
+  api_assert: |
+    # This is a default example node showing how to use assert with API
+    # Feel free to add more lines if necessary, code is parsed as Python
+    
+    import requests
+
+    api_url = "https://example-url.com/api/endpoint"
+
+    def api_assert():
+      try:
+          response = requests.get(api_url)
+          
+          # Check if the request was successful
+          response.raise_for_status()
+          
+          # Parse JSON response (or handle the response as needed)
+          data = response.json()
+          
+          # Example assertions (modify based on the data you expect)
+          assert "expected_key" in data, "Expected key not found in response"
+          assert data["status"] == "success", "API call was not successful"
+          
+          return True
+          
+      except requests.exceptions.RequestException as e:
+          return False
+      except AssertionError as e:
+          return False
+    
+    api_assert()
