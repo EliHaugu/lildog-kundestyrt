@@ -92,7 +92,7 @@ const fetchFlow = async () => {
       data: {
         id: node.id, // Including `id` here as expected
         label: node.label,
-        device: node.device, // Add any additional properties expected in the type
+        device: node.device || null, // Add any additional properties expected in the type
         node_type: node.node_type,
         function: node.function, // Assuming `function` might be required
         testState: 'idle',
@@ -186,7 +186,7 @@ const addNodeToFlow = async (nodeData: any, position: { x: number; y: number }) 
           id: nodeData.id,
           label: nodeData.data.label,
           node_type: nodeData.node_type,
-          device: nodeData.data.device,
+          device: nodeData.data.device || null,
           function: nodeData.data.function,
           x_pos: position.x, // Save the position for persistence
           y_pos: position.y

@@ -3,7 +3,7 @@ import type { Node, XYPosition } from '@vue-flow/core'
 export type ImportNode = {
   id: number
   label: string
-  device: number
+  device?: number
   node_type: string
   function: string
   testState?: string
