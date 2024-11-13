@@ -2,12 +2,10 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY client/package.json client/package-lock.json ./
+COPY package.json ./
 
-RUN npm install
+COPY . ./
 
-COPY client ./
+EXPOSE 5173
 
-EXPOSE 8080
-
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm install && npm run dev -- --host"]

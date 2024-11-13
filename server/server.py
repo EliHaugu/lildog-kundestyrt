@@ -180,7 +180,7 @@ async def log_all(
 
 
 async def main() -> None:
-    async with websockets.serve(log_all, "localhost", 8765):
+    async with websockets.serve(log_all, "0.0.0.0", 8765):
         print("Websocket startet running on port 8765")
         await asyncio.Future()  # run forever
 

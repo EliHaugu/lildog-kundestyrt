@@ -46,5 +46,8 @@
     "node": ">=20.x",
     "npm": ">=10.x"
   },
-  "engineStrict": true
+  "engineStrict": true,
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.26.0"
+  }
 }
