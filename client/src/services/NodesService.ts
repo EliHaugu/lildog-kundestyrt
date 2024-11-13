@@ -56,7 +56,7 @@ export async function deleteNode(id: number): Promise<Boolean> {
  * @param node node to update, with the new values
  * @returns true if response is 200/OK, signifying that the node was updated successfully
  */
-export async function updateNode(id: number, node: ImportNode): Promise<Boolean> {
+export async function updateNode(id: number, node: Partial<ImportNode>): Promise<Boolean> {
   const requestOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test-suite description="Connect">
+    <target id="devkit" name="Kit" address="${MAC_ADDRESS}"/>
+
+    <test id="connect" description="Connect">
+        <connect target="devkit" timeout="5000" />
+        <refresh target="devkit" timeout="5000" />
+        <read-rssi target="devkit" timeout="5000" >
+            <assert-value value="-100+"/>
+        </read-rssi>
+        <discover-services target="devkit" timeout="5000" />
+    </test>
+
+    <run-test ref="connect" />
+</test-suite>

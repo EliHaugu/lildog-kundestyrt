@@ -4,12 +4,12 @@ import type { Flow } from '@/types/FlowType'
 import flowService from '@/services/FlowService'
 import NodeService from '@/services/NodeService'
 import { fetchDevice } from '@/services/DevicesService'
-import CategoryService from '@/services/CategoryService'
 
 import FlowCard from '@/components/FlowCard.vue'
 import BaseInputField from '@/components/common/BaseInputField.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '../components/common/BaseModal.vue'
+import { getCategory } from '@/services/CategoryService'
 
 const newFlowStatus = 'Untested'
 const newFlowName = ref('')
@@ -34,7 +34,7 @@ const fetchFlows = async () => {
             if (node.device) {
               const device = await fetchDevice(node.device)
               if (device && device.category) {
-                const category = await CategoryService.getCategory(device.category)
+                const category = await getCategory(device.category)
 
                 return {
                   connectionTypes: category.connection_types || [],
@@ -111,15 +111,18 @@ const addNewFlow = async () => {
 </script>
 
 <template>
-  <main class="flex flex-col gap-6">
+  <main class="flex flex-col gap-4">
     <div class="flex h-10 gap-2">
-      <h1 class="p-2 pt-1 text-2xl font-semibold">Test flows</h1>
+      <h1 class="p-2 text-xl font-semibold">Test flows</h1>
       <form action="" class="ml-auto w-fit flex-grow">
-        <base-input-field v-model="searchQuery" placeholder="Search for flows" class="rounded-lg" />
+        <base-input-field
+          v-model="searchQuery"
+          placeholder="Search for flows"
+          class="h-10 rounded-lg"
+        />
       </form>
-      <base-button class="w-48 items-center rounded-lg" @click="createNewFlow">
+      <base-button class="flex h-10 w-48 flex-shrink-0 items-center gap-2" @click="createNewFlow">
         New flow
-        <i class="mdi mdi-plus p-1 text-xl"></i>
       </base-button>
     </div>
 
@@ -135,7 +138,7 @@ const addNewFlow = async () => {
     </base-modal>
 
     <!-- Flow List Display -->
-    <ul class="mr-4 flex flex-wrap gap-4">
+    <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       <flow-card
         v-for="flow in filteredFlows"
         :key="flow.id"

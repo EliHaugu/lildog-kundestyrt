@@ -2,14 +2,12 @@ import type { DeviceCategory } from '@/types/DeviceTypes'
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/data_manager/api/categories`
 
-export default {
-  async getCategory(id: number) {
-    const response = await fetch(`${API_BASE_URL}/${id}/`)
-    if (!response.ok) {
-      throw new Error('Error fetching node')
-    }
-    return await response.json()
+export async function getCategory(id: number) {
+  const response = await fetch(`${API_BASE_URL}/${id}/`)
+  if (!response.ok) {
+    throw new Error('Error fetching node')
   }
+  return await response.json()
 }
 
 /**
@@ -27,7 +25,7 @@ export async function fetchCategories(): Promise<DeviceCategory[]> {
     return response.json()
   })
 
-  return response.map(mapCategory)
+  return response
 }
 
 /**
@@ -72,35 +70,7 @@ export async function updateCategory(
   const requestOptions = {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(mapToBackendModel(category))
+    body: JSON.stringify(category)
   }
   return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions)).ok
-}
-
-const mapCategory = (category: {
-  id: number
-  category_name: string
-  connection_types: string[]
-  communication_protocols: string[]
-}): DeviceCategory => {
-  return {
-    id: category.id,
-    name: category.category_name,
-    connectionTypes: category.connection_types,
-    communicationProtocols: category.communication_protocols
-  }
-}
-
-const mapToBackendModel = (
-  category: Partial<DeviceCategory>
-): Partial<{
-  category_name: string
-  connection_types: string[]
-  communication_protocols: string[]
-}> => {
-  return {
-    category_name: category.name,
-    connection_types: category.connectionTypes,
-    communication_protocols: category.communicationProtocols
-  }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test-suite description="Check Service UUID">
+    <target id="devkit" name="Kit" address="${MAC_ADDRESS}"/>
+
+    <test id="service-uuid" description="Check Service UUID">
+        <connect target="devkit" timeout="5000" />
+        <discover-services target="devkit" timeout="5000" />
+        <assert-service target="devkit" uuid="${SERVICE_UUID}" />
+    </test>
+
+    <run-test ref="service-uuid" />
+</test-suite>

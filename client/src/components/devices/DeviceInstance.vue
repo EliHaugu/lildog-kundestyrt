@@ -44,18 +44,21 @@ const deleteDevice = () => {
 <template>
   <div
     class="flex items-center justify-between gap-6 rounded-md px-2 py-1 hover:bg-secondary-50 dark:hover:bg-accent-700"
+    role="row"
   >
-    <div class="flex items-center justify-start gap-3">
-      <p class="w-12">{{ device.id }}</p>
-      <p class="w-64">{{ device.device_id }}</p>
-    </div>
-    <div class="flex items-center justify-start gap-3">
-      <base-button variant="icon" class="rounded-md" @click="openModal">
-        <edit-pen class="dark:fill-white-100" />
-      </base-button>
-      <base-button variant="icon" class="rounded-md" @click="deleteDevice">
-        <delete-icon class="fill-error" />
-      </base-button>
+    <div class="flex w-full items-center justify-start gap-3">
+      <p class="w-12" role="cell">{{ device.id }}</p>
+      <p class="w-64" role="cell">{{ device.device_id }}</p>
+      <div class="ml-auto" role="cell">
+        <base-button variant="icon" class="rounded-md" @click="openModal">
+          <edit-pen class="dark:fill-white-100" />
+        </base-button>
+      </div>
+      <div role="cell">
+        <base-button variant="icon" class="rounded-md" @click="deleteDevice">
+          <delete-icon class="fill-error" />
+        </base-button>
+      </div>
     </div>
     <device-modal
       :id="'editDeviceModal' + device.id"

@@ -43,7 +43,7 @@ onMounted(() => {
         View flows
       </nav-button>
     </nav>
-    <button @click="handleTheme" class="mt-auto">
+    <button @click="handleTheme" class="mt-auto" aria-label="Toggle colour mode">
       <theme-icon />
     </button>
   </div>

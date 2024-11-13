@@ -86,24 +86,27 @@ const newNode = () => {
     </base-button>
     <div
       v-if="storedNodesOpen"
+      role="tabpanel"
       class="absolute right-0 top-16 h-[calc(100vh-7rem)] rounded-xl bg-primary-100"
     >
-      <nav class="flex gap-2 rounded-xl p-2">
+      <nav class="flex gap-2 rounded-xl p-2" role="tablist">
         <base-button
           @click="selectedTab = 0"
           :aria-expanded="selectedTab === 0"
+          role="tab"
           class="h-9 flex-grow bg-opacity-0 leading-tight aria-expanded:bg-accent-500 aria-expanded:text-accent-900"
           >Assertions</base-button
         >
         <base-button
           @click="selectedTab = 1"
           :aria-expanded="selectedTab === 1"
+          role="tab"
           class="h-9 flex-grow bg-opacity-0 leading-tight aria-expanded:bg-accent-500 aria-expanded:text-accent-900"
           >Actions</base-button
         >
       </nav>
       <div class="flex gap-1 px-2">
-        <base-input-field class="h-9" />
+        <base-input-field class="h-9 flex-grow" />
         <base-button
           @click="openModal"
           variant="icon"

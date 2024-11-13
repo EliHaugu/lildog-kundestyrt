@@ -21,7 +21,7 @@ const props = defineProps({
 const editNodeModel = ref({
   label: props.node.data.label,
   node_type: props.node.data.node_type,
-  device: props.node.data.device.toString(),
+  device: props.node.data.device?.toString() ?? undefined,
   function: props.node.data.function,
   x_pos: props.node.position.x,
   y_pos: props.node.position.y
@@ -76,10 +76,20 @@ const onDragStart = (event: DragEvent, node: Node) => {
     class="mx-1 flex h-9 items-center gap-1 rounded-lg bg-primary-200 py-1.5 pl-4 shadow-md hover:cursor-grab"
   >
     <p>{{ node.data.label }}</p>
-    <base-button @click="openModal" variant="icon" class="ml-auto h-7 items-center">
+    <base-button
+      @click="openModal"
+      variant="icon"
+      aria-label="Edit node"
+      class="ml-auto h-7 items-center"
+    >
       <edit-pen class="fill-accent-900 dark:fill-white-100" />
     </base-button>
-    <base-button @click="deleteNode" variant="icon" class="mr-1 h-7 items-center">
+    <base-button
+      @click="deleteNode"
+      variant="icon"
+      aria-label="Delete node"
+      class="mr-1 h-7 items-center"
+    >
       <delete-icon class="fill-error" />
     </base-button>
 
