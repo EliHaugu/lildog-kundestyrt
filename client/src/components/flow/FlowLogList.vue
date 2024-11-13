@@ -2,7 +2,6 @@
 import type { Log } from '@/types/WebSocketServiceTypes'
 import type { IWebSocketService } from '@/interfaces/IWebSocketService'
 import { reactive, onMounted, onUnmounted, inject, watch } from 'vue'
-import { logItems } from '@/assets/mock_data'
 
 const props = defineProps<{
   deviceId: number
@@ -67,9 +66,9 @@ watch(
       'grid-rows-subgrid': devices.length > 2 && devices.length % 2 !== 0
     }"
   >
-    <h2 class="text-md pl-4 pt-2">
+    <!-- <h2 class="text-md pl-4 pt-2">
       {{ logItems.find((item) => item.id === deviceId)?.name || 'All Devices' }}
-    </h2>
+    </h2> -->
     <ul v-if="deviceId !== 0">
       <li
         v-for="log in state.logs.filter((item) => item.id === deviceId)"

@@ -2,7 +2,6 @@
 import FlowLogList from './FlowLogList.vue'
 import WebSocketProvider from '@/providers/WebSocketProvider.vue'
 
-import { logItems } from '@/assets/mock_data'
 import { ref } from 'vue'
 
 defineProps<{
@@ -34,7 +33,8 @@ const modifyCurrentDevices = (id: number) => {
         >
           All Devices
         </li>
-        <li
+
+        <!-- <li
           role="tab"
           :key="item.id"
           v-for="item in logItems"
@@ -44,7 +44,7 @@ const modifyCurrentDevices = (id: number) => {
           class="h-9 w-fit flex-shrink-0 rounded-md bg-primary-100 px-4 py-1.5 text-sm leading-6 shadow-md transition-colors duration-200 hover:cursor-pointer hover:bg-accent-500 aria-expanded:bg-accent-400 dark:hover:bg-accent-600 dark:aria-expanded:bg-accent-500"
         >
           {{ item.name }}
-        </li>
+        </li> -->
       </ul>
     </nav>
     <div

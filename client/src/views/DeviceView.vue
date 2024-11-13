@@ -100,7 +100,7 @@ const deleteCategoryFunc = async () => {
               class="my-2 flex content-start items-center justify-center rounded-xl px-2 text-white-100"
               :class="{
                 'bg-ble': connectionType === 'uart',
-                'bg-ade': connectionType === 'adb'
+                'bg-adb': connectionType === 'adb'
               }"
             >
               {{ connectionType }}
@@ -117,7 +117,7 @@ const deleteCategoryFunc = async () => {
               :class="{
                 'bg-ble': protocol === 'ble',
                 'bg-wifi': protocol === 'wifi',
-                'bg-ade': protocol === 'lte'
+                'bg-adb': protocol === 'lte'
               }"
             >
               {{ protocol }}
