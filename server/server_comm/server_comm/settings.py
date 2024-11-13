@@ -18,9 +18,6 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# print(BASE_DIR) TODO delete
-# print(os.path.join(BASE_DIR, 'default_nodes.yaml')) TODO delete
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
