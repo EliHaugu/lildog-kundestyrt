@@ -31,13 +31,14 @@ services:
   client:
     restart: always
     build:
-      context: .
-      dockerfile: client/Dockerfile
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app
     ports:
       - "5173:5173"
     networks:
       - app_network
-    command: npm run dev -- --host
     env_file:
       - .env
 
