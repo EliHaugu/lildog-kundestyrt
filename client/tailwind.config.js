@@ -33,7 +33,7 @@ export default {
       warning: '#FAFA00',
       success: '#00AA00',
       idle: '#AAAAAA',
-      ade: '#B900CA',
+      adb: '#B900CA',
       ble: '#006FFF',
       lte: '#69E75C',
       wifi: '#00CAC0'

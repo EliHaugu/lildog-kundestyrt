@@ -117,7 +117,7 @@ const test = (flowId: string) => {
         class="my-2 flex cursor-pointer content-start items-center justify-center rounded-xl px-2 text-white-100"
         :class="{
           'bg-success': connectionType === 'uart',
-          'bg-ade': connectionType === 'adb'
+          'bg-adb': connectionType === 'adb'
         }"
       >
         {{ connectionType }}
