@@ -37,13 +37,12 @@ class RunTestFlow(APIView):
                 "error": None,
             }
             try:
-                # TODO comment back in when this endpoint is implemented
-                # res = self.check_device_connections(flow_id) T
-                # if res['status'] != 'success':
-                #     flow_result["status"] = "failed"
-                #     flow_result["error"] = res["message"]
-                #     results.append(flow_result)
-                #     break
+                res = self.check_device_connections(flow_id)
+                if res['status'] != 'success':
+                    flow_result["status"] = "failed"
+                    flow_result["error"] = res["message"]
+                    results.append(flow_result)
+                    break
 
                 flow_parser = FlowParser(flow)
                 execution_order = flow_parser.get_execution_order()
