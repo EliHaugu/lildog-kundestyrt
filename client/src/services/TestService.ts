@@ -6,7 +6,10 @@ export async function runTest(testFlow: string): Promise<responseType> {
   const requestOptions = {
     method: 'POST'
   }
-  const res = await fetch(`http://127.0.0.1:8000/test_runner/run/${testFlow}/`, requestOptions)
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/test_runner/run/${testFlow}/`,
+    requestOptions
+  )
   return await res.json()
 }
 

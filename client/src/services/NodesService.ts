@@ -1,5 +1,7 @@
 import type { ImportNode, BaseNode as Node } from '@/types/NodeType'
 
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/data_manager/api/nodes/`
+
 /**
  * @returns list of nodes received from the server
  */
@@ -8,11 +10,9 @@ export async function fetchNodes(): Promise<Node[]> {
     method: 'GET'
   }
 
-  const response = await fetch(`http://127.0.0.1:8000/data_manager/api/nodes`, requestOptions).then(
-    (response) => {
-      return response.json()
-    }
-  )
+  const response = await fetch(API_BASE_URL, requestOptions).then((response) => {
+    return response.json()
+  })
   const baseResponse = []
   for (let i = 0; i < response.length; i++) {
     baseResponse.push({
@@ -38,7 +38,7 @@ export async function createNode(node: Partial<ImportNode>): Promise<Boolean> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(node)
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/nodes/`, requestOptions)).ok
+  return (await fetch(API_BASE_URL, requestOptions)).ok
 }
 
 /**
@@ -49,7 +49,7 @@ export async function deleteNode(id: number): Promise<Boolean> {
   const requestOptions = {
     method: 'DELETE'
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/nodes/${id}/`, requestOptions)).ok
+  return (await fetch(`${API_BASE_URL}${id}/`, requestOptions)).ok
 }
 
 /**
@@ -62,5 +62,5 @@ export async function updateNode(id: number, node: Partial<ImportNode>): Promise
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(node)
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/nodes/${id}/`, requestOptions)).ok
+  return (await fetch(`${API_BASE_URL}${id}/`, requestOptions)).ok
 }

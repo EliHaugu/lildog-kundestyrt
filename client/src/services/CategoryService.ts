@@ -1,6 +1,6 @@
 import type { DeviceCategory } from '@/types/DeviceTypes'
 
-const API_BASE_URL = 'http://localhost:8000/data_manager/api/categories'
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/data_manager/api/categories`
 
 export async function getCategory(id: number) {
   const response = await fetch(`${API_BASE_URL}/${id}/`)
@@ -19,7 +19,7 @@ export async function fetchCategories(): Promise<DeviceCategory[]> {
   }
 
   const response = await fetch(
-    `http://127.0.0.1:8000/data_manager/api/categories`,
+    `${import.meta.env.VITE_API_BASE_URL}/data_manager/api/categories`,
     requestOptions
   ).then((response) => {
     return response.json()
@@ -44,7 +44,7 @@ export async function createCategory(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(category)
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/categories/`, requestOptions)).ok
+  return (await fetch(`${API_BASE_URL}/`, requestOptions)).ok
 }
 
 /**
@@ -55,8 +55,7 @@ export async function deleteCategory(id: number): Promise<Boolean> {
   const requestOptions = {
     method: 'DELETE'
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${id}/`, requestOptions))
-    .ok
+  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions)).ok
 }
 
 /**
@@ -73,6 +72,5 @@ export async function updateCategory(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(category)
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/categories/${id}/`, requestOptions))
-    .ok
+  return (await fetch(`${API_BASE_URL}/${id}/`, requestOptions)).ok
 }

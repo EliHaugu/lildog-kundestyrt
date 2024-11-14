@@ -1,5 +1,7 @@
 import type { Device } from '@/types/DeviceTypes'
 
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/data_manager/api/devices/`
+
 /**
  * Fetch all devices.
  * @returns list of devices received from the server
@@ -9,7 +11,7 @@ export async function fetchDevices(): Promise<Device[]> {
     method: 'GET'
   }
 
-  const response = await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)
+  const response = await fetch(API_BASE_URL, requestOptions)
 
   if (!response.ok) {
     console.error('Failed to fetch devices')
@@ -29,9 +31,7 @@ export async function fetchDevicesByCategory(categoryId: number): Promise<Device
     method: 'GET'
   }
 
-  const url = `http://127.0.0.1:8000/data_manager/api/devices/?category_id=${encodeURIComponent(
-    categoryId
-  )}`
+  const url = `${API_BASE_URL}?category_id=${encodeURIComponent(categoryId)}`
 
   const response = await fetch(url, requestOptions)
 
@@ -48,10 +48,7 @@ export async function fetchDevice(id: number): Promise<Device | null> {
     method: 'GET'
   }
   try {
-    const response = await fetch(
-      `http://127.0.0.1:8000/data_manager/api/devices/${id}/`,
-      requestOptions
-    )
+    const response = await fetch(`${API_BASE_URL}${id}/`, requestOptions)
     if (!response.ok) {
       throw new Error(`Error fetching device with ID ${id}: ${response.statusText}`)
     }
@@ -88,7 +85,7 @@ export async function createDevice(device: Device): Promise<Boolean> {
       communication_ids: device.communication_ids
     })
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/`, requestOptions)).ok
+  return (await fetch(API_BASE_URL, requestOptions)).ok
 }
 
 /**
@@ -99,7 +96,7 @@ export async function deleteDevice(id: number): Promise<Boolean> {
   const requestOptions = {
     method: 'DELETE'
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/${id}/`, requestOptions)).ok
+  return (await fetch(`${API_BASE_URL}${id}/`, requestOptions)).ok
 }
 
 /**
@@ -115,5 +112,5 @@ export async function updateDevice(id: number, device: Device): Promise<Boolean>
       category: device.category
     })
   }
-  return (await fetch(`http://127.0.0.1:8000/data_manager/api/devices/${id}/`, requestOptions)).ok
+  return (await fetch(`${API_BASE_URL}${id}/`, requestOptions)).ok
 }

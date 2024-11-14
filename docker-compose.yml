@@ -1,0 +1,58 @@
+services:
+  server:
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/app
+    ports:
+      - "8000:8000"  # Django server
+      - "8765:8765"  # WebSocket server
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - app_network
+
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "kundestyrt_db"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d kundestyrt_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  client:
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app
+      - ./client/node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    networks:
+      - app_network
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
+  node_modules:
+
+networks:
+  app_network:

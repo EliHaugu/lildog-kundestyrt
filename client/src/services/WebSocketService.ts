@@ -11,12 +11,7 @@ class WebSocketService implements IWebSocketService {
     this.socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data)
-
-        if (data.id && Array.isArray(data.log)) {
-          this.notifyListeners(data)
-        } else {
-          console.error('Invalid WebSocket message format:', data)
-        }
+        this.notifyListeners(data)
       } catch (error) {
         console.error('Error parsing WebSocket message:', error)
       }
