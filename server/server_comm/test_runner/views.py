@@ -1,10 +1,9 @@
 import json
-from urllib.parse import urlencode
 
-import requests
 from data_manager.models import Flow, Node
+from device_connection.views import FlowDeviceConnectionView
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from flow_parser import FlowParser
 from rest_framework import status
 from rest_framework.response import Response
@@ -71,34 +70,42 @@ class RunTestFlow(APIView):
         """
         Checks device connectivity for the flow.
         """
-        protocol = 'https' if self.request.is_secure() else 'http'
-        base_url = f"{protocol}://{self.request.get_host()}"
-        check_devices_url = f"""
-                            {base_url}{reverse('flow-connection')}
-                            ?{urlencode({'flow_id': flow_id})}
-                            """
-        response = requests.get(check_devices_url)
 
-        if response.status_code == 200:
-            connection_data = response.json()
-            if all(
-                status['status'] == 'connected'
-                for status in connection_data['response'].values()
-            ):
-                return {
-                    "status": "success",
-                    "message": "All devices connected",
-                }
+        device_manager = FlowDeviceConnectionView()
+        responses = device_manager.connect_devices(flow_id)
+
+        if not responses:
+            return {
+                "status": "error",
+                "message": "Failed to check device connections",
+            }
+
+        parsed_responses = []
+        for response in responses:
+            if isinstance(response, JsonResponse):
+                response_content = response.content.decode('utf-8')
+                response_json = json.loads(response_content)
+                parsed_responses.append(response_json)
+            elif isinstance(response, bytes):
+                response_str = response.decode('utf-8')
+                response_json = json.loads(response_str)
+                parsed_responses.append(response_json)
             else:
-                return {
-                    "status": "failed",
-                    "message": "Some devices are not connected",
-                    "details": connection_data['response'],
-                }
-        return {
-            "status": "error",
-            "message": "Failed to check device connections",
-        }
+                parsed_responses.append(response)
+
+        if all(
+            response.get('status') == 'connected'
+            for response in parsed_responses
+        ):
+            return {
+                "status": "success",
+                "message": "All devices connected",
+            }
+        else:
+            return {
+                "status": "failed",
+                "message": f"Some devices are not connected: {parsed_responses}",
+            }
 
     def run_node(self, node):
         """
