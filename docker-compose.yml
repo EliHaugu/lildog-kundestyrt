@@ -17,6 +17,10 @@ services:
         restart: true
     networks:
       - app_network
+    privileged: true  # Grant privileged access
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"  # Pass through USB devices
+
 
   db:
     image: postgres:13
