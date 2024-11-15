@@ -161,7 +161,7 @@ const toggleWebSocket = () => {
 
   if (isRunning.value) {
     runFlow()
-    webSocketService.connect(8765)
+    webSocketService.connect(`ws://localhost:8765/logs/${flowId}`)
     webSocketService.subscribe((log: Log) => {
       console.log(log)
     })
@@ -303,7 +303,7 @@ onNodesChange(async (changes) => {
       @toggle-log="toggleLog"
       @toggle-web-socket="toggleWebSocket"
     />
-    <flow-log :show="displayLog" />
+    <flow-log :show="displayLog" :flow-id="flowId" />
     <div v-if="!displayLog" class="mt-2 h-[calc(100vh-6rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow
         v-model:nodes="nodes"

@@ -6,6 +6,7 @@ import { reactive, onMounted, onUnmounted, inject, watch } from 'vue'
 const props = defineProps<{
   deviceId: number
   devices: { key: number; item: number }[]
+  flowId: string
 }>()
 
 const webSocketService = inject<IWebSocketService>('webSocketService')
@@ -20,7 +21,7 @@ const handleNewLog = (log: Log) => {
 
 onMounted(() => {
   if (webSocketService) {
-    webSocketService.connect(8765)
+    webSocketService.connect(`ws://localhost:8765/logs/${props.flowId}`)
     webSocketService.subscribe(handleNewLog)
   } else {
     console.error('WebSocketService not found')
