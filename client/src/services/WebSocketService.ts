@@ -5,8 +5,8 @@ class WebSocketService implements IWebSocketService {
   private socket: WebSocket | null = null
   private eventListeners: ((log: Log) => void)[] = []
 
-  public connect(port: number) {
-    this.socket = new WebSocket(`ws://localhost:${port}`)
+  public connect(port: string) {
+    this.socket = new WebSocket(`${port}`)
 
     this.socket.onmessage = (event) => {
       try {
