@@ -22,6 +22,8 @@ const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
+console.log(props.data)
+
 const pickColour = (protocols: string[]) => {
   if (protocols.includes('bluetooth')) {
     return blue[Math.floor(Math.random() * blue.length)]
@@ -37,7 +39,7 @@ const pickColour = (protocols: string[]) => {
   return 'grey'
 }
 
-const colour = computed(() => pickColour(props.data.communicationProtocols || []))
+const colour = computed(() => pickColour(props.data.communication_protocols || []))
 
 const editedField = (fn: string) => {
   edited.value = true
@@ -95,7 +97,9 @@ const editedField = (fn: string) => {
       </h2>
 
       <div class="flex">
-        <h3 v-if="data.communication_protocols" class="text-md text-left dark:text-white-100">Connection: {{ data.communication_protocols }}</h3>
+        <h3 v-if="data.communication_protocols" class="text-md text-left dark:text-white-100">
+          Connection: BLE
+        </h3>
         <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
       </div>
 

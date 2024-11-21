@@ -62,6 +62,8 @@ export default {
     const nodeData = await response.json()
     let communication_protocols: any[] = []
 
+    console.log('HELLO', nodeData.device)
+
     if (nodeData.device) {
       // Fetch the device associated with this node
       const deviceResponse = await fetch(`${API_BASE_URL}/devices/${nodeData.device}/`) // Assuming nodeData.device gives you the device ID
@@ -81,6 +83,7 @@ export default {
 
     return {
       id: nodeData.id,
+      device: nodeData.device,
       label: nodeData.label,
       node_type: nodeData.node_type,
       function: nodeData.function,

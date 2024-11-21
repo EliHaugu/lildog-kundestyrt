@@ -12,6 +12,7 @@ import type { responseType } from '@/services/TestService'
 
 import FlowLog from '@/components/flow/FlowLog.vue'
 import FlowError from '@/components/flow/FlowError.vue'
+import FlowError from '@/components/flow/FlowError.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
 import { onMounted, ref } from 'vue'
@@ -52,6 +53,8 @@ const displayLog = ref(false)
 const isRunning = ref(false)
 const isError = ref(false)
 const error = ref('')
+const isError = ref(false)
+const error = ref('')
 
 const toggleLog = () => {
   displayLog.value = !displayLog.value
@@ -78,40 +81,35 @@ const onNodeDragStop = (nodeDragEvent: NodeDragEvent) => {
 
 const fetchFlow = async () => {
   try {
-    // Step 1: Fetch the main flow data
     const response = await FlowService.getFlow(flowId)
     flow.value = response
 
-    // Step 2: Fetch detailed node data by IDs, handling undefined `nodes`
     const nodeIds: number[] = response.nodes ?? []
     const nodePromises = nodeIds.map((nodeId: number) => NodeService.getNodeProtocol(nodeId))
     const fetchedNodes = await Promise.all(nodePromises)
 
-    // Map fetched nodes to VueFlow format
     nodes.value = fetchedNodes.map((node: any) => ({
       style: stripNodeStyles,
       id: node.id.toString(),
       position: { x: node.x_pos, y: node.y_pos },
       data: {
-        id: node.id, // Including `id` here as expected
+        id: node.id,
         label: node.label,
-        device: node.device || null, // Add any additional properties expected in the type
+        device: node.device,
         node_type: node.node_type,
-        function: node.function, // Assuming `function` might be required
+        function: node.function,
         testState: 'idle',
         output: '',
         x_pos: node.x_pos,
         y_pos: node.y_pos,
-        communicationProtocols: node.communication_protocols
+        communication_protocols: node.communication_protocols
       } as any
     }))
 
-    // Step 3: Fetch detailed edge data by IDs, handling undefined `edges`
-    const edgeIds = response.edges ?? [] // Use an empty array if `edges` is undefined
+    const edgeIds = response.edges ?? []
     const edgePromises = edgeIds.map((edgeId: number) => EdgeService.getEdge(edgeId))
     const fetchedEdges = await Promise.all(edgePromises)
 
-    // Map fetched edges to VueFlow format
     edges.value = fetchedEdges.map((edge: any) => ({
       id: edge.id.toString(),
       source: edge.source.toString(),
@@ -144,7 +142,8 @@ const runFlow = async () => {
     const response = (await runTest(flowId)) as responseType
     const updatedNodes = response.results[0].nodes_executed
 
-    // Update the node status based on the test results
+    console.log('Test results:', response.results[0])
+
     for (const node of updatedNodes) {
       const updatedNode = nodes.value.find((n) => n.id === node.node_id.toString())
       if (updatedNode) {
@@ -186,9 +185,7 @@ const toggleWebSocket = () => {
 
 const addNodeToFlow = async (nodeData: any, position: { x: number; y: number }) => {
   try {
-    // Ensure flow exists
     if (flow.value) {
-      // Add the node with full details to the nodes array
       nodes.value.push({
         id: nodeData.id,
         position,
@@ -199,7 +196,7 @@ const addNodeToFlow = async (nodeData: any, position: { x: number; y: number }) 
           node_type: nodeData.node_type,
           device: nodeData.data.device || null,
           function: nodeData.data.function,
-          x_pos: position.x, // Save the position for persistence
+          x_pos: position.x,
           y_pos: position.y
         } as any
       })
@@ -237,16 +234,11 @@ const onDrop = (event: DragEvent) => {
 const removeNodeFromFlow = async (nodeId: string) => {
   try {
     if (flow.value) {
-      // Remove the node from the frontend state
       nodes.value = nodes.value.filter((node) => node.id !== nodeId)
       flow.value.nodes = flow.value.nodes?.filter((id) => id !== Number(nodeId)) || []
 
-      // Update backend to reflect node removal
       await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
-
-      // Remove any edges that are now disconnected
       await deleteDisconnectedEdges()
-
     }
   } catch (error) {
     console.error(`Error removing node ${nodeId} from flow:`, error)
@@ -265,12 +257,12 @@ const deleteDisconnectedEdges = async () => {
       const disconnectedEdges = fetchedEdges.filter((edge) => {
         const sourceExists = flow.value?.nodes?.includes(edge.source)
         const targetExists = flow.value?.nodes?.includes(edge.target)
-        return !(sourceExists && targetExists) // Keep only disconnected edges
+        return !(sourceExists && targetExists)
       })
 
       // Delete disconnected edges in the backend
       for (const edge of disconnectedEdges) {
-        await EdgeService.deleteEdge(edge.id) // Use precise backend ID for deletion
+        await EdgeService.deleteEdge(edge.id)
       }
 
       // Update frontend edge state to remove disconnected edges
@@ -310,6 +302,7 @@ onNodesChange(async (changes) => {
       @toggle-web-socket="toggleWebSocket"
     />
     <flow-log :show="displayLog" :flow-id="flowId" />
+    <flow-error v-if="isError" :error="error" @close="isError = !isError" />
     <flow-error v-if="isError" :error="error" @close="isError = !isError" />
     <div v-if="!displayLog" class="mt-2 h-[calc(100vh-6rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow
