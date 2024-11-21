@@ -7,6 +7,7 @@ export type ImportNode = {
   node_type: string
   function: string
   testState?: string
+  output?: string
   x_pos?: number
   y_pos?: number
 }

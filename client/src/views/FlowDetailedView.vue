@@ -99,6 +99,7 @@ const fetchFlow = async () => {
         node_type: node.node_type,
         function: node.function, // Assuming `function` might be required
         testState: 'idle',
+        output: '',
         x_pos: node.x_pos,
         y_pos: node.y_pos,
         communicationProtocols: node.communication_protocols
@@ -149,6 +150,8 @@ const runFlow = async () => {
       if (updatedNode) {
         // @ts-ignore
         updatedNode.data!.testState = node.status
+        // @ts-ignore
+        updatedNode.data!.output = node.output
       }
     }
 
