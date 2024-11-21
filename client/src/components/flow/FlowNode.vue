@@ -56,7 +56,7 @@ const editedField = (fn: string) => {
       'border-idle': data.testState === 'idle',
       'border-success': data.testState === 'success',
       'border-warning': data.testState === 'warning',
-      'border-error': data.testState === 'error'
+      'border-error': data.testState === 'failed'
     }"
   >
     <div
@@ -79,7 +79,7 @@ const editedField = (fn: string) => {
       <div v-if="data.testState" class="icon-container p-1">
         <success-icon v-if="data.testState === 'success'" />
         <warning-icon v-if="data.testState === 'warning'" />
-        <error-icon v-if="data.testState === 'error'" />
+        <error-icon v-if="data.testState === 'failed'" />
       </div>
     </div>
 
