@@ -11,6 +11,7 @@ import type { Flow } from '@/types/FlowType'
 import type { responseType } from '@/services/TestService'
 
 import FlowLog from '@/components/flow/FlowLog.vue'
+import FlowError from '@/components/flow/FlowError.vue'
 import FlowNode from '@/components/flow/FlowNode.vue'
 import FlowEdge from '@/components/flow/FlowEdge.vue'
 import { onMounted, ref } from 'vue'
@@ -49,6 +50,8 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
 
 const displayLog = ref(false)
 const isRunning = ref(false)
+const isError = ref(false)
+const error = ref('')
 
 const toggleLog = () => {
   displayLog.value = !displayLog.value
@@ -147,6 +150,11 @@ const runFlow = async () => {
         // @ts-ignore
         updatedNode.data!.testState = node.status
       }
+    }
+
+    if (response.results[0].error) {
+      isError.value = true
+      error.value = response.results[0].error
     }
   } catch (error) {
     console.error('Error running test:', error)
@@ -304,6 +312,7 @@ onNodesChange(async (changes) => {
       @toggle-web-socket="toggleWebSocket"
     />
     <flow-log :show="displayLog" />
+    <flow-error v-if="isError" :error="error" @close="isError = !isError" />
     <div v-if="!displayLog" class="mt-2 h-[calc(100vh-6rem)] w-[calc(100vw-18rem)]" @drop="onDrop">
       <vue-flow
         v-model:nodes="nodes"
