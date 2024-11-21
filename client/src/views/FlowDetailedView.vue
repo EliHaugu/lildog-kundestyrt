@@ -240,12 +240,10 @@ const removeNodeFromFlow = async (nodeId: string) => {
 
       // Update backend to reflect node removal
       await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
-      console.log(`Node ${nodeId} removed from flow (frontend and backend)`)
 
       // Remove any edges that are now disconnected
       await deleteDisconnectedEdges()
 
-      console.log('Node and disconnected edges cleanup completed.')
     }
   } catch (error) {
     console.error(`Error removing node ${nodeId} from flow:`, error)
@@ -269,7 +267,6 @@ const deleteDisconnectedEdges = async () => {
 
       // Delete disconnected edges in the backend
       for (const edge of disconnectedEdges) {
-        console.log(`Deleting disconnected edge with ID: ${edge.id} from backend`)
         await EdgeService.deleteEdge(edge.id) // Use precise backend ID for deletion
       }
 
@@ -283,8 +280,6 @@ const deleteDisconnectedEdges = async () => {
       // Update the flow's edge list with currently connected edges
       flow.value.edges = edges.value.map((edge) => Number(edge.id))
       await FlowService.updateFlow(flowId, { edges: flow.value.edges })
-
-      console.log(`Disconnected edges removed from flow (frontend and backend)`)
     }
   } catch (error) {
     console.error('Error deleting disconnected edges from flow:', error)
