@@ -104,7 +104,9 @@ class RunTestFlow(APIView):
         else:
             return {
                 "status": "failed",
-                "message": f"Some devices are not connected: {parsed_responses}",
+                "message": (
+                    f"Some devices are not connected: {parsed_responses}"
+                ),
             }
 
     def run_node(self, node):
