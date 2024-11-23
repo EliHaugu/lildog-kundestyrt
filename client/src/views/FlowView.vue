@@ -16,7 +16,6 @@ const newFlowName = ref('')
 const searchQuery = ref('')
 const flows = ref<Flow[]>([])
 
-// Function to fetch flows from the API
 const fetchFlows = async () => {
   try {
     const response = await flowService.getFlows()
@@ -25,12 +24,10 @@ const fetchFlows = async () => {
       response.map(async (flow: Flow) => {
         const nodeIds = flow.nodes ?? []
 
-        // Retrieve each node's device and category connection types and communication protocols
         const connections = await Promise.all(
           nodeIds.map(async (nodeId: number) => {
             const node = await NodeService.getNode(nodeId)
 
-            // Get device and category data if device is present
             if (node.device) {
               const device = await fetchDevice(node.device)
               if (device && device.category) {
@@ -46,7 +43,6 @@ const fetchFlows = async () => {
           })
         )
 
-        // Flatten the arrays and deduplicate connection types and protocols for each flow
         const connectionTypes = Array.from(new Set(connections.flatMap((c) => c.connectionTypes)))
         const communicationProtocols = Array.from(
           new Set(connections.flatMap((c) => c.communicationProtocols))
@@ -54,8 +50,8 @@ const fetchFlows = async () => {
 
         return {
           ...flow,
-          connectionType: connectionTypes, // Assign to flow object
-          communicationProtocol: communicationProtocols // Assign to flow object
+          connectionType: connectionTypes,
+          communicationProtocol: communicationProtocols
         }
       })
     )
@@ -67,7 +63,6 @@ const fetchFlows = async () => {
   }
 }
 
-// Computed property to filter flows based on search query
 const filteredFlows = computed(() => {
   if (!searchQuery.value) return flows.value
   return flows.value.filter((flow) =>
@@ -75,12 +70,9 @@ const filteredFlows = computed(() => {
   )
 })
 
-// Call fetchFlows when the component is mounted
 onMounted(fetchFlows)
 
-// New form functionality
 const showNewFlowForm = ref(false)
-
 const createNewFlow = () => {
   ;(document.getElementById('newFlowModal') as HTMLDialogElement).showModal()
 }
@@ -89,7 +81,7 @@ const addNewFlow = async () => {
   if (!newFlowName.value) return
 
   const newFlow: Flow = {
-    id: '', // backend generates ID
+    id: '',
     name: newFlowName.value,
     status: newFlowStatus,
     connectionType: [],
@@ -100,8 +92,7 @@ const addNewFlow = async () => {
 
   try {
     await flowService.createFlow(newFlow)
-    console.log('Flow created')
-    await fetchFlows() // Re-fetch flows after adding a new flow
+    await fetchFlows()
     newFlowName.value = ''
     showNewFlowForm.value = false
   } catch (error) {
@@ -126,8 +117,6 @@ const addNewFlow = async () => {
       </base-button>
     </div>
 
-    <!-- New Flow Form -->
-
     <base-modal
       id="newFlowModal"
       submitButtonText="Create"
@@ -137,7 +126,6 @@ const addNewFlow = async () => {
       <base-input-field v-model="newFlowName" label="Flow name" />
     </base-modal>
 
-    <!-- Flow List Display -->
     <ul class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
       <flow-card
         v-for="flow in filteredFlows"

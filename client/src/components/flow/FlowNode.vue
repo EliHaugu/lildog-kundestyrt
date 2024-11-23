@@ -22,7 +22,6 @@ const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
-
 const pickColour = (protocols: string[]) => {
   if (protocols.includes('bluetooth')) {
     return blue[Math.floor(Math.random() * blue.length)]
@@ -95,9 +94,12 @@ const editedField = (fn: string) => {
         }}
       </h2>
 
-      <div class="flex">
-        <h3 v-if="data.communicationProtocols" class="text-md text-left dark:text-white-100">
-          Connection: BLE
+      <div class="flex" v-if="data.communication_protocols.length !== 0 || edited">
+        <h3
+          class="text-md text-left dark:text-white-100"
+          :class="{ 'opacity-0': data.communication_protocols.length === 0 }"
+        >
+          Connection: {{ data.communication_protocols.join(', ') }}
         </h3>
         <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
       </div>
@@ -111,14 +113,6 @@ const editedField = (fn: string) => {
         :colour="colour"
         @edit="editedField"
       />
-
-      <button
-        :style="{ backgroundColor: colour }"
-        class="flex items-center rounded-b-lg rounded-t-sm px-3 py-2 text-left shadow-md"
-      >
-        Test Connection
-        <div class="ml-auto rounded-sm bg-success px-1">200/OK</div>
-      </button>
     </div>
 
     <Handle type="target" :position="Position.Top" />

@@ -27,11 +27,13 @@ import { runTest } from '@/services/TestService'
 
 const route = useRoute()
 const flowId = route.params.id as string
-
-// state to store nodes, edges and flow
 const flow = ref<Flow | null>(null)
 const nodes = ref<CustomNode[]>([])
 const edges = ref<Edge[]>([])
+const displayLog = ref(false)
+const isRunning = ref(false)
+const isError = ref(false)
+const error = ref('')
 
 const { onConnect: vueFlowOnConnect, addEdges, updateEdge, onNodesChange } = useVueFlow()
 const { onDragOver, onDragLeave } = useDragAndDrop()
@@ -47,11 +49,6 @@ function onEdgeChange({ edge, connection }: { edge: GraphEdge; connection: Conne
     connection
   )
 }
-
-const displayLog = ref(false)
-const isRunning = ref(false)
-const isError = ref(false)
-const error = ref('')
 
 const toggleLog = () => {
   displayLog.value = !displayLog.value
@@ -139,7 +136,6 @@ const runFlow = async () => {
     const response = (await runTest(flowId)) as responseType
     const updatedNodes = response.results[0].nodes_executed
 
-
     for (const node of updatedNodes) {
       const updatedNode = nodes.value.find((n) => n.id === node.node_id.toString())
       if (updatedNode) {
@@ -197,13 +193,11 @@ const addNodeToFlow = async (nodeData: any, position: { x: number; y: number }) 
         } as any
       })
 
-      // Save the updated position in the database
       await NodeService.updateNode(Number(nodeData.id), {
         x_pos: position.x,
         y_pos: position.y
       })
 
-      // Update the flow's node list with the new node ID if it’s not already present
       if (!flow.value.nodes?.includes(Number(nodeData.id))) {
         flow.value.nodes = [...(flow.value.nodes ?? []), Number(nodeData.id)]
         await FlowService.updateFlow(flowId, { nodes: flow.value.nodes })
@@ -223,7 +217,7 @@ const onDrop = (event: DragEvent) => {
   const dropPosition = { x: event.offsetX, y: event.offsetY }
 
   if (nodeData.id) {
-    addNodeToFlow(nodeData, dropPosition) // Add node to the flow with position
+    addNodeToFlow(nodeData, dropPosition)
   }
 }
 
@@ -244,7 +238,6 @@ const removeNodeFromFlow = async (nodeId: string) => {
 const deleteDisconnectedEdges = async () => {
   try {
     if (flow.value) {
-      // Retrieve all edge details to ensure backend IDs are accurate
       const edgeIds = flow.value.edges ?? []
       const edgePromises = edgeIds.map((edgeId: number) => EdgeService.getEdge(edgeId))
       const fetchedEdges = await Promise.all(edgePromises)
@@ -281,7 +274,6 @@ const deleteDisconnectedEdges = async () => {
 onNodesChange(async (changes) => {
   for (const change of changes) {
     if (change.type === 'remove') {
-      // Call `removeNodeFromFlow` for database update
       await removeNodeFromFlow(change.id)
     }
   }
