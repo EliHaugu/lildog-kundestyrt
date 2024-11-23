@@ -85,11 +85,12 @@ class RunTestFlow(APIView):
             if isinstance(response, JsonResponse):
                 response_content = response.content.decode('utf-8')
                 response_json = json.loads(response_content)
-                parsed_responses.append(response_json)
+                parsed_responses.append(response_json['response'])
             elif isinstance(response, bytes):
                 response_str = response.decode('utf-8')
                 response_json = json.loads(response_str)
-                parsed_responses.append(response_json)
+                for res in response_json['response']:
+                    parsed_responses.append(res)
             else:
                 parsed_responses.append(response)
 
