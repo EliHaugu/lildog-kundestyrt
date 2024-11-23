@@ -79,8 +79,8 @@ const editedField = (fn: string) => {
 
       <div v-if="data.testState" class="icon-container p-1">
         <success-icon v-if="data.output === true" />
-        <error-icon v-if="data.output === false" />
-        <warning-icon v-if="typeof data.output === 'string' && data.output !== ''" />
+        <error-icon v-else-if="data.output === false" />
+        <warning-icon v-else-if="typeof data.output === 'string' && data.output !== ''" />
       </div>
     </div>
 

@@ -139,7 +139,6 @@ const runFlow = async () => {
     const response = (await runTest(flowId)) as responseType
     const updatedNodes = response.results[0].nodes_executed
 
-    console.log('Test results:', response.results[0])
 
     for (const node of updatedNodes) {
       const updatedNode = nodes.value.find((n) => n.id === node.node_id.toString())
