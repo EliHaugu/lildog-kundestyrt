@@ -266,6 +266,8 @@ class FlowDeviceConnectionView(View):
         devices_name: dict[str, str] = {}
 
         for node in flow.nodes.all():
+            if not node.device:
+                continue
             device = node.device
             device_id = device.id
             device_name = device.device_id

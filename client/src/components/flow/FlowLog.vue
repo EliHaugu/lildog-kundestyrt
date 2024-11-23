@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 defineProps<{
   show: boolean
+  flowId: string
 }>()
 
 const currentDevices = ref([{ key: 0, item: 0 }] as { key: number; item: number }[])
@@ -57,6 +58,7 @@ const modifyCurrentDevices = (id: number) => {
           :key="currentDevice.item"
           :device-id="currentDevice.item"
           :devices="currentDevices"
+          :flow-id="flowId"
         />
       </web-socket-provider>
     </div>

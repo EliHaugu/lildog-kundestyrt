@@ -17,6 +17,14 @@ services:
         restart: true
     networks:
       - app_network
+    privileged: true  # Grant privileged access
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"  # Pass through USB devices
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      ANDROID_ADB_SERVER_ADDRESS: host.docker.internal
+
 
   db:
     image: postgres:13
