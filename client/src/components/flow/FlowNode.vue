@@ -22,7 +22,6 @@ const props = defineProps<NodeProps>()
 const nodeExpanded = ref(false)
 const edited = ref(false)
 
-console.log(props.data)
 
 const pickColour = (protocols: string[]) => {
   if (protocols.includes('bluetooth')) {
@@ -81,7 +80,7 @@ const editedField = (fn: string) => {
       <div v-if="data.testState" class="icon-container p-1">
         <success-icon v-if="data.output === true" />
         <error-icon v-if="data.output === false" />
-        <warning-icon v-else />
+        <warning-icon v-if="typeof data.output === 'string' && data.output !== ''" />
       </div>
     </div>
 
@@ -97,7 +96,7 @@ const editedField = (fn: string) => {
       </h2>
 
       <div class="flex">
-        <h3 v-if="data.communication_protocols" class="text-md text-left dark:text-white-100">
+        <h3 v-if="data.communicationProtocols" class="text-md text-left dark:text-white-100">
           Connection: BLE
         </h3>
         <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
