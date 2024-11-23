@@ -125,7 +125,7 @@ class RunTestFlow(APIView):
                     function = node.function.split("\n")
                     if (
                         len(function) > 1
-                        and "THIS IS A DEFAULT NODE" in function[1]
+                        and "THIS IS A DEFAULT NODE" in function[0]
                     ):
                         res = json.loads(run_default_node(node).content)
                         if res['status'] != "success":

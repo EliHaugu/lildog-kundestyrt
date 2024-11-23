@@ -10,7 +10,7 @@ from test_runner.nrf_scripts.nrf_connect import (
 
 
 def run_default_node(node: Node):
-    function = node.function.split("\n")[1]
+    function = node.function.split("\n")[0]
     node_type = function.split("TYPE: ")[1].split(",")[0].strip()
 
     match node_type.lower():
