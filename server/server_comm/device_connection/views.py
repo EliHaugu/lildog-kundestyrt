@@ -74,7 +74,7 @@ class SerialDeviceConnectionView(View):
                     "response": str(e),
                 }
             )
-        
+
     def check_connection(self, conn_id: str):
         ports = list_ports.comports()
         for port in ports:
@@ -92,7 +92,7 @@ class SerialDeviceConnectionView(View):
                 "message": "device port not found",
                 "response": None,
             }
-        )  
+        )
 
     def get(self, request):
         conn_id = request.GET.get("conn_id")
