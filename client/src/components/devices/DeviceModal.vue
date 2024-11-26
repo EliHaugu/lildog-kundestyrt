@@ -2,7 +2,7 @@
 import BaseModal from '../common/BaseModal.vue'
 import BaseInputField from '../common/BaseInputField.vue'
 import type { Device } from '@/types/DeviceTypes'
-import { defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
 defineEmits(['submit'])
 const props = defineProps({

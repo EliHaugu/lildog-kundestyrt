@@ -5,7 +5,7 @@ import type { Flow } from '@/types/FlowType'
 import EditPen from '@/icons/EditPen.vue'
 import PlayIcon from '@/icons/PlayIcon.vue'
 import DeleteIcon from '@/icons/DeleteIcon.vue'
-import { ref, defineEmits, computed } from 'vue'
+import { ref, computed } from 'vue'
 import flowService from '@/services/FlowService'
 import BaseModal from './common/BaseModal.vue'
 import { runTest } from '@/services/TestService'
@@ -35,13 +35,10 @@ const deleteFlow = async (id: string) => {
   if (userConfirmed) {
     try {
       await flowService.deleteFlow(id)
-      console.log('Flow deleted successfully')
       emit('flowUpdated')
     } catch (error) {
       console.error('Error deleting flow:', error)
     }
-  } else {
-    console.log('User canceled the deletion')
   }
 }
 

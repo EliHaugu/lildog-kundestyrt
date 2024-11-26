@@ -81,6 +81,7 @@ export default {
 
     return {
       id: nodeData.id,
+      device: nodeData.device,
       label: nodeData.label,
       node_type: nodeData.node_type,
       function: nodeData.function,

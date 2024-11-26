@@ -40,11 +40,7 @@ class WebSocketService implements IWebSocketService {
 
   public disconnect() {
     if (this.socket) {
-      console.log('this.socket:', this.socket)
       this.socket.close()
-      console.log('WebSocket disconnected')
-    } else {
-      console.log('WebSocket already disconnected')
     }
   }
 }

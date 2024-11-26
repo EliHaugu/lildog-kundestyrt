@@ -20,7 +20,7 @@ class SerialDeviceConnectionView(View):
                 return port.device
         return None
 
-    def check_connection(self, conn_id: str):
+    def ping_device(self, conn_id: str):
         try:
             device_port = self.get_device_port(conn_id)
             if not device_port:
@@ -74,6 +74,25 @@ class SerialDeviceConnectionView(View):
                     "response": str(e),
                 }
             )
+
+    def check_connection(self, conn_id: str):
+        ports = list_ports.comports()
+        for port in ports:
+            if port.serial_number == conn_id:
+                return JsonResponse(
+                    {
+                        "status": "connected",
+                        "message": "serial device connected",
+                        "response": None,
+                    }
+                )
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "device port not found",
+                "response": None,
+            }
+        )
 
     def get(self, request):
         conn_id = request.GET.get("conn_id")

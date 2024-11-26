@@ -37,7 +37,7 @@ const pickColour = (protocols: string[]) => {
   return 'grey'
 }
 
-const colour = computed(() => pickColour(props.data.communicationProtocols || []))
+const colour = computed(() => pickColour(props.data.communication_protocols || []))
 
 const editedField = (fn: string) => {
   edited.value = true
@@ -56,7 +56,7 @@ const editedField = (fn: string) => {
       'border-idle': data.testState === 'idle',
       'border-success': data.testState === 'success',
       'border-warning': data.testState === 'warning',
-      'border-error': data.testState === 'error'
+      'border-error': data.testState === 'failed'
     }"
   >
     <div
@@ -77,9 +77,9 @@ const editedField = (fn: string) => {
       </h1>
 
       <div v-if="data.testState" class="icon-container p-1">
-        <success-icon v-if="data.testState === 'success'" />
-        <warning-icon v-if="data.testState === 'warning'" />
-        <error-icon v-if="data.testState === 'error'" />
+        <success-icon v-if="data.output === true" />
+        <error-icon v-else-if="data.output === false" />
+        <warning-icon v-else-if="typeof data.output === 'string' && data.output !== ''" />
       </div>
     </div>
 
@@ -94,8 +94,13 @@ const editedField = (fn: string) => {
         }}
       </h2>
 
-      <div class="flex">
-        <h3 class="text-md text-left dark:text-white-100">Connection: BLE</h3>
+      <div class="flex" v-if="data.communication_protocols.length !== 0 || edited">
+        <h3
+          class="text-md text-left dark:text-white-100"
+          :class="{ 'opacity-0': data.communication_protocols.length === 0 }"
+        >
+          Connection: {{ data.communication_protocols.join(', ') }}
+        </h3>
         <h4 v-if="edited" class="text-md ml-auto text-right dark:text-white-100">saved</h4>
       </div>
 
@@ -108,14 +113,6 @@ const editedField = (fn: string) => {
         :colour="colour"
         @edit="editedField"
       />
-
-      <button
-        :style="{ backgroundColor: colour }"
-        class="flex items-center rounded-b-lg rounded-t-sm px-3 py-2 text-left shadow-md"
-      >
-        Test Connection
-        <div class="ml-auto rounded-sm bg-success px-1">200/OK</div>
-      </button>
     </div>
 
     <Handle type="target" :position="Position.Top" />

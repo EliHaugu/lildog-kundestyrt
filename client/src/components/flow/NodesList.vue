@@ -58,7 +58,7 @@ const newNode = () => {
   const node = {
     label: newNodeModel.value.label,
     node_type: newNodeModel.value.node_type,
-    device: Number(newNodeModel.value.device),
+    device: Number(newNodeModel.value.device) || undefined,
     function: newNodeModel.value.function,
     x_pos: 0,
     y_pos: 0

@@ -1,4 +1,5 @@
 import ast
+import json
 import os
 
 from data_manager.models import Category, Device, Node
@@ -10,7 +11,7 @@ from test_runner.nrf_scripts.nrf_connect import (
 
 
 def run_default_node(node: Node):
-    function = node.function.split("\n")[1]
+    function = node.function.split("\n")[0]
     node_type = function.split("TYPE: ")[1].split(",")[0].strip()
 
     match node_type.lower():
@@ -72,7 +73,12 @@ def run_nrf_connect_node(node: Node):
 
     results = []
     for mac_adr in mac_adr_list:
-        results.append(run_check_connection(adb_device_id, mac_adr))
+        res = json.loads(
+            run_check_connection(adb_device_id, mac_adr).content.decode(
+                'utf-8'
+            )
+        )
+        results.append(res)
 
     if all(res['status'] == 'success' for res in results):
         return JsonResponse(
@@ -137,9 +143,11 @@ def run_nrf_custom_node(node: Node):
 
     # try to write custom xml script to file
     try:
-        xml_script = function.split("# XML SCRIPT START")[1].split(
-            "# XML SCRIPT END"
-        )[0]
+        xml_script = (
+            function.split("# XML SCRIPT START")[1]
+            .split("# XML SCRIPT END")[0]
+            .strip()
+        )
 
         script_dir = os.path.dirname(__file__)
         os.chdir(script_dir)
