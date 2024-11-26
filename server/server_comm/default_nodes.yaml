@@ -59,4 +59,4 @@ default_node_functions:
       except AssertionError as e:
           return False
     
-    api_assert()
+    return api_assert()
